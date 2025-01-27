@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { GeocodingResponse, WeatherData } from "../hooks//types";
+import { GeocodingResponse, WeatherData } from "../hooks/types";
 import { Card } from "@mantine/core";
 import { LuAArrowDown, LuAArrowUp, LuDroplets, LuWind } from "react-icons/lu";
 

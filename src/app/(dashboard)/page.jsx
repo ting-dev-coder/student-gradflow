@@ -1,9 +1,7 @@
 "use client";
-
-import { useRouter } from "next/router";
-
 import { useReverseGeocodeQuery, useWeatherQuery } from "./hooks/use-weather";
 import CurrentWeather from "./components/current-weather";
+import { Grid, Stack } from "@mantine/core";
 
 const Dashboard = () => {
 	// const router = useRouter();
@@ -20,9 +18,16 @@ const Dashboard = () => {
 	console.log("render");
 
 	return (
-		<>
-			<CurrentWeather data={weatherQuery.data} locationName={locationName} />
-		</>
+		<Grid>
+			<Grid.Col span={8}>
+				<Stack bg="#fff"></Stack>
+			</Grid.Col>
+			<Grid.Col span={4}>
+				<Stack bg="#fff">
+					<CurrentWeather data={weatherQuery.data} locationName={locationName} />
+				</Stack>
+			</Grid.Col>
+		</Grid>
 	);
 };
 

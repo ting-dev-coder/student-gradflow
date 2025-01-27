@@ -1,0 +1,19 @@
+.navbar {
+	width: 270px;
+	display: flex;
+	flex-direction: column;
+}
+
+.collections {
+	padding: 0;
+}
+
+.root {
+	background-color: transparent;
+	&[data-active="true"] {
+		font-weight: bold;
+		color: #fff;
+		background-color: var(--primary);
+		border-right: 5px solid var(--orange2);
+	}
+}
