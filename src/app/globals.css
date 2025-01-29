@@ -17,7 +17,11 @@
 	--gray2: #4f4f4f;
 	--gray3: #7e7a7a;
 	--gray4: #bdbdbd;
-	--gray5: #fbfbfb;
+	--gray5: #f5f3f3;
+}
+
+:root[data-mantine-color-scheme="light"] body {
+	--mantine-color-body: var(--gray5);
 }
 
 html,
