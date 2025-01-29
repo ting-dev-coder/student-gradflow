@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, List } from "@mantine/core";
+import { Button, Group, List } from "@mantine/core";
 import { useGetTodoList } from "./api/use-get-todo-list";
 import { useCreateTodoList } from "./api/user-create-todo-list";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,6 +9,9 @@ import { createTodoSchema } from "./schemas";
 import { z } from "zod";
 import { useUpdateTodoList } from "./api/use-update-todo-list";
 import { useDeleteTodoList } from "./api/use-delete-todo-list";
+import TimeLine from "./components/timeline";
+import DateCalendar from "./components/date-calendar";
+import ListTable from "./components/list-table";
 
 const ToDoList = () => {
 	const { data: toDoList, error, isPending: isLoading, isError } = useGetTodoList();
@@ -76,6 +79,11 @@ const ToDoList = () => {
 					<Button onClick={() => onDelete(todo.$id)}>刪除</Button>
 				</List>
 			))}
+			<DateCalendar />
+			<Group>
+				<TimeLine />
+				<ListTable />
+			</Group>
 		</>
 	);
 };

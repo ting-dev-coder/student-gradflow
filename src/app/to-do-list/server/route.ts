@@ -57,7 +57,7 @@ const app = new Hono()
 
 		const { taskId } = c.req.param();
 
-		// 先查詢該文檔是否存在，並檢查它是否屬於當前用戶
+		// check if the data exit and check if it belongs to the current user
 		const toDoList = await databases.getDocument(DATABASE_ID, TODO_LIST_ID, taskId);
 
 		if (toDoList.userId !== user.$id) {
