@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-const AuthLayout = () => {
-	return <>AuthLayout</>;
+const AuthLayout = ({ children }) => {
+  return <>{children}</>;
 };
 
 export default AuthLayout;

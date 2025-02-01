@@ -9,10 +9,9 @@ import { useState } from "react";
 import "@mantine/core/styles.css";
 import { Notifications } from "@mantine/notifications";
 import "@mantine/notifications/styles.css";
+import "@mantine/dates/styles.css";
+import theme from "./theme";
 
-const theme = createTheme({
-	/** Your theme override here */
-});
 type Props = {
 	children: ReactNode;
 };

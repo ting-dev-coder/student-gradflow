@@ -10,10 +10,10 @@ const AdminLayout = ({ children }) => {
 			header={{ height: 0 }}
 			navbar={{
 				width: 270,
-				breakpoint: "sm",
+				breakpoint: "0",
 				collapsed: { mobile: !opened },
 			}}
-			padding="md"
+			padding="0"
 		>
 			{/* <AppShell.Header>
 				<Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />

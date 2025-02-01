@@ -1,45 +1,48 @@
 :root {
-	--primary: #ffda80;
-	--secondary: #ffd83b;
-	--orange1: #f6b40c;
-	--orange2: #ffca4b;
-	--orange3: #fcd16b;
-	--orange4: #ffdd8c;
-	--info: #2f80ed;
-	--success: #27ae60;
-	--warning: #ffa963;
-	--error: #ef4444;
-	--black1: #231f1e;
-	--black2: #1d1d1d;
-	--black3: #393939;
-	--black4: #263238;
-	--gray1: #333333;
-	--gray2: #4f4f4f;
-	--gray3: #7e7a7a;
-	--gray4: #bdbdbd;
-	--gray5: #f5f3f3;
-}
-
-:root[data-mantine-color-scheme="light"] body {
-	--mantine-color-body: var(--gray5);
+  --primary: #ffda80;
+  --secondary: #f78c06;
+  --orange1: #f6b40c;
+  --orange2: #ffca4b;
+  --orange3: #fcd16b;
+  --orange4: #ffdd8c;
+  --info: #2f80ed;
+  --success: #27ae60;
+  --warning: #ffa963;
+  --error: #ef4444;
+  --black1: #231f1e;
+  --black2: #1d1d1d;
+  --black3: #393939;
+  --black4: #263238;
+  --gray1: #333333;
+  --gray2: #4f4f4f;
+  --gray3: #7e7a7a;
+  --gray4: #bdbdbd;
+  --gray5: #f5f3f3;
 }
 
 html,
 body {
-	max-width: 100vw;
-	overflow-x: hidden;
-}
-
-body {
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 * {
-	box-sizing: border-box;
-	padding: 0;
-	margin: 0;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
 a {
-	color: inherit;
-	text-decoration: none;
+  color: inherit;
+  text-decoration: none;
+}
+
+/** third-party library  **/
+.fc.fc-theme-standard {
+  height: 100%;
+}
+
+/* customized css  */
+.cursor-pointer {
+  cursor: pointer;
 }

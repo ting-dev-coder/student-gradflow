@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Provider from "./provider";
 import AdminLayout from "@/components/layout/admin-layout";
+
 // import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const geistSans = Geist({
