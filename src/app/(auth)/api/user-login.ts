@@ -1,39 +1,36 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { InferRequestType, InferResponseType } from "hono";
-import { client } from "@/lib/rpc";
-import { useRouter } from "next/navigation";
-import { notifications } from "@mantine/notifications";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { InferRequestType, InferResponseType } from 'hono';
+import { client } from '@/lib/rpc';
+import { useRouter } from 'next/navigation';
+import { notifications } from '@mantine/notifications';
 
-type ResponseType = InferResponseType<(typeof client.api.auth.login)["$post"]>;
+type ResponseType = InferResponseType<(typeof client.api.auth.login)['$post']>;
 
-type RequestType = InferRequestType<(typeof client.api.auth.login)["$post"]>;
+type RequestType = InferRequestType<(typeof client.api.auth.login)['$post']>;
 
 export const useLogin = () => {
-	const router = useRouter();
-	const queryClient = useQueryClient();
-	const mutation = useMutation<ResponseType, Error, RequestType>({
-		mutationFn: async ({ json }) => {
-			console.log("mutationFn");
-			const response = await client.api.auth.login["$post"]({ json });
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  const mutation = useMutation<ResponseType, Error, RequestType>({
+    mutationFn: async ({ json }) => {
+      const response = await client.api.auth.login['$post']({ json });
 
-			console.log("response", response);
+      if (!response.ok) {
+        throw new Error('Failed to login');
+      }
+      return await response.json();
+    },
+    onSuccess: () => {
+      notifications.show({
+        message: 'Logged in',
+      });
+      router.refresh();
+      queryClient.invalidateQueries({ queryKey: ['current'] });
+    },
+    onError: () => {
+      notifications.show({ message: 'Fail to log in ' });
+    },
+  });
 
-			if (!response.ok) {
-				throw new Error("Failed to login");
-			}
-			return await response.json();
-		},
-		onSuccess: () => {
-			notifications.show({
-				message: "Logged in",
-			});
-			router.refresh();
-			queryClient.invalidateQueries({ queryKey: ["current"] });
-		},
-		onError: () => {
-			notifications.show({ message: "Fail to log in " });
-		},
-	});
-
-	return mutation;
+  return mutation;
 };

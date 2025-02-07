@@ -1,10 +1,10 @@
 :root {
   --primary: #ffda80;
   --secondary: #f78c06;
-  --orange1: #f6b40c;
-  --orange2: #ffca4b;
-  --orange3: #fcd16b;
-  --orange4: #ffdd8c;
+  --yellow1: #f6b40c;
+  --yellow2: #ffca4b;
+  --yellow3: #fcd16b;
+  --yellow4: #ffdd8c;
   --info: #2f80ed;
   --success: #27ae60;
   --warning: #ffa963;
@@ -35,6 +35,11 @@ body {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+fieldset {
+  border-width: 0;
+  border: none;
 }
 
 /** third-party library  **/

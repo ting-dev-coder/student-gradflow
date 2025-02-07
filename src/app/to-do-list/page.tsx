@@ -1,34 +1,41 @@
 'use client';
 
-import { Button, Collapse, Group, List, Stack, Title } from '@mantine/core';
+import {
+  Button,
+  Collapse,
+  Drawer,
+  Group,
+  List,
+  Stack,
+  Title,
+} from '@mantine/core';
 import { useGetTodoList } from './api/use-get-todo-list';
 import { useCreateTodoList } from './api/user-create-todo-list';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { createTodoSchema } from './schemas';
 import { z } from 'zod';
 import { useUpdateTodoList } from './api/use-update-todo-list';
 import { useDeleteTodoList } from './api/use-delete-todo-list';
 import TimeLine from './components/timeline';
-import DateCalendar from './components/weekly-calendar';
+import DateCalendar from './components/weekly-calendar/page';
 import ListTable from './components/list-table';
 import { useDisclosure } from '@mantine/hooks';
 import TaskDetail from './components/task-detail';
 import TaskStatus from './components/tasks-status';
+import TransitionsSlide from '@/components/transitions-slide';
+import DrawerAddTask from './components/drawer-handle-task';
+import { useRef } from 'react';
 
 const ToDoList = () => {
   const [opened, { toggle }] = useDisclosure(false);
+  const [detailOpened, { open: detailOpen, close: detailClose }] =
+    useDisclosure(false);
+  const selectedTaskIdRef = useRef(null);
 
   const {
     data: toDoList,
     error,
-    isPending: isLoading,
+    isFetching: isLoading,
     isError,
   } = useGetTodoList();
-
-  console.log(toDoList);
-  const { mutate: updateMutate } = useUpdateTodoList();
-  const { mutate: deleteMutate } = useDeleteTodoList();
 
   if (isError) {
     // if (error.data?.code === "UNAUTHORIZED") {
@@ -36,17 +43,6 @@ const ToDoList = () => {
     // }
     return <div>Error: {error.message}</div>;
   }
-
-  const onUpdate = (taskId: string) => {
-    updateMutate(
-      { form: { name: '測試 to do 更新' }, param: { taskId: taskId } },
-      {
-        onSuccess: () => {
-          console.log('成功');
-        },
-      }
-    );
-  };
 
   const onDelete = (taskId: string) => {
     deleteMutate(
@@ -59,22 +55,43 @@ const ToDoList = () => {
     );
   };
 
-  function handleRowClick() {
-    toggle();
+  function handleRowClick(row) {
+    selectedTaskIdRef.current = row.$id;
+    detailOpen();
   }
 
+  function handleAddTaskClick() {
+    selectedTaskIdRef.current = null;
+    detailOpen();
+  }
+
+  function handleDateChange() {}
+
   return (
-    <Group h={'100vh'}>
-      <Stack flex={1}>
+    <Group h={'100dvh'} align="flex-start" wrap="nowrap" py="md" px="lg">
+      <Stack flex={1} gap="sm" h="100%" style={{ overflow: 'auto' }}>
         <Title tt="capitalize">to-do list</Title>
-        <DateCalendar />
-        <TaskStatus />
-        <ListTable data={toDoList?.documents} onRowClick={handleRowClick} />
+        <DateCalendar onChange={handleDateChange} />
+        <TaskStatus data={toDoList?.documents} />
+        <Button w="fit-content" onClick={handleAddTaskClick}>
+          Add
+        </Button>
+        <ListTable
+          loading={isLoading}
+          data={toDoList?.documents}
+          onRowClick={handleRowClick}
+        />
       </Stack>
-      <Collapse h={opened ? '100%' : 0} in={opened}>
+
+      <DrawerAddTask
+        taskId={selectedTaskIdRef.current}
+        opened={detailOpened}
+        close={detailClose}
+      />
+      <TimeLine />
+      {/* <TransitionsSlide opened={opened}>
         <TimeLine />
-        {/* <TaskDetail /> */}
-      </Collapse>
+      </TransitionsSlide> */}
     </Group>
   );
 };

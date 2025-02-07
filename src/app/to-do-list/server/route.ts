@@ -3,7 +3,8 @@ import { sessionMiddleware } from '@/lib/session-middleware';
 import { zValidator } from '@hono/zod-validator';
 import { Hono } from 'hono';
 import { Query } from 'node-appwrite';
-import { createTodoSchema, updateTodoSchema } from '../schemas';
+import { createTodoSchema, editTodoSchema } from '../schemas';
+import { setHeapSnapshotNearHeapLimit } from 'v8';
 
 const app = new Hono()
   .get('/', sessionMiddleware, async (c) => {
@@ -22,6 +23,16 @@ const app = new Hono()
 
     return c.json({ data: toDoList });
   })
+  .get(':taskId', sessionMiddleware, async (c) => {
+    const databases = c.get('databases');
+    const { taskId } = c.req.param();
+
+    const task = await databases.getDocument(DATABASE_ID, TODO_LIST_ID, taskId);
+    if (!task) {
+      return c.json({ data: null });
+    }
+    return c.json({ data: task });
+  })
   .post(
     '/',
     zValidator('form', createTodoSchema),
@@ -29,19 +40,31 @@ const app = new Hono()
     async (c) => {
       const databases = c.get('databases');
       const user = c.get('user');
-      const { name } = c.req.valid('form');
+      const {
+        title,
+        startDate,
+        startTime,
+        endTime,
+        allDay,
+        category,
+        status,
+        description,
+      } = c.req.valid('form');
 
       const res = await databases.createDocument(
         DATABASE_ID,
         TODO_LIST_ID,
         'unique()',
         {
-          name,
+          title,
           userId: user.$id,
-          allDay: true,
-          status: 'done',
-          category: '679d3ee20021b734541a',
-          // created_at: new Date().toISOString(),
+          startDate,
+          startTime,
+          endTime,
+          allDay,
+          category,
+          status,
+          description,
         }
       );
       return c.json({ data: res });
@@ -50,13 +73,22 @@ const app = new Hono()
   .patch(
     ':taskId',
     sessionMiddleware,
-    zValidator('form', updateTodoSchema),
+    zValidator('form', editTodoSchema),
     async (c) => {
       const databases = c.get('databases');
       const user = c.get('user');
 
       const { taskId } = c.req.param();
-      const { name } = c.req.valid('form');
+      const {
+        title,
+        startDate,
+        startTime,
+        endTime,
+        allDay,
+        category,
+        status,
+        description,
+      } = c.req.valid('form');
 
       // 先查詢該文檔是否存在，並檢查它是否屬於當前用戶
       const toDoList = await databases.getDocument(
@@ -74,7 +106,15 @@ const app = new Hono()
         TODO_LIST_ID,
         taskId,
         {
-          name,
+          title,
+          userId: user.$id,
+          startDate,
+          startTime,
+          endTime,
+          allDay,
+          category,
+          status,
+          description,
         }
       );
       return c.json({ data: res });

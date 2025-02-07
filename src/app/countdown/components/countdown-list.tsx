@@ -46,7 +46,7 @@ const CountdownList = ({ events, loading }) => {
   return (
     <Box flex={1}>
       <ModalAddEvent>
-        <Button>新增</Button>
+        <Button>Add Task</Button>
       </ModalAddEvent>
       {isLoading ? (
         <CardSkeleton

@@ -7,6 +7,7 @@ interface DateInputWrapper<T extends FieldValues> {
   name: Path<T>;
   handleInputChange?: (field: keyof T) => void;
   label: string;
+  defaultValue?: Date;
 }
 
 type DateInput<T extends FieldValues> = Omit<DateInputWrapper<T>, 'label'>;
@@ -14,6 +15,7 @@ type DateInput<T extends FieldValues> = Omit<DateInputWrapper<T>, 'label'>;
 function DateInput<T extends FieldValues>({
   control,
   name,
+  defaultValue,
   handleInputChange,
   ...props
 }: DateInput<T>) {
@@ -27,13 +29,21 @@ function DateInput<T extends FieldValues>({
     <Controller
       name={name}
       control={control}
-      render={({ field }) => (
+      render={({ field, fieldState }) => (
         <MantineDateInput
           {...field}
           {...props}
+          error={fieldState?.error?.message}
           flex={1}
+          value={
+            field.value
+              ? new Date(field.value)
+              : defaultValue
+              ? new Date(defaultValue)
+              : null
+          }
           onChange={(value: DateValue) => {
-            field.onChange(value);
+            field.onChange(value ? value.toDateString() : '');
             handleChange();
           }}
         />

@@ -3,13 +3,17 @@ import {
   Stack,
   TextInput,
   Input as MantineInput,
-  Box,
+  Text,
+  TextInputProps,
+  BoxProps,
 } from '@mantine/core';
 import { ChangeEvent } from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import FormLabel from './form-label';
 
-interface IControllerInput<T extends FieldValues> {
+type InputT = TextInputProps & FieldValues & BoxProps;
+
+interface IControllerInput<T extends InputT> {
   control: Control<T>;
   name: Path<T>;
   handleInputChange?: (field: keyof T) => void;
@@ -17,7 +21,7 @@ interface IControllerInput<T extends FieldValues> {
   error?: string;
 }
 
-function Input<T extends FieldValues>({
+function Input<T extends InputT>({
   control,
   name,
   error,
@@ -34,11 +38,11 @@ function Input<T extends FieldValues>({
     <Controller
       name={name}
       control={control}
-      render={({ field }) => (
+      render={({ field, fieldState }) => (
         <TextInput
           {...field}
           {...props}
-          error={error}
+          error={fieldState?.error?.message}
           flex={1}
           onChange={(e) => {
             field.onChange(e);
@@ -50,7 +54,7 @@ function Input<T extends FieldValues>({
   );
 }
 
-function ControllerInput<T extends FieldValues>({
+function ControllerInput<T extends InputT>({
   label,
   ...props
 }: IControllerInput<T>) {

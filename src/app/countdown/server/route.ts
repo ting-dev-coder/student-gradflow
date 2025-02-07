@@ -71,8 +71,6 @@ const app = new Hono()
     const databases = c.get('databases');
     const user = c.get('user');
 
-    console.log('user', user.$id);
-
     const countdownList = await databases.listDocuments(
       DATABASE_ID,
       COUNTDOWN_ID,
@@ -95,10 +93,8 @@ const app = new Hono()
       const databases = c.get('databases');
       const user = c.get('user');
       const storage = c.get('storage');
-      console.log('hono');
-      const { name, endAt, image, localImagePath } = c.req.valid('form');
 
-      console.log('endAt Date?', endAt instanceof Date);
+      const { name, endAt, image, localImagePath } = c.req.valid('form');
 
       let uploadedImageUrl: string = '';
 

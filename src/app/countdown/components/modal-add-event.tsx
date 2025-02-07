@@ -1,18 +1,13 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
-  Badge,
-  Box,
   Button,
   Card,
-  Divider,
   Image,
   Indicator,
-  Loader,
   LoadingOverlay,
   Modal,
   Paper,
   SimpleGrid,
-  Stack,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { cloneElement, createElement, useState } from 'react';
@@ -61,7 +56,6 @@ const ModalAddEvent = ({ children }) => {
       },
       {
         onSuccess: ({ data }) => {
-          console.log('成功');
           reset();
           close();
         },
@@ -76,7 +70,6 @@ const ModalAddEvent = ({ children }) => {
   };
 
   const handleImageClick = (image: DefaultImageI) => {
-    console.log('set', image);
     setValue('localImagePath', image.src);
   };
 

@@ -46,7 +46,7 @@ export function Navbar() {
 
   return (
     <Stack gap="sm" component={'nav'} className={classes.navbar}>
-      <Title c="var(--orange1)">Gradflow</Title>
+      <Title c="var(--yellow1)">Gradflow</Title>
       <Divider />
       <Box px="md">
         <ProfileButton />
