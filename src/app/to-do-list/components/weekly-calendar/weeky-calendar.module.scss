@@ -1,0 +1,30 @@
+.root {
+  --rdp-today-color: var(--black4);
+  --rdp-outside-opacity: 1;
+}
+
+.day_week_wrapper {
+  margin-right: var(--mantine-spacing-md);
+  min-height: 70px;
+  justify-content: center;
+  text-align: center;
+  background: var(--black4);
+  color: #fff;
+}
+
+.day_button,
+.weekday {
+  width: 70px;
+  height: fit-content;
+  text-align: center;
+}
+
+.day_button {
+  :root {
+  }
+}
+
+.day_selected {
+  background: var(--yellow2);
+  color: #fff;
+}
