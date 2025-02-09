@@ -19,6 +19,19 @@ export const INITIAL_EVENTS = [
   },
 ];
 
+// [
+//   {
+//     title: 'Meeting',
+//     start: '2024-01-29T10:00:00',
+//     end: '2024-01-29T12:00:00',
+//   },
+//   {
+//     title: 'Lunch',
+//     start: '2024-01-29T13:00:00',
+//     end: '2024-01-29T14:00:00',
+//   },
+// ]
+
 export function createEventId() {
   return String(eventGuid++);
 }
@@ -60,25 +73,15 @@ const TimeLine = () => {
         slotMinTime="08:00:00" // 設定最早時間
         slotMaxTime="20:00:00" // 設定最晚時間
         initialView="timeGridDay"
-        events={[
-          {
-            title: 'Meeting',
-            start: '2024-01-29T10:00:00',
-            end: '2024-01-29T12:00:00',
-          },
-          {
-            title: 'Lunch',
-            start: '2024-01-29T13:00:00',
-            end: '2024-01-29T14:00:00',
-          },
-        ]}
+        events={INITIAL_EVENTS}
         headerToolbar={false}
         // editable={false}
         // selectable={true}
         // selectMirror={true}
         // dayMaxEvents={true}
         // weekends={false}
-        // initialEvents={INITIAL_EVENTS} // alternatively, use the `events` setting to fetch from a feed
+        initialEvents={INITIAL_EVENTS}
+        // alternatively, use the `events` setting to fetch from a feed
         // select={handleDateSelect}
         // eventContent={renderEventContent} // custom render function
         // eventClick={handleEventClick}

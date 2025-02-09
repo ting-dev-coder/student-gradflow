@@ -1,22 +1,25 @@
-import { client } from "@/lib/rpc";
-import { useQuery } from "@tanstack/react-query";
+import { client } from '@/lib/rpc';
+import { useQuery } from '@tanstack/react-query';
 
-export const useGetTodoList = () => {
-	const query = useQuery({
-		queryKey: ["todo-list"],
-		queryFn: async () => {
-			const res = await client.api["todo-list"].$get();
+export const useGetTodoList = (createdAt) => {
+  const query = useQuery({
+    queryKey: ['todo-list', createdAt?.toString()],
+    queryFn: async () => {
+      console.log('Making API call with createdAt:', createdAt);
+      const res = await client.api['todo-list'].$get({
+        query: createdAt ? { createdAt } : undefined,
+      });
 
-			if (!res.ok) {
-				throw new Error("failed to get to-do list");
-			}
+      if (!res.ok) {
+        throw new Error('failed to get to-do list');
+      }
 
-			const { data } = await res.json();
+      const { data } = await res.json();
 
-			return data;
-		},
-		retry: false,
-	});
+      return data;
+    },
+    retry: false,
+  });
 
-	return query;
+  return query;
 };

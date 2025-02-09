@@ -5,15 +5,26 @@ import { Hono } from 'hono';
 import { Query } from 'node-appwrite';
 import { createTodoSchema, editTodoSchema } from '../schemas';
 import { setHeapSnapshotNearHeapLimit } from 'v8';
+import dayjs from 'dayjs';
 
 const app = new Hono()
   .get('/', sessionMiddleware, async (c) => {
     const databases = c.get('databases');
     const user = c.get('user');
 
-    const toDoList = await databases.listDocuments(DATABASE_ID, TODO_LIST_ID, [
-      Query.equal('userId', user.$id),
-    ]);
+    const { createdAt } = c.req.query();
+    const queries = [Query.equal('userId', user.$id)];
+    if (createdAt) {
+      queries.push(
+        Query.equal('startDate', dayjs(createdAt).format('YYYY-MM-DD'))
+      );
+    }
+
+    const toDoList = await databases.listDocuments(
+      DATABASE_ID,
+      TODO_LIST_ID,
+      queries
+    );
 
     if (toDoList?.total === 0) {
       return c.json({
@@ -58,7 +69,7 @@ const app = new Hono()
         {
           title,
           userId: user.$id,
-          startDate,
+          startDate: dayjs(startDate).format('YYYY-MM-DD'),
           startTime,
           endTime,
           allDay,
@@ -90,7 +101,7 @@ const app = new Hono()
         description,
       } = c.req.valid('form');
 
-      // 先查詢該文檔是否存在，並檢查它是否屬於當前用戶
+      // check if doc exist, and check if it belong to the current user
       const toDoList = await databases.getDocument(
         DATABASE_ID,
         TODO_LIST_ID,

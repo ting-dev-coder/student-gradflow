@@ -22,20 +22,20 @@ import TaskDetail from './components/task-detail';
 import TaskStatus from './components/tasks-status';
 import TransitionsSlide from '@/components/transitions-slide';
 import DrawerAddTask from './components/drawer-handle-task';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
 const ToDoList = () => {
   const [opened, { toggle }] = useDisclosure(false);
   const [detailOpened, { open: detailOpen, close: detailClose }] =
     useDisclosure(false);
   const selectedTaskIdRef = useRef(null);
-
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const {
     data: toDoList,
     error,
     isFetching: isLoading,
     isError,
-  } = useGetTodoList();
+  } = useGetTodoList(selectedDate);
 
   if (isError) {
     // if (error.data?.code === "UNAUTHORIZED") {
@@ -65,13 +65,15 @@ const ToDoList = () => {
     detailOpen();
   }
 
-  function handleDateChange() {}
+  function handleDateChange(date) {
+    setSelectedDate(date);
+  }
 
   return (
     <Group h={'100dvh'} align="flex-start" wrap="nowrap" py="md" px="lg">
       <Stack flex={1} gap="sm" h="100%" style={{ overflow: 'auto' }}>
         <Title tt="capitalize">to-do list</Title>
-        <DateCalendar onChange={handleDateChange} />
+        <DateCalendar defaultDate={selectedDate} onChange={handleDateChange} />
         <TaskStatus data={toDoList?.documents} />
         <Button w="fit-content" onClick={handleAddTaskClick}>
           Add

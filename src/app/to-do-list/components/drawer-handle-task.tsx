@@ -51,8 +51,9 @@ const DrawerHandleTask = ({ opened, close, taskId }: DrawerHandleTaskProps) => {
     form: { getValues, control, handleSubmit, clearErrors, reset },
   } = useApiHook();
 
-  const { mutate: updateMutate } = useUpdateTodoList();
-  const { mutate: deleteMutate } = useDeleteTodoList();
+  const { mutate: updateMutate, isPending: editPending } = useUpdateTodoList();
+  const { mutate: deleteMutate, isPending: deletePending } =
+    useDeleteTodoList();
 
   const { data, isFetching: taskLoading } = useGetTodo(taskId);
 
@@ -88,7 +89,7 @@ const DrawerHandleTask = ({ opened, close, taskId }: DrawerHandleTaskProps) => {
       title: 'Successfully Added',
       message: data.title,
     });
-    close();
+    onClose();
   }
   function onClose() {
     resetForm();
@@ -107,7 +108,7 @@ const DrawerHandleTask = ({ opened, close, taskId }: DrawerHandleTaskProps) => {
       size="32rem"
     >
       <LoadingOverlay
-        visible={taskLoading || isPending}
+        visible={taskLoading || isPending || deletePending || editPending}
         zIndex={1000}
         overlayProps={{ radius: 'sm', blur: 2 }}
       />

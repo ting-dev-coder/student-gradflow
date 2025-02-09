@@ -1,4 +1,4 @@
-import { Card, SimpleGrid } from '@mantine/core';
+import { Card, Text, SimpleGrid, Stack } from '@mantine/core';
 
 const TaskStatus = ({ data = [] }) => {
   const done = data.filter((task) => task.status === 'done').length;
@@ -10,9 +10,24 @@ const TaskStatus = ({ data = [] }) => {
   ).length;
   return (
     <SimpleGrid mx="auto" cols={3} w="80%">
-      <Card>To-do {toDo}</Card>
-      <Card>In progress {inProgress}</Card>
-      <Card>Done {done}</Card>
+      <Card shadow="sm">
+        <Stack gap="0">
+          <Text>To-do</Text>
+          <Text>{toDo}</Text>
+        </Stack>
+      </Card>
+      <Card shadow="sm">
+        <Stack gap="0">
+          <Text>In progress</Text>
+          <Text>{inProgress}</Text>
+        </Stack>
+      </Card>
+      <Card shadow="sm">
+        <Stack gap="0">
+          <Text>Done</Text>
+          <Text>{done}</Text>
+        </Stack>
+      </Card>
     </SimpleGrid>
   );
 };

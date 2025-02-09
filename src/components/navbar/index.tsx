@@ -24,8 +24,7 @@ const links = [
   { icon: <></>, label: 'Dashboard', path: '/' },
   { icon: <></>, label: 'Countdown', path: '/countdown' },
   { icon: <></>, label: 'To-do List', path: '/to-do-list' },
-  { icon: <></>, label: 'Pomodoro Timer', path: '/pomodoro -timer' },
-  { icon: <></>, label: 'Message board', path: '/message-board' },
+  { icon: <></>, label: 'Pomodoro Timer', path: '/pomodoro-timer' },
 ];
 
 export function Navbar() {

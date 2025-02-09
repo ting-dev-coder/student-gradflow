@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { createContext, use, useState } from 'react';
 import { DayPicker, Week, WeekProps, DayButtonProps } from 'react-day-picker';
 import {
   format,
@@ -8,8 +8,9 @@ import {
   startOfWeek,
 } from 'date-fns';
 import 'react-day-picker/style.css';
-import { Box, Group, Stack, UnstyledButton } from '@mantine/core';
+import { ActionIcon, Box, Group, Stack, UnstyledButton } from '@mantine/core';
 import styles from './weeky-calendar.module.scss';
+import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 
 type ValuePiece = Date | null;
 
@@ -18,17 +19,20 @@ type Value = ValuePiece | [ValuePiece, ValuePiece];
 interface CurrentWeekRowProps extends WeekProps {
   date: Date;
 }
-
+const SelectedDateContext = createContext<{
+  selected?: Date;
+  setSelected?: React.Dispatch<React.SetStateAction<Date | undefined>>;
+}>({});
 function DayButton(props: DayButtonProps) {
-  const { day, modifiers, ...buttonProps } = props;
-
-  //const { setSelected } = React.use(SelectedDateContext);
+  const { day, modifiers, onClick } = props;
+  const { setSelected } = use(SelectedDateContext);
   return (
     <Stack
       gap="0"
       className={`${styles['day_week_wrapper']} ${
         props.modifiers.selected && styles['day_selected']
       }`}
+      onClick={() => setSelected?.(day.date)}
     >
       <Box>{format(props.day.date, 'EEE')}</Box>
       <UnstyledButton {...props}></UnstyledButton>
@@ -50,19 +54,23 @@ function CurrentWeekRow(props: CurrentWeekRowProps) {
   return <Week {...props} />;
 }
 
-const DateCalendar = ({ onChange }) => {
-  const [value, setValueChange] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(new Date());
+const DateCalendar = ({ onChange, defaultDate }) => {
+  const [value, setValueChange] = useState(defaultDate);
+  const [selectedDate, setSelectedDate] = useState(defaultDate);
+  const [month, setMonth] = useState(defaultDate);
 
   function handleMonthChange(e, num: 1 | -1) {
     e.preventDefault();
-
-    setValueChange(addDays(value, 7 * num));
+    console.log(num);
+    const date = addDays(value, 7 * num);
+    setValueChange(date);
+    setMonth(date);
   }
 
   function handleDayClick(day) {
-    console.log(day);
+    console.log('change');
     setSelectedDate(day);
+    onChange(day);
   }
 
   return (
@@ -79,16 +87,26 @@ const DateCalendar = ({ onChange }) => {
         DayButton,
         Week: (weekProps) => <CurrentWeekRow {...weekProps} date={value} />,
         NextMonthButton: () => (
-          <button onClick={(e) => handleMonthChange(e, -1)}>Next Week</button>
+          <ActionIcon
+            variant="default"
+            onClick={(e) => handleMonthChange(e, 1)}
+          >
+            <IoIosArrowForward />
+          </ActionIcon>
         ),
         PreviousMonthButton: () => (
-          <button onClick={(e) => handleMonthChange(e, 1)}>
-            Previous Week
-          </button>
+          <ActionIcon
+            variant="default"
+            onClick={(e) => handleMonthChange(e, -1)}
+          >
+            <IoIosArrowBack />
+          </ActionIcon>
         ),
       }}
       selected={selectedDate}
       onSelect={handleDayClick}
+      month={month}
+      onMonthChange={setMonth}
       required
       showOutsideDays
       mode="single"
