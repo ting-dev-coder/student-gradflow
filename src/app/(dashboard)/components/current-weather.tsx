@@ -1,7 +1,8 @@
 import { memo } from 'react';
 import { GeocodingResponse, WeatherData } from '../hooks/types';
-import { Box, Card, Group, Image } from '@mantine/core';
+import { Box, Card, Grid, Group, Image, Text, Title } from '@mantine/core';
 import { LuAArrowDown, LuAArrowUp, LuDroplets, LuWind } from 'react-icons/lu';
+import { HiOutlineArrowDown, HiOutlineArrowUp } from 'react-icons/hi';
 
 interface CurrentWeatherProps {
   data: WeatherData;
@@ -21,58 +22,70 @@ export function CurrentWeather({ data, locationName }: CurrentWeatherProps) {
   const formatTemp = (temp: number) => `${Math.round(temp)}°`;
 
   return (
-    <Card>
-      <Group align="center">
-        <h2 className="text-2xl font-bold tracking-tight">
+    <Card py="xs" px="sm">
+      <Group gap="sm" align="center">
+        <Title order={2} c="var(--primary)">
           {locationName?.name}
-        </h2>
+        </Title>
         {locationName?.state && (
-          <span className="text-muted-foreground">, {locationName.state}</span>
+          <Text fz="sm" span c="var(--gray3)">
+            {locationName.state} {locationName?.country}
+          </Text>
         )}
-        <p className="text-sm text-muted-foreground">{locationName?.country}</p>
       </Group>
+      <Group gap={'sm'}>
+        <Box flex={3} maw={'fit-content'}>
+          <Group flex={1}>
+            <Text fw={700} fz="4.5rem" c="var(--primary)">
+              {formatTemp(temp)}
+            </Text>
+            <Box>
+              <Text fz="lg" c="var(--gray3)">
+                Feels like {formatTemp(feels_like)}
+              </Text>
+              <Text pr="sm" span c="var(--info)">
+                <HiOutlineArrowDown size={10} />
+                {formatTemp(temp_min)}
+              </Text>
+              <Text span c="var(--error)">
+                <HiOutlineArrowUp size={10} />
+                {formatTemp(temp_max)}
+              </Text>
+            </Box>
+          </Group>
 
-      <Group>
-        <Group flex={1}>
-          {formatTemp(temp)}
-          <Box>
-            <p className="text-sm font-medium text-muted-foreground">
-              Feels like {formatTemp(feels_like)}
-            </p>
-            <span className="flex items-center gap-1 text-blue-500">
-              <LuAArrowDown className="h-3 w-3" />
-              {formatTemp(temp_min)}
-            </span>
-            <span className="flex items-center gap-1 text-red-500">
-              <LuAArrowUp className="h-3 w-3" />
-              {formatTemp(temp_max)}
-            </span>
-          </Box>
-        </Group>
-        <Box w="145px">
+          <Group gap={'xs'}>
+            <Group gap={'xs'}>
+              <LuDroplets size={20} color="var(--primary)" />
+              <Box>
+                <Text fz="12px">Humidity</Text>
+                <Text fz="10px" fw="600" c="var(--gray3)">
+                  {humidity}%
+                </Text>
+              </Box>
+            </Group>
+            <Group gap={'xs'}>
+              <LuWind size={20} color="var(--primary)" />
+              <Box>
+                <Text fz="12px">Wind Speed</Text>
+                <Text fz="10px" fw="600" c="var(--gray3)">
+                  {speed} m/s
+                </Text>
+              </Box>
+            </Group>
+          </Group>
+        </Box>
+        <Box flex={1}>
           <Image
+            mt="-24px"
             src={`https://openweathermap.org/img/wn/${currentWeather.icon}@4x.png`}
             alt={currentWeather.description}
             w={'100%'}
           />
-          {currentWeather.description}
+          <Text fz="xs" ta="center" mt="-18px" c="var(--gray3)" tt="capitalize">
+            {currentWeather.description}
+          </Text>
         </Box>
-      </Group>
-      <Group>
-        <Group>
-          <LuDroplets />
-          <div>
-            <p className="text-sm font-medium">Humidity</p>
-            <p className="text-sm text-muted-foreground">{humidity}%</p>
-          </div>
-        </Group>
-        <Group>
-          <LuWind className="h-4 w-4 text-blue-500" />
-          <div className="space-y-0.5">
-            <p className="text-sm font-medium">Wind Speed</p>
-            <p className="text-sm text-muted-foreground">{speed} m/s</p>
-          </div>
-        </Group>
       </Group>
     </Card>
   );

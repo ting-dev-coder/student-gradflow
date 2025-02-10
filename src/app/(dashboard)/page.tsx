@@ -8,6 +8,7 @@ import MainCountdown from './components/main-countdown';
 import TimeLine from '../to-do-list/components/timeline';
 import { useGetTodoList } from '../to-do-list/api/use-get-todo-list';
 import WeeklyFocusChart from './components/weekly-focus-chart';
+import { useGeolocation } from './hooks/use-geolocation';
 
 const Dashboard = () => {
   // const router = useRouter();
@@ -28,9 +29,13 @@ const Dashboard = () => {
     isFetching,
     isError,
   } = useGetTodoList(new Date());
-  const lat = 0; //parseFloat(query.get("lat") || "0");
-  const lon = 0; //parseFloat(query.get("lon") || "0");
-  const coordinates = { lat, lon };
+  const {
+    coordinates,
+    error: locationError,
+    getLocation,
+    isLoading: locationLoading,
+  } = useGeolocation();
+
   const weatherQuery = useWeatherQuery(coordinates);
   const locationQuery = useReverseGeocodeQuery(coordinates);
 
@@ -46,6 +51,10 @@ const Dashboard = () => {
       h="calc(100vh - var(--app-shell-header-height, 0px) - var(--app-shell-padding))"
     >
       <Grid.Col
+        pt={0}
+        pl={0}
+        pb={0}
+        pr="xl"
         span={{
           base: 6,
           lg: 8,
@@ -56,12 +65,13 @@ const Dashboard = () => {
           <Box bg="#fff" flex={1.5}>
             <MainCountdown event={mainEvent} />
           </Box>
-          <Box bg="#fff" flex={1}>
+          <Box bg="#fff" flex={1} mih="250px">
             <WeeklyFocusChart />
           </Box>
         </Stack>
       </Grid.Col>
       <Grid.Col
+        p={0}
         span={{
           base: 6,
           lg: 4,
