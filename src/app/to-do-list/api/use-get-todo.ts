@@ -1,7 +1,11 @@
 import { client } from '@/lib/rpc';
 import { useQuery } from '@tanstack/react-query';
 
-export const useGetTodo = (taskId: number | null) => {
+interface GetTodo {
+  taskId?: number;
+}
+
+export const useGetTodo = ({ taskId }: GetTodo) => {
   const query = useQuery({
     queryKey: ['todo-list', taskId],
     queryFn: async () => {

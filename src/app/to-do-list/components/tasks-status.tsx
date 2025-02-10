@@ -1,6 +1,10 @@
 import { Card, Text, SimpleGrid, Stack } from '@mantine/core';
 
-const TaskStatus = ({ data = [] }) => {
+interface TaskStatus {
+  data: [];
+}
+
+const TaskStatus = ({ data = [] }: TaskStatus) => {
   const done = data.filter((task) => task.status === 'done').length;
 
   const toDo = data.filter((task) => task.status === 'to-do').length;

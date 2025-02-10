@@ -37,7 +37,7 @@ const CountdownList = ({ events, loading }) => {
       { param: { countdownId: countdownId } },
       {
         onSuccess: () => {
-          console.log('成功');
+          console.log('successfully deleted');
         },
       }
     );

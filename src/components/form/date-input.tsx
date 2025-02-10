@@ -1,16 +1,30 @@
-import { DateValue, DateInput as MantineDateInput } from '@mantine/dates';
+import {
+  DateInputProps,
+  DateValue,
+  DateInput as MantineDateInput,
+} from '@mantine/dates';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import FormLabel from './form-label';
+import dayjs from 'dayjs';
+import { parseISO } from 'date-fns';
 
 interface DateInputWrapper<T extends FieldValues> {
   control: Control<T>;
   name: Path<T>;
   handleInputChange?: (field: keyof T) => void;
   label: string;
-  defaultValue?: Date;
+  defaultValue?: Date | null;
 }
 
 type DateInput<T extends FieldValues> = Omit<DateInputWrapper<T>, 'label'>;
+
+const dateParser: DateInputProps['dateParser'] = (input) => {
+  if (input === 'WW2') {
+    return new Date(1939, 8, 1);
+  }
+
+  return dayjs(input, 'YYYY-MM-DD').toDate();
+};
 
 function DateInput<T extends FieldValues>({
   control,
@@ -24,30 +38,36 @@ function DateInput<T extends FieldValues>({
       handleInputChange(name);
     }
   };
-
+  console.log('defaultValue', defaultValue);
   return (
     <Controller
       name={name}
       control={control}
-      render={({ field, fieldState }) => (
-        <MantineDateInput
-          {...field}
-          {...props}
-          error={fieldState?.error?.message}
-          flex={1}
-          value={
-            field.value
-              ? new Date(field.value)
-              : defaultValue
-              ? new Date(defaultValue)
-              : null
-          }
-          onChange={(value: DateValue) => {
-            field.onChange(value ? value.toDateString() : '');
-            handleChange();
-          }}
-        />
-      )}
+      render={({ field, fieldState }) => {
+        console.log('看啊', defaultValue);
+        return (
+          <>
+            <MantineDateInput
+              {...field}
+              {...props}
+              error={fieldState?.error?.message}
+              flex={1}
+              valueFormat="YYYY-MM-DD"
+              value={
+                defaultValue
+                  ? parseISO(defaultValue)
+                  : field.value
+                  ? parseISO(field.value)
+                  : null
+              }
+              onChange={(value: DateValue) => {
+                field.onChange(value ? value.toDateString() : '');
+                handleChange();
+              }}
+            />
+          </>
+        );
+      }}
     />
   );
 }

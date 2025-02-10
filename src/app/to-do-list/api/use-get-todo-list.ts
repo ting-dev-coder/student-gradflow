@@ -5,7 +5,6 @@ export const useGetTodoList = (createdAt) => {
   const query = useQuery({
     queryKey: ['todo-list', createdAt?.toString()],
     queryFn: async () => {
-      console.log('Making API call with createdAt:', createdAt);
       const res = await client.api['todo-list'].$get({
         query: createdAt ? { createdAt } : undefined,
       });

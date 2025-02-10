@@ -61,14 +61,13 @@ const DateCalendar = ({ onChange, defaultDate }) => {
 
   function handleMonthChange(e, num: 1 | -1) {
     e.preventDefault();
-    console.log(num);
+
     const date = addDays(value, 7 * num);
     setValueChange(date);
     setMonth(date);
   }
 
   function handleDayClick(day) {
-    console.log('change');
     setSelectedDate(day);
     onChange(day);
   }

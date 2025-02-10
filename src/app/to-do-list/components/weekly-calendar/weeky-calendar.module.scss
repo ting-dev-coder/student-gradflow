@@ -4,8 +4,8 @@
 }
 
 .day_week_wrapper {
-  margin-right: var(--mantine-spacing-md);
-  min-height: 70px;
+  margin-right: var(--mantine-spacing-sm);
+  min-height: 60px;
   justify-content: center;
   text-align: center;
   background: var(--black4);
@@ -15,7 +15,7 @@
 
 .day_button,
 .weekday {
-  width: 70px;
+  width: 60px;
   height: fit-content;
   text-align: center;
 }

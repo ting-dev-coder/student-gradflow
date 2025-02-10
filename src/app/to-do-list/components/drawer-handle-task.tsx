@@ -29,14 +29,21 @@ import { notifications } from '@mantine/notifications';
 import { useDeleteTodoList } from '../api/use-delete-todo-list';
 import { useUpdateTodoList } from '../api/use-update-todo-list';
 import { useEditTask } from '../hooks/use-edit-task';
+import { dateFormat } from '@/lib/utils';
 
 interface DrawerHandleTaskProps {
   opened: boolean;
-  taskId?: number | null;
+  taskId?: number;
   close: () => void;
+  defaultDate: string;
 }
 
-const DrawerHandleTask = ({ opened, close, taskId }: DrawerHandleTaskProps) => {
+const DrawerHandleTask = ({
+  opened,
+  close,
+  taskId,
+  defaultDate,
+}: DrawerHandleTaskProps) => {
   const { mutate, isPending } = useCreateTodoList();
 
   let useApiHook = useCreateTask;
@@ -55,12 +62,11 @@ const DrawerHandleTask = ({ opened, close, taskId }: DrawerHandleTaskProps) => {
   const { mutate: deleteMutate, isPending: deletePending } =
     useDeleteTodoList();
 
-  const { data, isFetching: taskLoading } = useGetTodo(taskId);
+  const { data, isFetching: taskLoading } = useGetTodo({ taskId });
 
   useEffect(() => {
-    console.log(data);
-
     if (taskId && data) {
+      console.log();
       reset((prev) => ({ ...prev, ...data }));
     }
   }, [data, reset]);
@@ -139,7 +145,12 @@ const DrawerHandleTask = ({ opened, close, taskId }: DrawerHandleTaskProps) => {
             <Divider />
             <Title order={5}>Dates</Title>
 
-            <DateInput label="Start Date" name="startDate" control={control} />
+            <DateInput
+              label="Start Date"
+              name="startDate"
+              control={control}
+              defaultValue={taskId ? null : defaultDate}
+            />
             <Checkbox control={control} name="allDay" label="All day " />
             <Group wrap="nowrap">
               <FormLabel
