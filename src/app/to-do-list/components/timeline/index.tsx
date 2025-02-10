@@ -1,86 +1,57 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { Box } from '@mantine/core';
+import { convertCustomTimeToISO, dateFormat } from '@/lib/utils';
+import { parseISO } from 'date-fns';
 
 let eventGuid = 0;
-let todayStr = new Date().toISOString().replace(/T.*$/, ''); // YYYY-MM-DD of today
-
-export const INITIAL_EVENTS = [
-  {
-    id: createEventId(),
-    title: 'All-day event',
-    start: todayStr,
-  },
-  {
-    id: createEventId(),
-    title: 'Timed event',
-    start: todayStr + 'T12:00:00',
-  },
-];
-
-// [
-//   {
-//     title: 'Meeting',
-//     start: '2024-01-29T10:00:00',
-//     end: '2024-01-29T12:00:00',
-//   },
-//   {
-//     title: 'Lunch',
-//     start: '2024-01-29T13:00:00',
-//     end: '2024-01-29T14:00:00',
-//   },
-// ]
 
 export function createEventId() {
   return String(eventGuid++);
 }
-const TimeLine = () => {
-  function handleDateSelect(selectInfo) {
-    let title = prompt('Please enter a new title for your event');
-    let calendarApi = selectInfo.view.calendar;
+const TimeLine = ({ tasks, currentDate }) => {
+  const calendarRef = useRef(null);
+  const events = useMemo(() => {
+    if (!tasks) return [];
+    console.log(tasks);
+    const newTasks = tasks.map((task) => ({
+      id: createEventId(),
+      title: task.title,
+      start: task.allDay
+        ? task.startDate
+        : convertCustomTimeToISO(task.startDate, task.startTime),
+    }));
+    goToSpecificDate(dateFormat(currentDate));
+    return newTasks;
+  }, [tasks]);
 
-    calendarApi.unselect(); // clear date selection
+  useEffect(() => {
+    console.log('events', events);
+  }, [events]);
 
-    if (title) {
-      calendarApi.addEvent({
-        id: createEventId(),
-        title,
-        start: selectInfo.startStr,
-        end: selectInfo.endStr,
-        allDay: selectInfo.allDay,
-      });
-    }
-  }
-  function handleEventClick(clickInfo) {
-    if (
-      confirm(
-        `Are you sure you want to delete the event '${clickInfo.event.title}'`
-      )
-    ) {
-      clickInfo.event.remove();
-    }
-  }
-
-  function handleEvents(events) {
-    console.log('handleEvents', events);
+  function goToSpecificDate(date: string) {
+    if (!calendarRef?.current) return;
+    const calendarApi = calendarRef.current?.getApi();
+    calendarApi.gotoDate(parseISO(date)); // 跳轉到 2025-02-15
   }
 
   return (
     <Box miw="230" h={'100%'}>
       <FullCalendar
+        ref={calendarRef}
         plugins={[timeGridPlugin]}
         slotMinTime="08:00:00" // 設定最早時間
         slotMaxTime="20:00:00" // 設定最晚時間
         initialView="timeGridDay"
-        events={INITIAL_EVENTS}
         headerToolbar={false}
+        events={events}
         // editable={false}
         // selectable={true}
         // selectMirror={true}
         // dayMaxEvents={true}
         // weekends={false}
-        initialEvents={INITIAL_EVENTS}
+        // initialEvents={events}
         // alternatively, use the `events` setting to fetch from a feed
         // select={handleDateSelect}
         // eventContent={renderEventContent} // custom render function

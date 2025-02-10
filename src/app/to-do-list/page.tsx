@@ -28,7 +28,7 @@ const ToDoList = () => {
     useDisclosure(false);
   const selectedTaskIdRef = useRef(null);
   const [selectedDate, setSelectedDate] = useState(new Date());
-  console.log('index date', selectedDate);
+
   const {
     data: toDoList,
     error,
@@ -86,14 +86,17 @@ const ToDoList = () => {
   return (
     <Group h={'100dvh'} align="flex-start" wrap="nowrap" py="md" px="lg">
       <Stack flex={1} gap="sm" h="100%" style={{ overflow: 'auto' }}>
-        <Title tt="capitalize">to-do list</Title>
+        <Group justify="space-between">
+          <Title tt="capitalize">to-do list</Title>
+          {!isTodayBefore(selectedDate.toISOString()) && (
+            <Button w="fit-content" onClick={handleAddTaskClick}>
+              Add
+            </Button>
+          )}
+        </Group>
+
         <DateCalendar defaultDate={selectedDate} onChange={handleDateChange} />
         <TaskStatus data={toDoList?.documents || []} />
-        {!isTodayBefore(selectedDate.toISOString()) && (
-          <Button w="fit-content" onClick={handleAddTaskClick}>
-            Add
-          </Button>
-        )}
 
         <ListTable
           loading={isLoading || isFetching}
@@ -109,7 +112,7 @@ const ToDoList = () => {
         opened={detailOpened}
         close={detailClose}
       />
-      <TimeLine />
+      <TimeLine tasks={toDoList?.documents} currentDate={selectedDate} />
       {/* <TransitionsSlide opened={opened}>
         <TimeLine />
       </TransitionsSlide> */}

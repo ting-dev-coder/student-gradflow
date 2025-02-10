@@ -32,7 +32,11 @@ function DayButton(props: DayButtonProps) {
       className={`${styles['day_week_wrapper']} ${
         props.modifiers.selected && styles['day_selected']
       }`}
-      onClick={() => setSelected?.(day.date)}
+      onClick={(e) => {
+        console.log('select?');
+        e.preventDefault();
+        setSelected?.(day.date);
+      }}
     >
       <Box>{format(props.day.date, 'EEE')}</Box>
       <UnstyledButton {...props}></UnstyledButton>
@@ -49,9 +53,7 @@ function CurrentWeekRow(props: CurrentWeekRowProps) {
   const isNotCurrentWeek = props.week.days.every(
     (day) => !isDateInCurrentWeek(day.date)
   );
-  if (isNotCurrentWeek) return <></>;
-
-  return <Week {...props} />;
+  return isNotCurrentWeek ? null : <Week {...props} />;
 }
 
 const DateCalendar = ({ onChange, defaultDate }) => {

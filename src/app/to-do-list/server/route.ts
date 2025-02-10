@@ -61,7 +61,6 @@ const app = new Hono()
         status,
         description,
       } = c.req.valid('form');
-
       const res = await databases.createDocument(
         DATABASE_ID,
         TODO_LIST_ID,
@@ -72,7 +71,6 @@ const app = new Hono()
           startDate: dayjs(startDate).format('YYYY-MM-DD'),
           startTime,
           endTime,
-          allDay,
           category,
           status,
           description,
@@ -88,7 +86,6 @@ const app = new Hono()
     async (c) => {
       const databases = c.get('databases');
       const user = c.get('user');
-
       const { taskId } = c.req.param();
       const {
         title,

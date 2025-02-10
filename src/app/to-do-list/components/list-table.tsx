@@ -29,19 +29,11 @@ const taskOpts = [
 function ListTable({ loading, data, onRowClick, onStatusChange }) {
   if (!data) return <>Data Empty</>;
 
+  const [statuses, setStatuses] = useState(
+    data.reduce((acc, task) => ({ ...acc, [task.name]: task.status }), {})
+  );
   const tasks = data || [];
-  const rows = tasks.map((element, idx) => {
-    const [status, setStatus] = useState(element.status);
-    function handleRowClick(element) {
-      onRowClick(element);
-    }
-
-    function handleStatusChange(status) {
-      setStatus(status);
-      console.log({ ...element, status });
-      onStatusChange({ ...element, status });
-    }
-
+  const rows = data.map((element, idx) => {
     return (
       <Table.Tr key={`${element.name}-${idx}`}>
         <Table.Td>{element.title}</Table.Td>
@@ -49,25 +41,25 @@ function ListTable({ loading, data, onRowClick, onStatusChange }) {
         <Table.Td>
           {element.allDay
             ? 'All Day'
-            : element.startAt
-            ? dateFormat(element.startAt)
+            : element.startTime
+            ? `${element.startTime[0]}:${element.startTime[1]} ${element.startTime[2]}`
             : '-'}
         </Table.Td>
-        <Table.Td>
+        {/* <Table.Td>
           {element.allDay
             ? '-'
-            : element.endAt
-            ? dateFormat(element.startAt)
+            : element.endTime
+            ? dateFormat(element.endTime)
             : '-'}
-        </Table.Td>
-        <Table.Td maw="100px">
+        </Table.Td> */}
+        <Table.Td maw="80px">
           {isTodayBefore(element.startDate) ? (
             element.status
           ) : (
             <Select
-              value={status}
+              value={statuses[element.name] || element.status}
               data={taskOpts}
-              onChange={handleStatusChange}
+              onChange={(status) => handleStatusChange(element, status)}
             />
           )}
         </Table.Td>
@@ -75,7 +67,7 @@ function ListTable({ loading, data, onRowClick, onStatusChange }) {
           {isTodayBefore(element.startDate) ? (
             ''
           ) : (
-            <ActionIcon onClick={() => handleRowClick(element)}>
+            <ActionIcon onClick={() => onRowClick(element)}>
               <BiSolidEdit />
             </ActionIcon>
           )}
@@ -83,6 +75,11 @@ function ListTable({ loading, data, onRowClick, onStatusChange }) {
       </Table.Tr>
     );
   });
+
+  function handleStatusChange(task, status) {
+    setStatuses((prev) => ({ ...prev, [task.name]: status }));
+    onStatusChange({ ...task, status });
+  }
 
   return (
     <Table striped highlightOnHover pos={'relative'}>
@@ -99,7 +96,7 @@ function ListTable({ loading, data, onRowClick, onStatusChange }) {
           <Table.Th>Task</Table.Th>
           <Table.Th>Category</Table.Th>
           <Table.Th>Start At</Table.Th>
-          <Table.Th>End At</Table.Th>
+          {/* <Table.Th>End At</Table.Th> */}
           <Table.Th>Status</Table.Th>
         </Table.Tr>
       </Table.Thead>

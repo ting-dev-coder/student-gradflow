@@ -7,7 +7,14 @@ export const createTodoSchema = z
     startDate: z.string().min(1, 'required field'),
     startTime: z.array(z.union([z.string(), z.number()])).optional(),
     endTime: z.array(z.union([z.string(), z.number()])).optional(),
-    allDay: z.coerce.boolean().default(false),
+    allDay: z
+      .preprocess((value) => {
+        if (typeof value === 'string') {
+          return value.toLowerCase() === 'true';
+        }
+        return value;
+      }, z.boolean())
+      .default(false),
     category: z.string(),
     status: z.string(),
     description: z.string(),
@@ -45,7 +52,14 @@ export const editTodoSchema = z
     startDate: z.string().min(1, 'required field'),
     startTime: z.array(z.union([z.string(), z.number()])).optional(),
     endTime: z.array(z.union([z.string(), z.number()])).optional(),
-    allDay: z.coerce.boolean().default(false),
+    allDay: z
+      .preprocess((value) => {
+        if (typeof value === 'string') {
+          return value.toLowerCase() === 'true';
+        }
+        return value;
+      }, z.boolean())
+      .default(false),
     category: z.string(),
     status: z.string(),
     description: z.string(),
