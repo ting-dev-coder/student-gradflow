@@ -14,6 +14,12 @@ const Countdown = () => {
     isFetching: isLoading,
     isError,
   } = useGetCountdownEvents();
+  const mainEvent =
+    (countdownEvents?.documents || []).find((event) => event.isMain) ||
+    countdownEvents?.documents[0];
+  const noMainList = (countdownEvents?.documents || []).filter(
+    (event) => !event.isMain
+  );
 
   if (isError) {
     return <div>Error: {error.message}</div>;
@@ -30,7 +36,7 @@ const Countdown = () => {
       gap={'sm'}
     >
       <MainCountdown
-        event={countdownEvents?.documents[0]}
+        event={mainEvent}
         onFullViewChange={handleFullView}
         fullView={fullView}
       />
@@ -46,10 +52,7 @@ const Countdown = () => {
       >
         <ScrollArea h="100%" w={'100%'}>
           <Title>Countdown</Title>
-          <CountdownList
-            loading={isLoading}
-            events={countdownEvents?.documents}
-          />
+          <CountdownList loading={isLoading} events={noMainList} />
         </ScrollArea>
       </motion.div>
     </Group>

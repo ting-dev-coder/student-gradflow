@@ -1,4 +1,6 @@
+import { dateFormat } from '@/lib/utils';
 import { Box, Image, Paper, Stack, Text, UnstyledButton } from '@mantine/core';
+import { differenceInDays } from 'date-fns';
 import { MdFullscreen, MdFullscreenExit } from 'react-icons/md';
 
 export interface EventI {
@@ -16,7 +18,7 @@ interface EventProps {
 const MainCountdown = ({ event, fullView, onFullViewChange }: EventProps) => {
   return (
     <Box flex={1} pos="relative" h="100%" c="var(--warning)">
-      <Image src="countdown-image-4.jpg" h="100%" />
+      <Image src={event?.localImagePath} h="100%" />
       <UnstyledButton
         pos="absolute"
         top="0"
@@ -33,10 +35,10 @@ const MainCountdown = ({ event, fullView, onFullViewChange }: EventProps) => {
       <Paper
         pos={'absolute'}
         inset={0}
-        w="fit-content"
+        w="min(488px,80%)"
         h="fit-content"
         m="auto"
-        p="lg"
+        p="xl"
         bg="rgba(189, 189, 189, 0.2)"
         style={{
           backdropFilter: ' blur(2px)',
@@ -44,10 +46,20 @@ const MainCountdown = ({ event, fullView, onFullViewChange }: EventProps) => {
         c="#fff"
         shadow="lg"
       >
-        <Stack align="center">
-          <Text>Graduation</Text>
-          <Text>79</Text>
-          <Text>2025-04-08 Tuesday</Text>
+        <Stack align="center" gap="sm">
+          <Text className="text-shadow" fz="max(16px, 2.25vw)">
+            {event?.name}
+          </Text>
+          <Text
+            className="text-shadow "
+            lh={0.8}
+            fz={`max(56px,${fullView ? '25vw' : '15vw'} )`}
+          >
+            {differenceInDays(dateFormat(event?.endAt), new Date())}
+          </Text>
+          <Text fz="max(16px, 2vw) " className="text-shadow ">
+            {dateFormat(event?.endAt)}
+          </Text>
         </Stack>
       </Paper>
     </Box>

@@ -64,7 +64,8 @@ import { sessionMiddleware } from '@/lib/session-middleware';
 import { zValidator } from '@hono/zod-validator';
 import { Hono } from 'hono';
 import { ID, Query } from 'node-appwrite';
-import { createCountdownSchema } from '../schemas';
+import { createCountdownSchema, updateCountdownSchema } from '../schemas';
+import { z } from 'zod';
 
 const app = new Hono()
   .get('/', sessionMiddleware, async (c) => {
@@ -87,8 +88,8 @@ const app = new Hono()
   })
   .post(
     '/',
-    zValidator('form', createCountdownSchema),
     sessionMiddleware,
+    zValidator('form', createCountdownSchema),
     async (c) => {
       const databases = c.get('databases');
       const user = c.get('user');
@@ -121,14 +122,52 @@ const app = new Hono()
         'unique()',
         {
           name,
-          endAt: endAt.toISOString(),
+          endAt,
           userId: user.$id,
           imageUrl: uploadedImageUrl,
           localImagePath: localImagePath || null,
-          // created_at: new Date().toISOString(),
         }
       );
-      return c.json({ data: { document: [] } });
+      return c.json({ data: { document: res } });
+    }
+  )
+  .patch(
+    ':countdownId',
+    sessionMiddleware,
+    zValidator('form', updateCountdownSchema),
+    async (c) => {
+      const databases = c.get('databases');
+      const user = c.get('user');
+
+      const { countdownId } = c.req.param();
+      const { isMain, endAt } = c.req.valid('form');
+
+      if (isMain) {
+        const existingMainEvent = await databases.listDocuments(
+          DATABASE_ID,
+          COUNTDOWN_ID,
+          [Query.equal('userId', user.$id), Query.equal('isMain', true)]
+        );
+        if (existingMainEvent.documents.length > 0) {
+          await databases.updateDocument(
+            DATABASE_ID,
+            COUNTDOWN_ID,
+            existingMainEvent.documents[0].$id,
+            { isMain: false }
+          );
+        }
+      }
+
+      const res = await databases.updateDocument(
+        DATABASE_ID,
+        COUNTDOWN_ID,
+        countdownId,
+        {
+          isMain,
+          endAt,
+        }
+      );
+      return c.json({ data: res });
     }
   )
   .delete(':countdownId', sessionMiddleware, async (c) => {

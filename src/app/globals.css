@@ -1,5 +1,5 @@
 :root {
-  --primary: #ffda80;
+  --primary: #f6b40c;
   --secondary: #f78c06;
   --yellow1: #f6b40c;
   --yellow2: #ffca4b;
@@ -50,4 +50,8 @@ fieldset {
 /* customized css  */
 .cursor-pointer {
   cursor: pointer;
+}
+
+.text-shadow {
+  text-shadow: 2px 3px 8px #393939b0;
 }

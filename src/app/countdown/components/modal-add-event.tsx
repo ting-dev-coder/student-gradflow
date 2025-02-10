@@ -24,7 +24,7 @@ import { MdCheck } from 'react-icons/md';
 import {
   useCountdown,
   DEFAULT_BACKGROUND_IMAGES,
-} from '../hooks/use-countdown';
+} from '../hooks/use-create-countdown';
 
 interface DefaultImageI {
   id: number;
@@ -102,7 +102,6 @@ const ModalAddEvent = ({ children }) => {
               label="event name"
               name="name"
               control={control}
-              error={errors.name?.message}
               handleInputChange={handleInputChange}
             />
             <DateInput
@@ -110,7 +109,6 @@ const ModalAddEvent = ({ children }) => {
               label="end at"
               name="endAt"
               control={control}
-              error={errors.endAt?.message}
               handleInputChange={handleInputChange}
             />
             <BackgroundImageField
@@ -151,8 +149,9 @@ const BackgroundImageField = ({ onImageChange, onDefaultImageChange }) => {
         align="flex-start"
         field={
           <SimpleGrid cols={3}>
-            {DEFAULT_BACKGROUND_IMAGES.map((image) => (
+            {DEFAULT_BACKGROUND_IMAGES.map((image, idx) => (
               <Indicator
+                key={`${image}-${idx}`}
                 color="var(--secondary)"
                 size="18"
                 offset={5}

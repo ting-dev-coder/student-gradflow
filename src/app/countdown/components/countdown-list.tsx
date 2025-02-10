@@ -67,8 +67,14 @@ const CountdownList = ({ events, loading }) => {
           }}
           spacing="md"
         >
-          {events?.map((event) => {
-            return <EventCard event={event} onDelete={onDelete} />;
+          {events?.map((event, idx) => {
+            return (
+              <EventCard
+                key={`event-${idx}`}
+                event={event}
+                onDelete={onDelete}
+              />
+            );
           })}
         </SimpleGrid>
       )}

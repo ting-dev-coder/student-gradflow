@@ -108,7 +108,7 @@ function ListTable({
           ) : (
             <ActionButtons
               onDeleteClick={(callback) => onDeleteClick(element.$id, callback)}
-              onEditClick={onEditClick}
+              onEditClick={() => onEditClick(element)}
             />
           )}
         </Table.Td>

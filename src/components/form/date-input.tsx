@@ -6,7 +6,7 @@ import {
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import FormLabel from './form-label';
 import dayjs from 'dayjs';
-import { parseISO } from 'date-fns';
+import { parse, parseISO } from 'date-fns';
 
 interface DateInputWrapper<T extends FieldValues> {
   control: Control<T>;
@@ -17,6 +17,10 @@ interface DateInputWrapper<T extends FieldValues> {
 }
 
 type DateInput<T extends FieldValues> = Omit<DateInputWrapper<T>, 'label'>;
+
+const dateParser: DateInputProps['dateParser'] = (input: string) => {
+  return parseISO(input);
+};
 
 function DateInput<T extends FieldValues>({
   control,
@@ -36,23 +40,34 @@ function DateInput<T extends FieldValues>({
       name={name}
       control={control}
       render={({ field, fieldState }) => {
+        console.log(defaultValue, field.value);
+        console.log(
+          'field.value',
+          defaultValue && typeof defaultValue === 'string'
+            ? parseISO(defaultValue)
+            : field.value && typeof field.value === 'string'
+            ? parseISO(field.value)
+            : null
+        );
         return (
           <>
             <MantineDateInput
               {...field}
               {...props}
+              dateParser={dateParser}
               error={fieldState?.error?.message}
               flex={1}
               valueFormat="YYYY-MM-DD"
               value={
-                defaultValue
+                defaultValue && typeof defaultValue === 'string'
                   ? parseISO(defaultValue)
-                  : field.value
+                  : field.value && typeof field.value === 'string'
                   ? parseISO(field.value)
                   : null
               }
               onChange={(value: DateValue) => {
-                field.onChange(value ? value.toDateString() : '');
+                console.log('change', value?.toDateString());
+                field.onChange(value ? value.toISOString() : '');
                 handleChange();
               }}
             />

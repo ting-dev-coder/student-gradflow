@@ -17,8 +17,8 @@ const CardSkeleton = ({
   return (
     visible && (
       <Grid {...props}>
-        {Array.from({ length: amount }).map(() => (
-          <Grid.Col span={span}>
+        {Array.from({ length: amount }).map((_, idx) => (
+          <Grid.Col key={`skeleton-${idx}`} span={span}>
             <Skeleton height={height} />
           </Grid.Col>
         ))}
