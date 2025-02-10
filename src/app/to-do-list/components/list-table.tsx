@@ -66,6 +66,46 @@ function ActionButtons({ onEditClick, onDeleteClick }) {
   );
 }
 
+function TaskRow({ task, onStatusChange, onEditClick, onDeleteClick }) {
+  const [status, setStatus] = useState(task.status);
+
+  function handleChange(newStatus) {
+    setStatus(newStatus);
+    onStatusChange({ ...task, status: newStatus });
+  }
+
+  return (
+    <Table.Tr key={task.name}>
+      <Table.Td>{task.title}</Table.Td>
+      <Table.Td>{task?.category}</Table.Td>
+      <Table.Td>
+        {task.allDay
+          ? 'All Day'
+          : task.startTime
+          ? `${task.startTime[0]}:${task.startTime[1]} ${task.startTime[2]}`
+          : '-'}
+      </Table.Td>
+      <Table.Td maw="80px">
+        {isTodayBefore(task.startDate) ? (
+          task.status
+        ) : (
+          <Select value={status} data={taskOpts} onChange={handleChange} />
+        )}
+      </Table.Td>
+      <Table.Td>
+        {isTodayBefore(task.startDate) ? (
+          ''
+        ) : (
+          <ActionButtons
+            onDeleteClick={(callback) => onDeleteClick(task.$id, callback)}
+            onEditClick={() => onEditClick(task)}
+          />
+        )}
+      </Table.Td>
+    </Table.Tr>
+  );
+}
+
 function ListTable({
   loading,
   data,
@@ -75,74 +115,27 @@ function ListTable({
 }) {
   if (!data) return <>Data Empty</>;
 
-  const [statuses, setStatuses] = useState(
-    data.reduce((acc, task) => ({ ...acc, [task.name]: task.status }), {})
-  );
-  const tasks = data || [];
-  const rows = data.map((element, idx) => {
-    return (
-      <Table.Tr key={`${element.name}-${idx}`}>
-        <Table.Td>{element.title}</Table.Td>
-        <Table.Td>{element?.category}</Table.Td>
-        <Table.Td>
-          {element.allDay
-            ? 'All Day'
-            : element.startTime
-            ? `${element.startTime[0]}:${element.startTime[1]} ${element.startTime[2]}`
-            : '-'}
-        </Table.Td>
-        <Table.Td maw="80px">
-          {isTodayBefore(element.startDate) ? (
-            element.status
-          ) : (
-            <Select
-              value={statuses[element.name] || element.status}
-              data={taskOpts}
-              onChange={(status) => handleStatusChange(element, status)}
-            />
-          )}
-        </Table.Td>
-        <Table.Td>
-          {isTodayBefore(element.startDate) ? (
-            ''
-          ) : (
-            <ActionButtons
-              onDeleteClick={(callback) => onDeleteClick(element.$id, callback)}
-              onEditClick={() => onEditClick(element)}
-            />
-          )}
-        </Table.Td>
-      </Table.Tr>
-    );
-  });
-
-  function handleStatusChange(task, status) {
-    setStatuses((prev) => ({ ...prev, [task.name]: status }));
-    onStatusChange({ ...task, status });
-  }
-
   return (
     <Table striped highlightOnHover pos={'relative'}>
-      {/* <Progress
-        w="100%"
-        pos={'absolute'}
-        value={100}
-        animated
-        h="2px"
-        color="yellow"
-      /> */}
       <Table.Thead>
         <Table.Tr>
           <Table.Th>Task</Table.Th>
           <Table.Th>Category</Table.Th>
           <Table.Th>Start At</Table.Th>
-          {/* <Table.Th>End At</Table.Th> */}
           <Table.Th>Status</Table.Th>
         </Table.Tr>
       </Table.Thead>
       <Table.Tbody>
         {loading && <Loader size={30} />}
-        {rows}
+        {data.map((task) => (
+          <TaskRow
+            key={task.name}
+            task={task}
+            onStatusChange={onStatusChange}
+            onEditClick={onEditClick}
+            onDeleteClick={onDeleteClick}
+          />
+        ))}
       </Table.Tbody>
     </Table>
   );
