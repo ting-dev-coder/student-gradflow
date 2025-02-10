@@ -4,6 +4,7 @@ import {
   ActionIcon,
   Badge,
   Box,
+  Button,
   Code,
   Divider,
   Group,
@@ -19,6 +20,7 @@ import { ProfileButton } from '../profile-button';
 import { BsPlusLg } from 'react-icons/bs';
 import classes from './navbar.module.css';
 import { usePathname } from 'next/navigation';
+import { UserButton } from '@/app/(auth)/components/user-button';
 
 const links = [
   { icon: <></>, label: 'Dashboard', path: '/' },
@@ -44,7 +46,7 @@ export function Navbar() {
   ));
 
   return (
-    <Stack gap="sm" component={'nav'} className={classes.navbar}>
+    <Stack h="100%" gap="sm" component={'nav'} className={classes.navbar}>
       <Title c="var(--yellow1)">Gradflow</Title>
       <Divider />
       <Box px="md">
@@ -54,6 +56,13 @@ export function Navbar() {
       <Box>
         <div className={classes.collections}>{navItems}</div>
       </Box>
+      <UserButton
+        mt="auto"
+        mx="auto"
+        w="fit-content"
+        variant="outline"
+        color="var(--primary)"
+      />
     </Stack>
   );
 }

@@ -2,7 +2,15 @@
 
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Card, Divider, Input, Button, Text, Title } from '@mantine/core';
+import {
+  Card,
+  Divider,
+  Input,
+  Button,
+  Text,
+  Title,
+  Stack,
+} from '@mantine/core';
 import { FcGoogle } from 'react-icons/fc';
 import { FaGithub } from 'react-icons/fa';
 import { Form, useForm } from 'react-hook-form';
@@ -13,7 +21,7 @@ import ControllerInput from '@/components/form/input';
 import { useSignIn } from './use-sign-in';
 
 export default function SignIn() {
-  const { mutate } = useLogin();
+  const { mutate, isPending } = useLogin();
 
   const {
     form: {
@@ -25,57 +33,40 @@ export default function SignIn() {
   } = useSignIn();
 
   function onSubmit(values: z.infer<typeof loginSchema>) {
-    mutate({ json: values });
+    mutate(
+      { json: values },
+      {
+        onSuccess: () => {},
+      }
+    );
   }
   return (
-    <Card className="w-full h-full md:w-[487px] border-none shadow-none">
-      <Title className="flex items-center justify-center text-center p-7">
-        <Text className="text-2xl">Welcome back!</Text>
+    <Card>
+      <Title>
+        <Text>Welcome back!</Text>
       </Title>
-      <div className="px-7 mb-2">
+      <div>
         <Divider my="sm" variant="dotted" />
       </div>
-      <Card.Section className="p-7">
+      <Stack ta="center">
         <form onSubmit={handleSubmit(onSubmit)}>
-          <ControllerInput
-            name="email"
-            control={control}
-            error={errors.email?.message}
-          />
+          <Stack>
+            <ControllerInput label="Email" name="email" control={control} />
 
-          <ControllerInput
-            name="password"
-            control={control}
-            error={errors.password?.message}
-          />
-          <Button size="lg" type="submit">
-            Login
-          </Button>
+            <ControllerInput
+              label="Password"
+              name="password"
+              control={control}
+            />
+            <Button px="xl" size="compact-md" loading={isPending} type="submit">
+              Login
+            </Button>
+          </Stack>
         </form>
-      </Card.Section>
+      </Stack>
       <div className="px-7">
         <Divider my="sm" variant="dotted" />
       </div>
-      <Card.Section className="p-7 flex flex-col gap-y-4">
-        <Button
-          disabled={false}
-          className="w-full"
-          variant={'secondary'}
-          size="lg"
-        >
-          <FcGoogle className="mr-2 size-5" />
-          Login with Google
-        </Button>
-        <Button
-          disabled={false}
-          className="w-full"
-          variant={'secondary'}
-          size="lg"
-        >
-          <FaGithub className="mr-2 size-5" />
-          Login with Github
-        </Button>
-      </Card.Section>
     </Card>
   );
 }

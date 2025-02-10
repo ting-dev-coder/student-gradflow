@@ -2,21 +2,18 @@ import { client } from "@/lib/rpc";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { InferRequestType, InferResponseType } from "hono";
 
-type ResponseType = InferResponseType<(typeof client.api)["todo-list"][":taskId"]["$patch"]>;
+type ResponseType = InferResponseType<(typeof client.api)["todo-list"][":taskId"]["$delete"]>;
 
-type RequestType = InferRequestType<(typeof client.api)["todo-list"][":taskId"]["$patch"]>;
+type RequestType = InferRequestType<(typeof client.api)["todo-list"][":taskId"]["$delete"]>;
 
-export const useUpdateTodoList = () => {
+export const useDeleteTodoList = () => {
 	const queryClient = useQueryClient();
 	const mutation = useMutation<ResponseType, Error, RequestType>({
-		mutationFn: async ({ form, param }) => {
-			const response = await client.api["todo-list"][":taskId"].$patch({
-				form,
-				param,
-			});
+		mutationFn: async ({ param }) => {
+			const response = await client.api["todo-list"][":taskId"].$delete({ param });
 
 			if (!response.ok) {
-				throw new Error("Failed to update task");
+				throw new Error("Failed to delete task");
 			}
 			return await response.json();
 		},
@@ -24,7 +21,7 @@ export const useUpdateTodoList = () => {
 			queryClient.invalidateQueries({ queryKey: ["todo-list"] });
 		},
 		onError: () => {
-			console.log("failed to update todo list");
+			console.log("failed to delete todo list");
 		},
 	});
 

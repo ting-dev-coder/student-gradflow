@@ -3,11 +3,13 @@ interface ModalDeleteConfirm {
   opened: boolean;
   close: () => void;
   onDeleteClick: (closeCallback: () => void) => void;
+  loading?: boolean;
 }
 const ModalDeleteConfirm = ({
   opened,
   close,
   onDeleteClick,
+  loading,
 }: ModalDeleteConfirm) => {
   return (
     <Modal
@@ -25,6 +27,7 @@ const ModalDeleteConfirm = ({
         <Button
           onClick={() => onDeleteClick(() => close())}
           color="var(--gray4)"
+          loading={loading}
         >
           Delete
         </Button>

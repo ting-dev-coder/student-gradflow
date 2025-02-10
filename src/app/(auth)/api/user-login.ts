@@ -24,8 +24,9 @@ export const useLogin = () => {
       notifications.show({
         message: 'Logged in',
       });
-      router.refresh();
+
       queryClient.invalidateQueries({ queryKey: ['current'] });
+      router.replace('/');
     },
     onError: () => {
       notifications.show({ message: 'Fail to log in ' });

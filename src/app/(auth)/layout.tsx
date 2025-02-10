@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import Image from 'next/image';
-import { Button } from '@mantine/core';
+import { Box, Button, Center, Stack } from '@mantine/core';
 
 interface AuthLayoutProps {
   children: ReactNode;
@@ -8,17 +8,14 @@ interface AuthLayoutProps {
 
 export default function AuthLayout({ children }: AuthLayoutProps) {
   return (
-    <div className="bg-neutral-100 min-h-screen">
-      <div className="mx-auto max-w-screen-2xl p-4">
+    <Box>
+      <Stack mx="auto" maw="60%">
         <nav className="flex justify-between items-center">
           {/* <Image src="/logo.svg" width={152} height={56} alt="logo" /> */}
           <Button variant="secondary">Sign up</Button>
         </nav>
-
-        <div className="flex flex-col items-center justify-center pt-4 md:pt-14">
-          {children}
-        </div>
-      </div>
-    </div>
+        {children}
+      </Stack>
+    </Box>
   );
 }

@@ -10,7 +10,6 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query';
-import { useState } from 'react';
 
 import '@mantine/core/styles.css';
 import { Notifications } from '@mantine/notifications';

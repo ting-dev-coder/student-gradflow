@@ -12,9 +12,9 @@ const FormLabel = ({ label, field, ...props }: FormLabelProps) => {
       <Input.Label
         c="var(--gray3)"
         tt="capitalize"
+        ta="left"
         w="100px"
         miw={'100px'}
-        required
       >
         {label}
       </Input.Label>
