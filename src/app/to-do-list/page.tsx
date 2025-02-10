@@ -1,14 +1,6 @@
 'use client';
 
-import {
-  Button,
-  Collapse,
-  Drawer,
-  Group,
-  List,
-  Stack,
-  Title,
-} from '@mantine/core';
+import { Button, Group, Stack, Title } from '@mantine/core';
 import { useGetTodoList } from './api/use-get-todo-list';
 import TimeLine from './components/timeline';
 import DateCalendar from './components/weekly-calendar/page';
