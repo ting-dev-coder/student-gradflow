@@ -55,7 +55,6 @@ const app = new Hono()
         title,
         startDate,
         startTime,
-        endTime,
         allDay,
         category,
         status,
@@ -70,10 +69,10 @@ const app = new Hono()
           userId: user.$id,
           startDate: dayjs(startDate).format('YYYY-MM-DD'),
           startTime,
-          endTime,
           category,
           status,
           description,
+          allDay,
         }
       );
       return c.json({ data: res });
@@ -91,7 +90,6 @@ const app = new Hono()
         title,
         startDate,
         startTime,
-        endTime,
         allDay,
         category,
         status,
@@ -118,7 +116,6 @@ const app = new Hono()
           userId: user.$id,
           startDate,
           startTime,
-          endTime,
           allDay,
           category,
           status,

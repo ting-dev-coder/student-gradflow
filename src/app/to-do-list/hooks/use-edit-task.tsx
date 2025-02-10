@@ -8,7 +8,6 @@ export const DEFAULT_FORM_VALUES = {
   category: 'personal',
   startDate: '',
   startTime: [],
-  endTime: [],
   description: '',
   allDay: false,
   status: 'to-do',

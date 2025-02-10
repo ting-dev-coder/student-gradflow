@@ -21,6 +21,7 @@ import { useRef, useState } from 'react';
 import { isTodayBefore } from '@/lib/utils';
 import { useUpdateTodoList } from './api/use-update-todo-list';
 import { notifications } from '@mantine/notifications';
+import { useDeleteTodoList } from './api/use-delete-todo-list';
 
 const ToDoList = () => {
   const [opened, { toggle }] = useDisclosure(false);
@@ -38,6 +39,9 @@ const ToDoList = () => {
   } = useGetTodoList(selectedDate);
   const { mutate: updateMutate, isPending: editPending } = useUpdateTodoList();
 
+  const { mutate: deleteMutate, isPending: deletePending } =
+    useDeleteTodoList();
+
   if (isError) {
     // if (error.data?.code === "UNAUTHORIZED") {
     // 	console.log("unauthorize");
@@ -45,18 +49,19 @@ const ToDoList = () => {
     return <div>Error: {error.message}</div>;
   }
 
-  const onDelete = (taskId: string) => {
+  const handleDeleteClick = (taskId: string, successCallback) => {
     deleteMutate(
       { param: { taskId: taskId } },
       {
         onSuccess: () => {
           console.log('deleted');
+          successCallback();
         },
       }
     );
   };
 
-  function handleRowClick(row) {
+  function handleEditClick(row) {
     selectedTaskIdRef.current = row.$id;
     detailOpen();
   }
@@ -101,7 +106,8 @@ const ToDoList = () => {
         <ListTable
           loading={isLoading || isFetching}
           data={toDoList?.documents}
-          onRowClick={handleRowClick}
+          onEditClick={handleEditClick}
+          onDeleteClick={handleDeleteClick}
           onStatusChange={handleStatusChange}
         />
       </Stack>

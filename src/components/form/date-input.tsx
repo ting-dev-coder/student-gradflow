@@ -13,18 +13,10 @@ interface DateInputWrapper<T extends FieldValues> {
   name: Path<T>;
   handleInputChange?: (field: keyof T) => void;
   label: string;
-  defaultValue?: Date | null;
+  defaultValue?: string | null;
 }
 
 type DateInput<T extends FieldValues> = Omit<DateInputWrapper<T>, 'label'>;
-
-const dateParser: DateInputProps['dateParser'] = (input) => {
-  if (input === 'WW2') {
-    return new Date(1939, 8, 1);
-  }
-
-  return dayjs(input, 'YYYY-MM-DD').toDate();
-};
 
 function DateInput<T extends FieldValues>({
   control,
@@ -44,7 +36,6 @@ function DateInput<T extends FieldValues>({
       name={name}
       control={control}
       render={({ field, fieldState }) => {
-        console.log('看啊', defaultValue);
         return (
           <>
             <MantineDateInput

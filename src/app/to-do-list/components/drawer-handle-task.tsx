@@ -10,7 +10,7 @@ import {
   Stack,
   Title,
 } from '@mantine/core';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
 import { createTodoSchema, editTodoSchema } from '../schemas';
 import { useCreateTodoList } from '../api/user-create-todo-list';
@@ -22,7 +22,6 @@ import Checkbox from '@/components/form/checkbox';
 import TimePicker from '@/components/form/time-picker';
 import FormLabel from '@/components/form/form-label';
 import Textarea from '@/components/form/textarea';
-import FormTask from './form-task';
 import { useEffect, useState } from 'react';
 import { useGetTodo } from '../api/use-get-todo';
 import { notifications } from '@mantine/notifications';
@@ -33,7 +32,7 @@ import { dateFormat } from '@/lib/utils';
 
 interface DrawerHandleTaskProps {
   opened: boolean;
-  taskId?: number;
+  taskId: number | null;
   close: () => void;
   defaultDate: string;
 }
@@ -58,9 +57,12 @@ const DrawerHandleTask = ({
     form: { getValues, control, handleSubmit, clearErrors, reset },
   } = useApiHook();
 
+  const showStartTimeField = useWatch({
+    control,
+    name: 'allDay',
+  });
+
   const { mutate: updateMutate, isPending: editPending } = useUpdateTodoList();
-  const { mutate: deleteMutate, isPending: deletePending } =
-    useDeleteTodoList();
 
   const { data, isFetching: taskLoading } = useGetTodo({ taskId });
 
@@ -114,7 +116,7 @@ const DrawerHandleTask = ({
       size="32rem"
     >
       <LoadingOverlay
-        visible={taskLoading || isPending || deletePending || editPending}
+        visible={taskLoading || isPending || editPending}
         zIndex={1000}
         overlayProps={{ radius: 'sm', blur: 2 }}
       />
@@ -151,8 +153,9 @@ const DrawerHandleTask = ({
               control={control}
               defaultValue={taskId ? null : defaultDate}
             />
+
             <Checkbox control={control} name="allDay" label="All day " />
-            <Group wrap="nowrap">
+            {!showStartTimeField && (
               <FormLabel
                 label={'Start Time'}
                 field={
@@ -165,19 +168,7 @@ const DrawerHandleTask = ({
                   />
                 }
               />
-              <FormLabel
-                label={'End Time'}
-                field={
-                  <TimePicker
-                    initialHour={getValues('endTime')?.[0]}
-                    initialMin={getValues('endTime')?.[1]}
-                    initialSession={getValues('endTime')?.[2] as string}
-                    control={control}
-                    name={'endTime'}
-                  />
-                }
-              />
-            </Group>
+            )}
 
             <Divider />
             <Title order={5}>Description</Title>

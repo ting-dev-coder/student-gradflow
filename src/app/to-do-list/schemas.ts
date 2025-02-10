@@ -5,8 +5,10 @@ export const createTodoSchema = z
   .object({
     title: z.string().trim().min(1, 'required field'),
     startDate: z.string().min(1, 'required field'),
-    startTime: z.array(z.union([z.string(), z.number()])).optional(),
-    endTime: z.array(z.union([z.string(), z.number()])).optional(),
+    startTime: z
+      .array(z.union([z.string(), z.number()]))
+      .nullish()
+      .default([]),
     allDay: z
       .preprocess((value) => {
         if (typeof value === 'string') {
@@ -28,21 +30,8 @@ export const createTodoSchema = z
       });
     }
 
-    // // startTime 和 endTime 都存在時，確保 startTime 早於 endTime
-    if (data.startTime && data.endTime) {
-      const start = data.startTime;
-      const end = data.endTime;
-
-      const timeStart = dayjs(`${start[0]}:${start[1]} ${start[2]}`, 'h:mm A');
-      const timeEnd = dayjs(`${end[0]}:${end[1]} ${end[2]}`, 'h:mm A');
-
-      if (timeStart.isAfter(timeEnd) || timeStart.isSame(timeEnd)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: 'endTime must be later than startTime',
-          path: ['endTime'],
-        });
-      }
+    if (data.allDay) {
+      data.startTime = [];
     }
   });
 
@@ -51,7 +40,6 @@ export const editTodoSchema = z
     title: z.string().trim().min(1, 'required field'),
     startDate: z.string().min(1, 'required field'),
     startTime: z.array(z.union([z.string(), z.number()])).optional(),
-    endTime: z.array(z.union([z.string(), z.number()])).optional(),
     allDay: z
       .preprocess((value) => {
         if (typeof value === 'string') {
@@ -73,20 +61,7 @@ export const editTodoSchema = z
       });
     }
 
-    // // startTime 和 endTime 都存在時，確保 startTime 早於 endTime
-    if (data.startTime && data.endTime) {
-      const start = data.startTime;
-      const end = data.endTime;
-
-      const timeStart = dayjs(`${start[0]}:${start[1]} ${start[2]}`, 'h:mm A');
-      const timeEnd = dayjs(`${end[0]}:${end[1]} ${end[2]}`, 'h:mm A');
-
-      if (timeStart.isAfter(timeEnd) || timeStart.isSame(timeEnd)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: 'endTime must be later than startTime',
-          path: ['endTime'],
-        });
-      }
+    if (data.allDay) {
+      data.startTime = [];
     }
   });

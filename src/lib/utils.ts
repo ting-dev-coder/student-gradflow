@@ -19,11 +19,10 @@ export function isTodayBefore(date: string) {
  * @returns {string} - The ISO formatted date string
  */
 export function convertCustomTimeToISO(dateStr, timeArray) {
-  if ((timeArray, length)) return '';
+  if (!timeArray.length) return '';
   let [hour, minute, meridiem] = timeArray;
   hour = parseInt(hour, 10);
   minute = parseInt(minute, 10);
-
   // Convert 12-hour format to 24-hour format
   if (meridiem.toUpperCase() === 'PM' && hour < 12) {
     hour += 12;
