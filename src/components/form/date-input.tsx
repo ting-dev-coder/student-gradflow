@@ -34,21 +34,12 @@ function DateInput<T extends FieldValues>({
       handleInputChange(name);
     }
   };
-  console.log('defaultValue', defaultValue);
+
   return (
     <Controller
       name={name}
       control={control}
       render={({ field, fieldState }) => {
-        console.log(defaultValue, field.value);
-        console.log(
-          'field.value',
-          defaultValue && typeof defaultValue === 'string'
-            ? parseISO(defaultValue)
-            : field.value && typeof field.value === 'string'
-            ? parseISO(field.value)
-            : null
-        );
         return (
           <>
             <MantineDateInput
@@ -66,7 +57,6 @@ function DateInput<T extends FieldValues>({
                   : null
               }
               onChange={(value: DateValue) => {
-                console.log('change', value?.toDateString());
                 field.onChange(value ? value.toISOString() : '');
                 handleChange();
               }}

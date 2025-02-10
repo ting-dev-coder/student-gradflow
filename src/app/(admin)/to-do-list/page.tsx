@@ -42,13 +42,12 @@ const ToDoList = () => {
     return <div>Error: {error.message}</div>;
   }
 
-  const handleDeleteClick = (taskId: string, successCallback) => {
+  const handleDeleteClick = (taskId: string, callback) => {
     deleteMutate(
       { param: { taskId: taskId } },
       {
-        onSuccess: () => {
-          console.log('deleted');
-          successCallback();
+        onSettled: () => {
+          callback();
         },
       }
     );

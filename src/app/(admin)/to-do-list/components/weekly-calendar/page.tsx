@@ -33,7 +33,6 @@ function DayButton(props: DayButtonProps) {
         props.modifiers.selected && styles['day_selected']
       }`}
       onClick={(e) => {
-        console.log('select?');
         e.preventDefault();
         setSelected?.(day.date);
       }}

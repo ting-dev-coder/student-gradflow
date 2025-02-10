@@ -86,8 +86,15 @@ const Dashboard = () => {
               <CurrentWeather
                 data={weatherQuery.data}
                 locationName={locationName}
+                error={locationError}
               />
             </Skeleton>
+            {/* <Skeleton w="100%" h={'100%'} visible={locationLoading}>
+              <CurrentWeather
+                data={weatherQuery.data}
+                locationName={locationName}
+              />
+            </Skeleton> */}
           </Box>
           <Box bg="#fff" flex={3}>
             <TimeLine tasks={toDoList?.documents} currentDate={new Date()} />

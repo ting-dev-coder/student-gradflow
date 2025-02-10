@@ -68,7 +68,6 @@ const DrawerHandleTask = ({
 
   useEffect(() => {
     if (taskId && data) {
-      console.log();
       reset((prev) => ({ ...prev, ...data }));
     }
   }, [data, reset]);

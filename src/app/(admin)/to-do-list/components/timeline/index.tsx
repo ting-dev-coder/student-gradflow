@@ -14,7 +14,7 @@ const TimeLine = ({ tasks, currentDate }) => {
   const calendarRef = useRef(null);
   const events = useMemo(() => {
     if (!tasks) return [];
-    console.log(tasks);
+
     const newTasks = tasks.map((task) => ({
       id: createEventId(),
       title: task.title,
@@ -25,10 +25,6 @@ const TimeLine = ({ tasks, currentDate }) => {
     goToSpecificDate(dateFormat(currentDate));
     return newTasks;
   }, [tasks]);
-
-  useEffect(() => {
-    console.log('events', events);
-  }, [events]);
 
   function goToSpecificDate(date: string) {
     if (!calendarRef?.current) return;
