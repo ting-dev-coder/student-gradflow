@@ -1,38 +1,38 @@
+import { groupByDateAndSumMins } from '@/lib/utils';
 import { Stack, Group, Text } from '@mantine/core';
+import { compareAsc, format, parseISO } from 'date-fns';
 import { BarChart, Bar, ResponsiveContainer, YAxis, XAxis } from 'recharts';
 
-const data = [
-  {
-    name: 'Mon',
-    value: 2,
-  },
-  {
-    name: 'Tue',
-    value: 3,
-  },
-  {
-    name: 'Wed',
-    value: 0,
-  },
-  {
-    name: 'Thr',
-    value: 0,
-  },
-  {
-    name: 'Fri',
-    value: 1,
-  },
-  {
-    name: 'Sat',
-    value: 9,
-  },
-  {
-    name: 'Sun',
-    value: 4,
-  },
+const weekDays = [
+  { name: 'Sun', mins: 0 },
+  { name: 'Mon', mins: 0 },
+  { name: 'Tue', mins: 0 },
+  { name: 'Wed', mins: 0 },
+  { name: 'Thu', mins: 0 },
+  { name: 'Fri', mins: 0 },
+  { name: 'Sat', mins: 0 },
 ];
+const aggregateMinsByDay = (data, weekDays) => {
+  data.forEach((item) => {
+    const dayName = format(item?.date, 'EEE');
+    const weekDay = weekDays.find((entry) => entry.name === dayName);
 
-const WeeklyFocusChart = () => {
+    console.log('item', weekDay);
+
+    if (weekDay) {
+      weekDay.mins += item.mins;
+    }
+  });
+
+  return weekDays.map(({ name, mins }) => ({ name, value: mins }));
+};
+
+const WeeklyFocusChart = ({ data }) => {
+  if (!data) return;
+
+  const groupedData = groupByDateAndSumMins(data);
+  const chartData = aggregateMinsByDay(groupedData, weekDays);
+
   return (
     <Stack h="100%">
       <Group>
@@ -41,7 +41,7 @@ const WeeklyFocusChart = () => {
       <ResponsiveContainer width="100%" style={{ flex: 1 }}>
         <BarChart
           height={100}
-          data={data}
+          data={chartData}
           margin={{ top: 0, left: -30, right: 0, bottom: -10 }}
         >
           <Bar dataKey="value" fill="var(--yellow2)" />

@@ -4,4 +4,7 @@ export const TODO_LIST_ID = process.env.NEXT_PUBLIC_APPWRITE_TODO_LIST_ID!;
 
 export const COUNTDOWN_ID = process.env.NEXT_PUBLIC_APPWRITE_COUNTDOWN_ID!;
 
-export const IMAGES_BUCKET_ID = process.env.NEXT_PUBLIC_APPWRITE_IMAGES_BUCKET_ID!;
+export const FOCUS_MINS_ID = process.env.NEXT_PUBLIC_APPWRITE_FOCUS_MIN_ID!;
+
+export const IMAGES_BUCKET_ID =
+  process.env.NEXT_PUBLIC_APPWRITE_IMAGES_BUCKET_ID!;

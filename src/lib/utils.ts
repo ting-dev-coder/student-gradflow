@@ -1,5 +1,5 @@
 import { clsx, type ClassValue } from 'clsx';
-import { isBefore, format, parseISO } from 'date-fns';
+import { isBefore, format } from 'date-fns';
 import dayjs from 'dayjs';
 
 export function dateFormat(date, format = 'YYYY-MM-DD') {
@@ -34,4 +34,33 @@ export function convertCustomTimeToISO(dateStr, timeArray) {
   baseDate.setHours(hour, minute, 0, 0);
 
   return baseDate.toISOString();
+}
+
+import { parseISO, isSameDay, startOfDay } from 'date-fns';
+
+const data = [
+  { id: 1, date: '2025-02-01T10:00:00Z', mins: 30 },
+  { id: 2, date: '2025-02-01T12:00:00Z', mins: 45 },
+  { id: 3, date: '2025-02-02T09:00:00Z', mins: 60 },
+  { id: 4, date: '2025-02-02T14:00:00Z', mins: 30 },
+  { id: 5, date: '2025-02-03T08:00:00Z', mins: 20 },
+];
+
+export function groupByDateAndSumMins(data: { date: string; mins: number }[]) {
+  if (!data) return 0;
+  const result = data.reduce((acc, item) => {
+    const date = startOfDay(parseISO(item.date));
+
+    const existing = acc.find((entry) => isSameDay(entry.date, date));
+
+    if (existing) {
+      existing.mins += item.mins;
+    } else {
+      acc.push({ date, mins: item.mins });
+    }
+
+    return acc;
+  }, [] as { date: Date; mins: number }[]);
+
+  return result;
 }

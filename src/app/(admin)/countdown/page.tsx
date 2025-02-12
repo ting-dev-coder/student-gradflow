@@ -12,10 +12,9 @@ const Countdown = () => {
   const {
     data: countdownEvents,
     error,
-
     isPending: isLoading,
     isError,
-  } = useGetCountdownEvents(false, setEventUpdate);
+  } = useGetCountdownEvents(false);
   const mainEvent =
     (countdownEvents?.documents || []).find((event) => event.isMain) ||
     countdownEvents?.documents[0];

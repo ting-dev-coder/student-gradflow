@@ -11,6 +11,9 @@ export function UseCountdownTimer() {
   const [isRunning, setIsRunning] = useState(false);
 
   useEffect(() => {
+    if (time == 0) {
+      setIsRunning(false);
+    }
     if (isRunning && time > 0) {
       const timer = setTimeout(() => {
         setTime(time - 1);
@@ -36,9 +39,14 @@ export function UseCountdownTimer() {
       '0'
     )}`;
   };
+
+  function handleSetTime(seconds: number) {
+    setTime(seconds);
+  }
   return {
     handleStartPause,
     handleReset,
+    handleSetTime,
     formatTime,
     time,
     isRunning,

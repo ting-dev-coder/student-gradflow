@@ -9,10 +9,19 @@ import TimeLine from '../to-do-list/components/timeline';
 import { useGetTodoList } from '../to-do-list/api/use-get-todo-list';
 import WeeklyFocusChart from './components/weekly-focus-chart';
 import { useGeolocation } from './hooks/use-geolocation';
+import { useGetFocusRecords } from '../pomodoro-timer/api/use-get-focus-record';
+import { useEffect, useState } from 'react';
+import { startOfDay } from 'date-fns';
 
 const Dashboard = () => {
-  // const router = useRouter();
-  // const { query } = router;
+  const [currentDate, setCurrentDate] = useState(new Date());
+  useEffect(() => {
+    // Use startOfDay from date-fns to get today's date with time reset to midnight
+    const today = startOfDay(new Date());
+    setCurrentDate(today);
+  }, []);
+  const { data: focusRecords, isLoading: focusMinLoading } =
+    useGetFocusRecords(currentDate);
   const {
     data: countdownEvents,
     error,
@@ -23,19 +32,15 @@ const Dashboard = () => {
     (countdownEvents?.documents || []).find((event) => event.isMain) ||
     countdownEvents?.documents[0] ||
     [];
-  const {
-    data: toDoList,
-    isLoading: toDoLoading,
-    isFetching,
-    isError,
-  } = useGetTodoList(new Date());
+  const { data: toDoList, isLoading: toDoLoading } =
+    useGetTodoList(currentDate);
   const {
     coordinates,
     error: locationError,
     getLocation,
     isLoading: locationLoading,
   } = useGeolocation();
-
+  console.log('focusRecords', focusRecords);
   const weatherQuery = useWeatherQuery(coordinates);
   const locationQuery = useReverseGeocodeQuery(coordinates);
 
@@ -68,7 +73,7 @@ const Dashboard = () => {
             </Skeleton>
           </Box>
           <Box bg="#fff" flex={1} mih="250px">
-            <WeeklyFocusChart />
+            <WeeklyFocusChart data={focusRecords?.data?.documents} />
           </Box>
         </Stack>
       </Grid.Col>
