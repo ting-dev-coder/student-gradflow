@@ -11,7 +11,7 @@ const Countdown = () => {
   const {
     data: countdownEvents,
     error,
-    isFetching: isLoading,
+    isPending: isLoading,
     isError,
   } = useGetCountdownEvents();
   const mainEvent =
@@ -20,6 +20,7 @@ const Countdown = () => {
   const noMainList = (countdownEvents?.documents || []).filter(
     (event) => !event.isMain
   );
+  console.log('mainEvent', mainEvent, noMainList);
 
   if (isError) {
     return <div>Error: {error.message}</div>;

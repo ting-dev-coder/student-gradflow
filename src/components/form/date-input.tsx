@@ -40,11 +40,22 @@ function DateInput<T extends FieldValues>({
       name={name}
       control={control}
       render={({ field, fieldState }) => {
+        console.log('DateInput Value:', {
+          defaultValue,
+          fieldValue: field.value,
+          finalValue:
+            defaultValue && typeof defaultValue === 'string'
+              ? parseISO(defaultValue)
+              : field.value && typeof field.value === 'string'
+              ? parseISO(field.value)
+              : null,
+        });
         return (
           <>
             <MantineDateInput
               {...field}
               {...props}
+              minDate={new Date()}
               dateParser={dateParser}
               error={fieldState?.error?.message}
               flex={1}

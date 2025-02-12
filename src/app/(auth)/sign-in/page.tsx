@@ -19,8 +19,12 @@ import { useLogin } from '../api/user-login';
 import { getCurrent } from '../actions';
 import ControllerInput from '@/components/form/input';
 import { useSignIn } from './use-sign-in';
+import ControllerPasswordInput from '@/components/form/password-input';
+import { useRouter } from 'next/navigation';
+import { IconArrowRight } from '@tabler/icons-react';
 
 export default function SignIn() {
+  const router = useRouter();
   const { mutate, isPending } = useLogin();
 
   const {
@@ -40,20 +44,29 @@ export default function SignIn() {
       }
     );
   }
+  function navToSignup() {
+    router.push('/sign-up');
+  }
   return (
-    <Card>
-      <Title>
-        <Text>Welcome back!</Text>
-      </Title>
-      <div>
-        <Divider my="sm" variant="dotted" />
-      </div>
+    <Card w="100%" pt="0">
+      <Button
+        ml="auto"
+        w="fit-content"
+        rightSection={<IconArrowRight size={14} />}
+        variant="subtle"
+        onClick={navToSignup}
+      >
+        Sign up
+      </Button>
+      <Title>Sign in</Title>
+      <Text>Welcome back!</Text>
+      <Divider my="sm" variant="dotted" />
       <Stack ta="center">
         <form onSubmit={handleSubmit(onSubmit)}>
           <Stack>
             <ControllerInput label="Email" name="email" control={control} />
 
-            <ControllerInput
+            <ControllerPasswordInput
               label="Password"
               name="password"
               control={control}
@@ -64,9 +77,6 @@ export default function SignIn() {
           </Stack>
         </form>
       </Stack>
-      <div className="px-7">
-        <Divider my="sm" variant="dotted" />
-      </div>
     </Card>
   );
 }

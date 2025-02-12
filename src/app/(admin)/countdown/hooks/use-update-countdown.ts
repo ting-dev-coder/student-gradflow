@@ -10,7 +10,6 @@ export const useUpdateCountdown = () => {
     resolver: zodResolver(updateCountdownSchema),
     defaultValues: {
       isMain: false,
-      endAt: new Date(),
     },
   });
   return {

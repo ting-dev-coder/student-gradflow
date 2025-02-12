@@ -27,7 +27,7 @@ export const useEditCountdown = () => {
       return await response.json();
     },
     onSuccess: (_, variables) => {
-      if (variables.form.endAt) return;
+      //if (variables.form.endAt) return;
       queryClient.invalidateQueries({ queryKey: ['countdown'] });
     },
     onError: () => {

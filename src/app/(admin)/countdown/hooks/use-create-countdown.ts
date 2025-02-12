@@ -37,7 +37,6 @@ export const useCountdown = () => {
     resolver: zodResolver(createCountdownSchema),
     defaultValues: {
       name: '',
-      endAt: new Date(),
       localImagePath: DEFAULT_BACKGROUND_IMAGES[0].src,
     },
   });

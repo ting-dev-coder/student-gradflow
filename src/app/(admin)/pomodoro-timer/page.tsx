@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@mantine/core';
+import { Text, Button, Center, Flex, Stack, Title, Box } from '@mantine/core';
 import { UseCountdownTimer } from './hooks/use-countdown-timer';
 export default function PomodoroTimer() {
   const {
@@ -12,12 +12,17 @@ export default function PomodoroTimer() {
     isOngoing,
   } = UseCountdownTimer();
   return (
-    <div>
-      <h1>{formatTime(time)}</h1>
-      <Button onClick={handleStartPause}>
-        {isRunning ? 'Pause' : isOngoing ? 'Resume' : 'Start'}
-      </Button>
-      <Button onClick={handleReset}>Reset</Button>
-    </div>
+    <Box px="xl" py="sm">
+      <Title>Pomodoro Timer</Title>
+      <Flex justify={'center'} align="center">
+        <Stack pt="120px">
+          <Text ta="center">{formatTime(time)}</Text>
+          <Button onClick={handleStartPause}>
+            {isRunning ? 'Pause' : isOngoing ? 'Resume' : 'Start'}
+          </Button>
+          {isOngoing && <Button onClick={handleReset}>Reset</Button>}
+        </Stack>
+      </Flex>
+    </Box>
   );
 }

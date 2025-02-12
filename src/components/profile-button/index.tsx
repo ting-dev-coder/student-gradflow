@@ -1,17 +1,24 @@
 import { MdOutlineChevronRight } from 'react-icons/md';
 
-import { Avatar, Group, Text, UnstyledButton } from '@mantine/core';
+import {
+  Avatar,
+  Box,
+  Group,
+  Skeleton,
+  Text,
+  UnstyledButton,
+} from '@mantine/core';
 import classes from './profile-button.module.css';
 import { useRouter } from 'next/router';
 import { useCurrent } from '@/app/(auth)/api/user-current';
 
 export function ProfileButton() {
   const { data: user, isLoading } = useCurrent();
-
+  if (isLoading) return <Skeleton h="40px" />;
   if (!user) return null;
 
   return (
-    <UnstyledButton w="100%" className={classes.profile}>
+    <Box w="100%" className={classes.profile}>
       <Group gap={'xs'}>
         <Avatar
           src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-8.png"
@@ -28,8 +35,8 @@ export function ProfileButton() {
           </Text>
         </div>
 
-        <MdOutlineChevronRight size={14} />
+        {/* <MdOutlineChevronRight size={14} /> */}
       </Group>
-    </UnstyledButton>
+    </Box>
   );
 }
