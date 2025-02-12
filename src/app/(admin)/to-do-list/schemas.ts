@@ -39,7 +39,10 @@ export const editTodoSchema = z
   .object({
     title: z.string().trim().min(1, 'required field'),
     startDate: z.string().min(1, 'required field'),
-    startTime: z.array(z.union([z.string(), z.number()])).optional(),
+    startTime: z
+      .array(z.union([z.string(), z.number()]))
+      .nullish()
+      .default([]),
     allDay: z
       .preprocess((value) => {
         if (typeof value === 'string') {

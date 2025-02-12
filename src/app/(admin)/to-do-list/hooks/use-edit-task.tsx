@@ -7,7 +7,7 @@ export const DEFAULT_FORM_VALUES = {
   title: '',
   category: 'personal',
   startDate: '',
-  startTime: [],
+  startTime: [0, 0, 'AM'],
   description: '',
   allDay: false,
   status: 'to-do',

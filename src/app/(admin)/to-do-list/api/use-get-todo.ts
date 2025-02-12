@@ -2,7 +2,7 @@ import { client } from '@/lib/rpc';
 import { useQuery } from '@tanstack/react-query';
 
 interface GetTodo {
-  taskId?: number;
+  taskId?: number | null;
 }
 
 export const useGetTodo = ({ taskId }: GetTodo) => {

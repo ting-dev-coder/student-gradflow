@@ -28,13 +28,14 @@ import { notifications } from '@mantine/notifications';
 import { useDeleteTodoList } from '../api/use-delete-todo-list';
 import { useUpdateTodoList } from '../api/use-update-todo-list';
 import { useEditTask } from '../hooks/use-edit-task';
-import { dateFormat } from '@/lib/utils';
 
 interface DrawerHandleTaskProps {
   opened: boolean;
   taskId: number | null;
   close: () => void;
   defaultDate: string;
+  onAfterEditClose?: () => void;
+  refetch: () => void;
 }
 
 const DrawerHandleTask = ({
@@ -42,6 +43,7 @@ const DrawerHandleTask = ({
   close,
   taskId,
   defaultDate,
+  refetch,
 }: DrawerHandleTaskProps) => {
   const { mutate, isPending } = useCreateTodoList();
 
@@ -50,10 +52,11 @@ const DrawerHandleTask = ({
   if (!!taskId) {
     useApiHook = useEditTask;
     onSubmit = onEditSubmit;
+  } else {
+    typeof useApiHook?.reset === 'function' && useApiHook.reset();
   }
 
   const {
-    resetForm,
     form: { getValues, control, handleSubmit, clearErrors, reset },
   } = useApiHook();
 
@@ -70,7 +73,8 @@ const DrawerHandleTask = ({
     if (taskId && data) {
       reset((prev) => ({ ...prev, ...data }));
     }
-  }, [data, reset]);
+  }, [taskId, data, reset]);
+
   function onAddSubmit(values: z.infer<typeof createTodoSchema>) {
     mutate(
       {
@@ -86,7 +90,11 @@ const DrawerHandleTask = ({
     updateMutate(
       { form: { ...values }, param: { taskId } },
       {
-        onSuccess: ({ data }) => handleSubmitSuccess(data),
+        onSuccess: async ({ data }) => {
+          refetch();
+          console.log('關閉');
+          handleSubmitSuccess(data);
+        },
       }
     );
   }
@@ -99,7 +107,6 @@ const DrawerHandleTask = ({
     onClose();
   }
   function onClose() {
-    resetForm();
     close();
   }
   return (
