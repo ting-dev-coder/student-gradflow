@@ -1,7 +1,10 @@
 import { client } from '@/lib/rpc';
 import { useQuery } from '@tanstack/react-query';
 
-export const useGetCountdownEvents = (isMain?: boolean) => {
+export const useGetCountdownEvents = (
+  isMain?: boolean,
+  setEventUpdate?: (update: boolean) => void
+) => {
   const query = useQuery({
     queryKey: ['countdown', { isMain }],
     queryFn: async () => {
@@ -15,6 +18,7 @@ export const useGetCountdownEvents = (isMain?: boolean) => {
 
       return data;
     },
+
     retry: false,
   });
 

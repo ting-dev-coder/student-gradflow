@@ -20,8 +20,6 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-
-
 ## Project Tech stack
 
 - Nextjs
@@ -33,13 +31,9 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
   - weather api
   - youtube api
 
-
-
 ## Project site list
 
 🔹 MVP 🔸 Features
-
-
 
 🔹Auth
 
@@ -49,13 +43,11 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 
 Dashboard
 
-  🔹Countdown
+🔹Countdown
 
-  🔹To do list
+🔹To do list
 
-  🔹Today weather
-
-
+🔹Today weather
 
 🔹Countdown
 
@@ -69,17 +61,15 @@ Dashboard
     - default
     - 🔸<font color=red>custom</font>
 
-
 - Delete
 
 - View List
 
-
-
 🔹To do list
 
 - Create task
-  - tag  - personal , work , study
+
+  - tag - personal , work , study
   - name
   - start at
   - end at (optional, default start + 2 hours)
@@ -87,8 +77,6 @@ Dashboard
 - Update task
 - Delete task
 - View List
-
-
 
 Promdrom timer
 
@@ -101,27 +89,3 @@ Promdrom timer
 - Start
 
   🔸Play misc
-
-
-
-🔸Message board
-
-- Create
-  - message
-  - Tags
-  - Images
-- Update
-- Delete
-- Read List
-
-
-
-🔸Setting 
-
-
-
-- Read information
-- Update
-  - name
-  - Program 
-  - Course schedule

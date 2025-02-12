@@ -7,20 +7,21 @@ import MainCountdown from './components/main-countdown';
 
 import { motion } from 'framer-motion';
 const Countdown = () => {
+  const [eventUpdate, setEventUpdate] = useState(false);
   const [fullView, setFullView] = useState(false);
   const {
     data: countdownEvents,
     error,
+
     isPending: isLoading,
     isError,
-  } = useGetCountdownEvents();
+  } = useGetCountdownEvents(false, setEventUpdate);
   const mainEvent =
     (countdownEvents?.documents || []).find((event) => event.isMain) ||
     countdownEvents?.documents[0];
   const noMainList = (countdownEvents?.documents || []).filter(
     (event) => !event.isMain
   );
-  console.log('mainEvent', mainEvent, noMainList);
 
   if (isError) {
     return <div>Error: {error.message}</div>;
@@ -41,6 +42,7 @@ const Countdown = () => {
         onFullViewChange={handleFullView}
         fullView={fullView}
         loading={isLoading}
+        updating={eventUpdate}
       />
       <motion.div
         initial={{ opacity: 1, flex: 1, display: 'flex', height: '100%' }}
@@ -54,7 +56,11 @@ const Countdown = () => {
       >
         <ScrollArea h="100%" w={'100%'}>
           <Title>Countdown</Title>
-          <CountdownList loading={isLoading} events={noMainList} />
+          <CountdownList
+            setEventUpdate={setEventUpdate}
+            loading={isLoading}
+            events={noMainList}
+          />
         </ScrollArea>
       </motion.div>
     </Group>

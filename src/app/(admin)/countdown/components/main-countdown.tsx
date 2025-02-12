@@ -12,6 +12,7 @@ import { differenceInDays, parseISO } from 'date-fns';
 import { MdFullscreen, MdFullscreenExit } from 'react-icons/md';
 import { useEditCountdown } from '../api/use-edit-countdown';
 import EditableDateInput from './editable-date-input';
+import { useState } from 'react';
 
 export interface EventI {
   image: string;
@@ -23,24 +24,24 @@ interface EventProps {
   event: EventI;
   onFullViewChange: () => void;
   fullView: boolean;
+  updating: boolean;
 }
-{
-  /* <Box>{!event?.image ? "暫無圖片" : <Image src={event.image} />}</Box> */
-}
+
 const MainCountdown = ({
   loading,
   event,
   fullView,
   onFullViewChange,
+  updating,
 }: EventProps) => {
-  if (!event && loading)
+  const { mutate } = useEditCountdown();
+  if ((!event && loading) || updating)
     return (
       <Box flex={1} pos="relative" h="100%" c="var(--warning)">
-        <Skeleton h="100%" visible={loading}></Skeleton>;
+        <Skeleton h="100%"></Skeleton>;
       </Box>
     );
 
-  const { mutate } = useEditCountdown();
   console.log('event', event);
   function handleUpdateDate(value, callback) {
     mutate(
@@ -49,7 +50,9 @@ const MainCountdown = ({
         param: { countdownId: event.$id },
       },
       {
-        onSettled: () => callback(),
+        onSettled: () => {
+          callback();
+        },
       }
     );
   }

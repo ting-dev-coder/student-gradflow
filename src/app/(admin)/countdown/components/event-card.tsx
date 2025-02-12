@@ -26,7 +26,7 @@ import { useDisclosure } from '@mantine/hooks';
 import ModalDeleteConfirm from '@/components/modal-delete-confirm';
 import EditableDateInput from './editable-date-input';
 
-const EventCard = ({ event, onDelete, loading }) => {
+const EventCard = ({ event, onDelete, loading, setEventUpdate }) => {
   const [opened, { open, close }] = useDisclosure(false);
 
   const { mutate } = useEditCountdown();
@@ -37,16 +37,30 @@ const EventCard = ({ event, onDelete, loading }) => {
         param: { countdownId: event.$id },
       },
       {
-        onSettled: () => callback(),
+        onSettled: () => {
+          callback();
+        },
       }
     );
   }
 
   function handleUpdateMainEvent() {
-    mutate({
-      form: { isMain: 'true' },
-      param: { countdownId: event.$id },
-    });
+    setEventUpdate(true);
+    mutate(
+      {
+        form: { isMain: 'true' },
+        param: { countdownId: event.$id },
+      },
+      {
+        onSettled: async () => {
+          // workaround wait for get count down event fished
+          await new Promise<void>((resolve) =>
+            setTimeout(() => resolve(), 800)
+          );
+          setEventUpdate(false);
+        },
+      }
+    );
   }
 
   return (

@@ -14,7 +14,7 @@ import ModalAddEvent from './modal-add-event';
 import EventCard from './event-card';
 import CardSkeleton from '@/components/card-skeleton';
 
-const CountdownList = ({ events, loading }) => {
+const CountdownList = ({ events, loading, setEventUpdate }) => {
   // const { mutate: updateMutate } = useUpdateCountdownEvent();
   const { mutate: deleteMutate, isPending: deleteLoading } =
     useDeleteCountdownEvent();
@@ -63,6 +63,7 @@ const CountdownList = ({ events, loading }) => {
                 event={event}
                 onDelete={onDelete}
                 loading={loading}
+                setEventUpdate={setEventUpdate}
               />
             );
           })}
