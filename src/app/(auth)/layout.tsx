@@ -15,6 +15,7 @@ import {
 } from '@mantine/core';
 import styles from './auth.module.scss';
 import WindowAnimation from './components/window-animation';
+import { usePathname } from 'next/navigation';
 
 interface AuthLayoutProps {
   children: ReactNode;
@@ -22,8 +23,9 @@ interface AuthLayoutProps {
 
 export default function AuthLayout({ children }: AuthLayoutProps) {
   const [panel, setPanel] = useState('sign-in');
+  const pathname = usePathname();
   return (
-    <Center p="sm" w="100vw" h="100vh">
+    <Center p="sm" w="100vw" h="100vh" bg={'#132338'}>
       <Group pos="relative" maw="1200px" w="100%" h="100%">
         <Center
           flex={1}
@@ -50,7 +52,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
               top="5%"
               pos="absolute"
             >
-              <WindowAnimation />
+              <WindowAnimation isDay={pathname === '/sign-up'} />
             </Box>
 
             <Image src={'/focused-work.svg'} alt="auth image" />

@@ -99,7 +99,7 @@ const app = new Hono()
 
       let uploadedImageUrl: string = '';
 
-      if (image instanceof File) {
+      if (!localImagePath && image instanceof File) {
         const file = await storage.createFile(
           IMAGES_BUCKET_ID,
           ID.unique(),

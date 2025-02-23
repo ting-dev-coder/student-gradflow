@@ -7,8 +7,9 @@ import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import FormLabel from './form-label';
 import dayjs from 'dayjs';
 import { parse, parseISO } from 'date-fns';
+import { BoxProps } from '@mantine/core';
 
-interface DateInputWrapper<T extends FieldValues> {
+interface DateInputWrapper<T extends FieldValues> extends BoxProps {
   control: Control<T>;
   name: Path<T>;
   handleInputChange?: (field: keyof T) => void;

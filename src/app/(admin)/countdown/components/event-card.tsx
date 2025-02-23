@@ -96,7 +96,7 @@ const EventCard = ({ event, onDelete, loading, setEventUpdate }) => {
         >
           {differenceInDays(event.endAt, new Date())}
         </Text>
-        <Image src={event.localImagePath || event.image} />
+        <Image h="155px" src={event.localImagePath || event.imageUrl} />
       </Card.Section>
       <Card.Section withBorder inheritPadding p="xs">
         <Tooltip label={event.name}>

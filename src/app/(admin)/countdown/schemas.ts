@@ -8,7 +8,16 @@ export const createCountdownSchema = z.object({
       message: 'Invalid file type',
     })
     .optional(),
-  localImagePath: z.string().optional(),
+  localImagePath: z.preprocess(
+    (val) => (val == null ? '' : val.toString()),
+    z.string().optional()
+  ),
+  // image: z
+  //   .union([
+  //     z.instanceof(File),
+  //     z.string().transform((val) => (val === '' ? undefined : val)),
+  //   ])
+  //   .optional(),
 });
 
 export const updateCountdownSchema = z.object({

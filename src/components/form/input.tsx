@@ -13,7 +13,7 @@ import FormLabel from './form-label';
 
 type InputT = TextInputProps & FieldValues & BoxProps;
 
-interface IControllerInput<T extends InputT> {
+interface IControllerInput<T extends InputT> extends BoxProps {
   control: Control<T>;
   name: Path<T>;
   handleInputChange?: (field: keyof T) => void;

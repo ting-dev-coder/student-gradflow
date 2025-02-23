@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Button,
   Card,
+  FileInput,
   Image,
   Indicator,
   LoadingOverlay,
@@ -10,7 +11,15 @@ import {
   SimpleGrid,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { cloneElement, createElement, useState } from 'react';
+import {
+  cloneElement,
+  createElement,
+  isValidElement,
+  ReactElement,
+  ReactNode,
+  useRef,
+  useState,
+} from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useCreateCountdownEvent } from '../api/use-create-countdown-event';
@@ -25,13 +34,11 @@ import {
   useCountdown,
   DEFAULT_BACKGROUND_IMAGES,
 } from '../hooks/use-create-countdown';
+import AddEventBackgroundImage, {
+  DefaultImageI,
+} from './add-event-background-image';
 
-interface DefaultImageI {
-  id: number;
-  src: string;
-}
-
-const ModalAddEvent = ({ children }) => {
+const ModalAddEvent = ({ children }: { children: ReactNode }) => {
   const [opened, { open, close }] = useDisclosure(false);
 
   const { mutate, isPending: loading } = useCreateCountdownEvent();
@@ -43,19 +50,17 @@ const ModalAddEvent = ({ children }) => {
       handleSubmit,
       clearErrors,
       reset,
+      watch,
       formState: { errors, isSubmitted, isDirty },
     },
   } = useCountdown();
+  const uploadImage = watch('image');
 
   const onSubmit = (values: z.infer<typeof createCountdownSchema>) => {
     mutate(
+      { form: { ...values } },
       {
-        form: {
-          ...values,
-        },
-      },
-      {
-        onSuccess: ({ data }) => {
+        onSuccess: () => {
           reset();
           close();
         },
@@ -64,12 +69,17 @@ const ModalAddEvent = ({ children }) => {
   };
 
   const handleImageChange = (payload: File | null) => {
-    if (!payload) return;
-
+    console.log('set', payload);
+    if (!payload) {
+      setValue('image', undefined);
+      return;
+    }
+    console.log('set', payload);
     setValue('image', payload);
   };
 
-  const handleImageClick = (image: DefaultImageI) => {
+  const handleImageClick = (image: DefaultImageI | null) => {
+    if (!image) return setValue('localImagePath', undefined);
     setValue('localImagePath', image.src);
   };
 
@@ -111,9 +121,11 @@ const ModalAddEvent = ({ children }) => {
               control={control}
               handleInputChange={handleInputChange}
             />
-            <BackgroundImageField
+            <AddEventBackgroundImage
+              loading={loading}
               onDefaultImageChange={handleImageClick}
               onImageChange={handleImageChange}
+              uploadImage={uploadImage}
             />
 
             <Card.Section pt="md" ta="right">
@@ -124,69 +136,9 @@ const ModalAddEvent = ({ children }) => {
           </form>
         </Card>
       </Modal>
-      {cloneElement(children, { onClick: open })}
-    </>
-  );
-};
-
-const BackgroundImageField = ({ onImageChange, onDefaultImageChange }) => {
-  const [selectedImageId, setImageSelectedId] = useState(
-    DEFAULT_BACKGROUND_IMAGES[0].id
-  );
-  const [loaded, setLoaded] = useState(false);
-
-  function onImageClick(image: DefaultImageI) {
-    setImageSelectedId(image.id);
-    onDefaultImageChange(image);
-  }
-
-  return (
-    <>
-      <FormLabel
-        pt="md"
-        label="background image"
-        wrap="nowrap"
-        align="flex-start"
-        field={
-          <SimpleGrid cols={3}>
-            {DEFAULT_BACKGROUND_IMAGES.map((image, idx) => (
-              <Indicator
-                key={`${image}-${idx}`}
-                color="var(--secondary)"
-                size="18"
-                offset={5}
-                label={<MdCheck />}
-                disabled={image.id !== selectedImageId}
-              >
-                <Paper
-                  className="cursor-pointer"
-                  radius={4}
-                  p="xxs"
-                  bd={`2px solid ${
-                    image.id === selectedImageId
-                      ? 'var(--secondary)'
-                      : 'var(--gray4)'
-                  }`}
-                  onClick={() => onImageClick(image)}
-                >
-                  <LoadingOverlay
-                    visible={!loaded}
-                    zIndex={1000}
-                    overlayProps={{ radius: 'sm', blur: 2 }}
-                  />
-                  <Image
-                    src={image.src}
-                    h={83}
-                    onLoad={() => setLoaded(true)}
-                  />
-                </Paper>
-              </Indicator>
-            ))}
-          </SimpleGrid>
-        }
-      />
-
-      {/* <FileInput accept="image/jpg,image/jpeg,image/png" onChange={handleImageChange} label="Upload files" placeholder="Upload files" disabled={isPending} /> */}
+      {cloneElement(children as ReactElement<{ onClick?: () => void }>, {
+        onClick: open,
+      })}
     </>
   );
 };

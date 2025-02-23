@@ -49,7 +49,7 @@ export default function SignIn() {
     router.push('/sign-up');
   }
   return (
-    <Card w="100%" pt="md">
+    <Card w="100%" pt="md" bg="transparent">
       <Button
         ml="auto"
         size="compact-md"
@@ -62,8 +62,12 @@ export default function SignIn() {
         Sign in
       </Button>
       <Stack gap={0} justify="center" align="center">
-        <Title pt="xl">Hi Student</Title>
-        <Text pb="md">Welcome back!</Text>
+        <Title pt="xl" c="#fff">
+          Hi Student
+        </Title>
+        <Text pb="md" c="#fff">
+          Welcome back!
+        </Text>
 
         <form
           style={{ margin: 'auto', width: '80%' }}
