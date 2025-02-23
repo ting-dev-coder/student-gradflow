@@ -6,7 +6,15 @@ import countdown from '@/app/(admin)/countdown/server/route';
 import focusMin from '@/app/(admin)/pomodoro-timer/server/route';
 
 const app = new Hono().basePath('/api');
-
+app.onError((err, c) => {
+  let message = 'Unknown error';
+  const status = 500; // 可以根據需要設置不同的錯誤狀態碼
+  if (err instanceof Error) {
+    message = err.message;
+  }
+  console.log('global catch', err);
+  return c.json({ error: message }, { status });
+});
 const routes = app
   .route('/auth', auth)
   .route('/todo-list', todoList)

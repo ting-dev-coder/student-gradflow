@@ -10,6 +10,7 @@ import {
   Text,
   Title,
   Stack,
+  Center,
 } from '@mantine/core';
 import { FcGoogle } from 'react-icons/fc';
 import { FaGithub } from 'react-icons/fa';
@@ -21,11 +22,11 @@ import ControllerInput from '@/components/form/input';
 import { useSignIn } from './use-sign-in';
 import ControllerPasswordInput from '@/components/form/password-input';
 import { useRouter } from 'next/navigation';
-import { IconArrowRight } from '@tabler/icons-react';
+import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
 
 export default function SignIn() {
   const router = useRouter();
-  const { mutate, isPending } = useLogin();
+  const { mutate, isPending, isError, error } = useLogin();
 
   const {
     form: {
@@ -48,30 +49,42 @@ export default function SignIn() {
     router.push('/sign-up');
   }
   return (
-    <Card w="100%" pt="0">
+    <Card w="100%" pt="md">
       <Button
         ml="auto"
+        size="compact-md"
+        color="var(--primary)"
         w="fit-content"
-        rightSection={<IconArrowRight size={14} />}
         variant="subtle"
+        rightSection={<IconArrowRight size={14} />}
         onClick={navToSignup}
       >
-        Sign up
+        Sign in
       </Button>
-      <Title>Sign in</Title>
-      <Text>Welcome back!</Text>
-      <Divider my="sm" variant="dotted" />
-      <Stack ta="center">
-        <form onSubmit={handleSubmit(onSubmit)}>
+      <Stack gap={0} justify="center" align="center">
+        <Title pt="xl">Hi Student</Title>
+        <Text pb="md">Welcome back!</Text>
+
+        <form
+          style={{ margin: 'auto', width: '80%' }}
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <Stack>
-            <ControllerInput label="Email" name="email" control={control} />
+            <ControllerInput name="email" control={control} size="md" />
 
             <ControllerPasswordInput
-              label="Password"
+              size="md"
               name="password"
               control={control}
             />
-            <Button px="xl" size="compact-md" loading={isPending} type="submit">
+            {isError && <Text c="var(--error)">{error.message}</Text>}
+            <Button
+              px="xl"
+              color="var(--secondary)"
+              size="md"
+              loading={isPending}
+              type="submit"
+            >
               Login
             </Button>
           </Stack>

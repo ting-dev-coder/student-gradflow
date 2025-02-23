@@ -1,7 +1,9 @@
 import { groupByDateAndSumMins } from '@/lib/utils';
-import { Stack, Group, Text } from '@mantine/core';
+import { Stack, Group, Text, Skeleton, Button } from '@mantine/core';
 import { compareAsc, format, parseISO } from 'date-fns';
 import { BarChart, Bar, ResponsiveContainer, YAxis, XAxis } from 'recharts';
+import { MdKeyboardArrowRight } from 'react-icons/md';
+import { useRouter } from 'next/navigation';
 
 const weekDays = [
   { name: 'Sun', mins: 0 },
@@ -27,33 +29,42 @@ const aggregateMinsByDay = (data, weekDays) => {
   return weekDays.map(({ name, mins }) => ({ name, value: mins }));
 };
 
-const WeeklyFocusChart = ({ data }) => {
+const WeeklyFocusChart = ({ data, loading }) => {
   if (!data) return;
-
+  const router = useRouter();
   const groupedData = groupByDateAndSumMins(data);
   const chartData = aggregateMinsByDay(groupedData, weekDays);
 
   return (
-    <Stack h="100%">
-      <Group>
-        <Text>Weekly focus time</Text>
-      </Group>
-      <ResponsiveContainer width="100%" style={{ flex: 1 }}>
-        <BarChart
-          height={100}
-          data={chartData}
-          margin={{ top: 0, left: -30, right: 0, bottom: -10 }}
-        >
-          <Bar dataKey="value" fill="var(--yellow2)" />
-          <XAxis
-            dataKey="name"
-            tickLine={false}
-            axisLine={{ stroke: 'var(--yellow2)', strokeWidth: 2 }}
-          />
-          <YAxis tickLine={false} axisLine={false} />
-        </BarChart>
-      </ResponsiveContainer>
-    </Stack>
+    <Skeleton visible={loading} h="95%">
+      <Stack h="100%">
+        <Group justify="space-between">
+          <Text>Weekly focus time</Text>
+          <Button
+            rightSection={<MdKeyboardArrowRight />}
+            variant="white"
+            onClick={() => router.push('/pomodoro-timer')}
+          >
+            Start Focusing
+          </Button>
+        </Group>
+        <ResponsiveContainer width="100%" style={{ flex: 1 }}>
+          <BarChart
+            height={100}
+            data={chartData}
+            margin={{ top: 0, left: -20, right: 10, bottom: -10 }}
+          >
+            <Bar dataKey="value" fill="var(--yellow2)" />
+            <XAxis
+              dataKey="name"
+              tickLine={false}
+              axisLine={{ stroke: 'var(--yellow2)', strokeWidth: 2 }}
+            />
+            <YAxis tickLine={false} axisLine={false} />
+          </BarChart>
+        </ResponsiveContainer>
+      </Stack>
+    </Skeleton>
   );
 };
 

@@ -81,11 +81,15 @@ export default function PomodoroTimer() {
             </Button>
           </Button.Group>
           <Text ta="center">{formatTime(time)}</Text>
-          <Button onClick={handleStartPause}>
-            {isRunning ? 'Pause' : isOngoing ? 'Resume' : 'Start'}
-          </Button>
+          {time !== 0 && (
+            <Button onClick={handleStartPause}>
+              {isRunning ? 'Pause' : isOngoing ? 'Resume' : 'Start'}
+            </Button>
+          )}
 
-          {isOngoing && <Button onClick={handleReset}>Reset</Button>}
+          {isOngoing && time !== 0 && (
+            <Button onClick={handleReset}>Reset</Button>
+          )}
 
           {time === 0 && (
             <Button onClick={handleSaveRecord}>

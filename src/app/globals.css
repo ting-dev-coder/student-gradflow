@@ -55,3 +55,8 @@ fieldset {
 .text-shadow {
   text-shadow: 2px 3px 8px #393939b0;
 }
+
+.sign-in,
+.sign-up {
+  view-transition-name: form-transition;
+}

@@ -2,21 +2,21 @@
 
 import { useEffect, useState } from 'react';
 
-const DEFAULT_SECONDS = 25 * 60; // 25 minutes in seconds
-export function UseCountdownTimer() {
-  const [time, setTime] = useState(DEFAULT_SECONDS);
-
-  const isOngoing = time !== DEFAULT_SECONDS;
-
+export function UseCountdownTimer(initialSeconds = 25 * 60) {
+  const [time, setTime] = useState(initialSeconds);
+  const [startTime, setStartTime] = useState(initialSeconds); // 記錄初始秒數
   const [isRunning, setIsRunning] = useState(false);
 
+  // isOngoing 代表計時是否已開始過
+  const isOngoing = time !== startTime;
+
   useEffect(() => {
-    if (time == 0) {
+    if (time === 0) {
       setIsRunning(false);
     }
     if (isRunning && time > 0) {
       const timer = setTimeout(() => {
-        setTime(time - 1);
+        setTime((prev) => prev - 1);
       }, 1000);
       return () => clearTimeout(timer);
     }
@@ -28,7 +28,7 @@ export function UseCountdownTimer() {
 
   const handleReset = () => {
     setIsRunning(false);
-    setTime(25 * 60);
+    setTime(startTime);
   };
 
   const formatTime = (seconds: number) => {
@@ -42,7 +42,9 @@ export function UseCountdownTimer() {
 
   function handleSetTime(seconds: number) {
     setTime(seconds);
+    setStartTime(seconds);
   }
+
   return {
     handleStartPause,
     handleReset,

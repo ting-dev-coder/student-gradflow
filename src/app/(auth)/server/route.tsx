@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { ID } from 'node-appwrite';
+import { AppwriteException, ID } from 'node-appwrite';
 import { Hono } from 'hono';
 import { zValidator } from '@hono/zod-validator';
 import { loginSchema, registerSchema } from '../schemas';
@@ -17,25 +17,24 @@ const app = new Hono()
     const { email, password } = c.req.valid('json');
 
     const { account } = await createAdminClient();
-    const session = await account.createEmailPasswordSession(email, password);
-
     try {
+      const session = await account.createEmailPasswordSession(email, password);
       const user = await account.get();
-      // Logged in
       console.log(user);
-    } catch (err) {
-      // Not logged in
-      console.log('Not logged in');
-    }
 
-    setCookie(c, AUTH_COOKIE, session.secret, {
-      path: '/',
-      httpOnly: true,
-      secure: true,
-      sameSite: 'strict',
-      maxAge: 60 * 60 * 24 * 40,
-    });
-    return c.json({ success: true });
+      // 設置 cookie
+      setCookie(c, AUTH_COOKIE, session.secret, {
+        path: '/',
+        httpOnly: true,
+        secure: true,
+        sameSite: 'strict',
+        maxAge: 60 * 60 * 24 * 40,
+      });
+
+      return c.json({ data: user });
+    } catch (error) {
+      throw error;
+    }
   })
   .post('/register', zValidator('json', registerSchema), async (c) => {
     const { name, email, password } = c.req.valid('json');

@@ -40,10 +40,10 @@ function Input<T extends InputT>({
       control={control}
       render={({ field, fieldState }) => (
         <TextInput
-          {...field}
-          {...props}
           error={fieldState?.error?.message}
           flex={1}
+          {...field}
+          {...props}
           onChange={(e) => {
             field.onChange(e);
             handleChange(e);

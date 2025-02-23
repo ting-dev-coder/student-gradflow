@@ -20,7 +20,7 @@ const Dashboard = () => {
     const today = startOfDay(new Date());
     setCurrentDate(today);
   }, []);
-  const { data: focusRecords, isLoading: focusMinLoading } =
+  const { data: focusRecords, isLoading: focusMinsLoading } =
     useGetFocusRecords(currentDate);
   const {
     data: countdownEvents,
@@ -73,7 +73,10 @@ const Dashboard = () => {
             </Skeleton>
           </Box>
           <Box bg="#fff" flex={1} mih="250px">
-            <WeeklyFocusChart data={focusRecords?.data?.documents} />
+            <WeeklyFocusChart
+              loading={focusMinsLoading}
+              data={focusRecords?.data?.documents}
+            />
           </Box>
         </Stack>
       </Grid.Col>

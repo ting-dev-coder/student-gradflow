@@ -1,0 +1,24 @@
+.sign-in-container {
+  z-index: 1;
+  position: relative;
+  height: 100%;
+  transition: all 1s ease-in-out;
+  .sign-in-square,
+  .sign-in-square_skew {
+    z-index: -1;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+    background-color: #faf3dd;
+  }
+}
+.sign-in-square_skew {
+  transform-origin: bottom left;
+  background: #faf3dd;
+  transform: skew(-10deg);
+}
+.sign-up-button {
+  z-index: 1;
+}
