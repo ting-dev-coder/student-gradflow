@@ -11,6 +11,7 @@ import {
 } from '@mantine/core';
 import { Controller, Control, FieldValues, Path } from 'react-hook-form';
 import { useEffect, useRef, useState } from 'react';
+import { useMounted } from '@mantine/hooks';
 
 type SessionT = 'AM' | 'PM';
 
@@ -73,10 +74,13 @@ const TimePicker = ({
   const minViewport = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (value.length) {
+    if (value?.length) {
       setHour(value[0]);
       setMin(value[1]);
       setSession(value[2] as SessionT);
+    } else {
+      console.log('change', [HOURS[0], MINIS[1], SESSIONS[0]]);
+      onChange([HOURS[0], MINIS[1], SESSIONS[0]]);
     }
   }, [value]);
 
@@ -197,6 +201,7 @@ const ControlTimePicker = <T extends FieldValues>({
             initialMin={initialMin}
             initialSession={initialSession as SessionT}
             onChange={(value) => {
+              console.log('value change', value);
               field.onChange(value);
               handleChange?.(value);
             }}

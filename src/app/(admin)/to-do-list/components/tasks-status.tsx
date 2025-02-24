@@ -1,10 +1,43 @@
-import { Card, Text, SimpleGrid, Stack, Skeleton } from '@mantine/core';
+import {
+  Card,
+  Text,
+  SimpleGrid,
+  Stack,
+  Skeleton,
+  Center,
+  Box,
+  Group,
+} from '@mantine/core';
 
 interface TaskStatus {
   data: {
     status: string;
   }[];
   loading: boolean;
+}
+
+function StatusCard({
+  value,
+  label,
+  color,
+}: {
+  value: number | string;
+  label: string;
+  color: string;
+}) {
+  return (
+    <Card shadow="md" p="sm">
+      <Stack gap="0" align="center">
+        <Text fz="2rem">{value}</Text>
+        <Group gap="xs" wrap="nowrap">
+          <Box style={{ borderRadius: '50%' }} w=".5rem" h=".5rem" bg={color} />
+          <Text fz="sm" c="var(--gray2)" truncate="end">
+            {label}
+          </Text>
+        </Group>
+      </Stack>
+    </Card>
+  );
 }
 
 const TaskStatus = ({ data = [], loading }: TaskStatus) => {
@@ -16,32 +49,21 @@ const TaskStatus = ({ data = [], loading }: TaskStatus) => {
     (task) => task.status === 'in-progress'
   ).length;
   return (
-    <SimpleGrid mx="auto" cols={3} w="80%">
+    <SimpleGrid mt="sm" mx="auto" cols={3} w="80%">
       <Skeleton visible={loading}>
-        <Card shadow="sm">
-          <Stack gap="0">
-            <Text>To-do</Text>
-            <Text>{toDo}</Text>
-          </Stack>
-        </Card>
+        <StatusCard color="var(--gray4)" value={toDo} label="To-do" />
       </Skeleton>
 
       <Skeleton visible={loading}>
-        <Card shadow="sm">
-          <Stack gap="0">
-            <Text>In progress</Text>
-            <Text>{inProgress}</Text>
-          </Stack>
-        </Card>
+        <StatusCard
+          color="var(--primary)"
+          value={inProgress}
+          label="In progress"
+        />
       </Skeleton>
 
       <Skeleton visible={loading}>
-        <Card shadow="sm">
-          <Stack gap="0">
-            <Text>Done</Text>
-            <Text>{done}</Text>
-          </Stack>
-        </Card>
+        <StatusCard color="var(--success)" value={done} label="Done" />
       </Skeleton>
     </SimpleGrid>
   );

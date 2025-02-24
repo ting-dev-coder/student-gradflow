@@ -9,11 +9,17 @@
 }
 
 .root {
+  color: #fff;
   background-color: transparent;
+  &:hover:not([data-active='true']) {
+    background-color: rgb(69 139 86 / 15%);
+    opacity: 0.8;
+  }
   &[data-active='true'] {
+    padding-left: 8px;
     font-weight: bold;
-    color: #fff;
-    background-color: var(--primary);
-    border-right: 5px solid var(--yellow2);
+    color: var(--secondary);
+    background-color: var(--yellow-20);
+    border-left: 8px solid var(--primary);
   }
 }

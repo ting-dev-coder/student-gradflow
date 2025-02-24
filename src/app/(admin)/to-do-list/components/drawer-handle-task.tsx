@@ -1,4 +1,5 @@
 'use client';
+
 import {
   Button,
   Divider,
@@ -28,6 +29,10 @@ import { notifications } from '@mantine/notifications';
 import { useDeleteTodoList } from '../api/use-delete-todo-list';
 import { useUpdateTodoList } from '../api/use-update-todo-list';
 import { useEditTask } from '../hooks/use-edit-task';
+import { useMounted } from '@mantine/hooks';
+import { parseISO } from 'date-fns';
+import dayjs from 'dayjs';
+import { dateFormat } from '@/lib/utils';
 
 interface DrawerHandleTaskProps {
   opened: boolean;
@@ -45,6 +50,7 @@ const DrawerHandleTask = ({
   defaultDate,
   refetch,
 }: DrawerHandleTaskProps) => {
+  const mounted = useMounted();
   const { mutate, isPending } = useCreateTodoList();
 
   let useApiHook = useCreateTask;
@@ -70,10 +76,14 @@ const DrawerHandleTask = ({
   const { data, isFetching: taskLoading } = useGetTodo({ taskId });
 
   useEffect(() => {
+    if (!mounted) return;
     if (taskId && data) {
       reset((prev) => ({ ...prev, ...data }));
+    } else {
+      console.log(dayjs(defaultDate).format('YYYY-MM-DD'));
+      reset({ startDate: dateFormat(defaultDate) });
     }
-  }, [taskId, data, reset]);
+  }, [opened]);
 
   function onAddSubmit(values: z.infer<typeof createTodoSchema>) {
     mutate(
@@ -92,7 +102,6 @@ const DrawerHandleTask = ({
       {
         onSuccess: async ({ data }) => {
           refetch();
-          console.log('關閉');
           handleSubmitSuccess(data);
         },
       }
@@ -152,14 +161,12 @@ const DrawerHandleTask = ({
             />
             <Divider />
             <Title order={5}>Dates</Title>
-
             <DateInput
               label="Start Date"
               name="startDate"
               control={control}
               defaultValue={taskId ? null : defaultDate}
             />
-
             <Checkbox control={control} name="allDay" label="All day " />
             {!showStartTimeField && (
               <FormLabel
@@ -175,10 +182,8 @@ const DrawerHandleTask = ({
                 }
               />
             )}
-
             <Divider />
             <Title order={5}>Description</Title>
-
             <Textarea
               name="description"
               control={control}

@@ -10,7 +10,7 @@ const AdminLayout = ({ children }) => {
     <AppShell
       header={{ height: 0 }}
       navbar={{
-        width: 270,
+        width: 220,
         breakpoint: '0',
         collapsed: { mobile: !opened },
       }}
@@ -25,7 +25,7 @@ const AdminLayout = ({ children }) => {
         style={{
           boxShadow: '0 4px 4px rgba(0,0,0,.25)',
         }}
-        bg="var(--gray5)"
+        bg="var(--secondary)"
         withBorder={false}
         py="md"
       >

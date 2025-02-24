@@ -1,6 +1,7 @@
 .root {
   --rdp-today-color: var(--black4);
   --rdp-outside-opacity: 1;
+  overflow: auto;
 }
 
 .day_week_wrapper {
@@ -11,6 +12,17 @@
   background: var(--black4);
   color: #fff;
   cursor: pointer;
+  border-radius: 4px;
+}
+.months {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  max-width: fit-content;
+  margin: auto;
+}
+.month {
+  margin-right: calc(var(--mantine-spacing-sm) * -1);
 }
 
 .day_button,
@@ -20,12 +32,27 @@
   text-align: center;
 }
 
-.day_button {
-  :root {
+.nav {
+  z-index: -1;
+  display: flex;
+  margin-right: 0;
+  position: absolute;
+  width: calc(100% + 42px + var(--mantine-spacing-xl));
+  justify-content: space-between;
+  top: calc(50% + 8px);
+  left: 50%;
+  transform: translate(-50%);
+}
+
+.month_caption {
+  margin: 0;
+  padding-bottom: var(--mantine-spacing-md);
+  span {
+    font-weight: 600;
   }
 }
 
 .day_selected {
-  background: var(--yellow2);
+  background: var(--primary);
   color: #fff;
 }

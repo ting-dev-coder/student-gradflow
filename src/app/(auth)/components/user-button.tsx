@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
 import { useRouter } from 'next/navigation';
 import { useCurrent } from '../api/user-current';
 import { useLogout } from '../api/user-logout';
 import { memo } from 'react';
-import { Button, Loader } from '@mantine/core';
+import { Button, ButtonProps, Loader } from '@mantine/core';
 
-export const UserButton = memo(({ ...props }) => {
+export const UserButton = memo(({ ...props }: ButtonProps) => {
   const { mutate: logout } = useLogout();
   const { data: user, isLoading } = useCurrent();
   const router = useRouter();

@@ -8,6 +8,7 @@ import FormLabel from './form-label';
 import dayjs from 'dayjs';
 import { parse, parseISO } from 'date-fns';
 import { BoxProps } from '@mantine/core';
+import { useMounted } from '@mantine/hooks';
 
 interface DateInputWrapper<T extends FieldValues> extends BoxProps {
   control: Control<T>;
@@ -30,6 +31,7 @@ function DateInput<T extends FieldValues>({
   handleInputChange,
   ...props
 }: DateInput<T>) {
+  console.log('defaultValue', defaultValue);
   const handleChange = () => {
     if (handleInputChange) {
       handleInputChange(name);
@@ -41,39 +43,22 @@ function DateInput<T extends FieldValues>({
       name={name}
       control={control}
       render={({ field, fieldState }) => {
-        console.log('DateInput Value:', {
-          defaultValue,
-          fieldValue: field.value,
-          finalValue:
-            defaultValue && typeof defaultValue === 'string'
-              ? parseISO(defaultValue)
-              : field.value && typeof field.value === 'string'
-              ? parseISO(field.value)
-              : null,
-        });
         return (
-          <>
-            <MantineDateInput
-              {...field}
-              {...props}
-              minDate={new Date()}
-              dateParser={dateParser}
-              error={fieldState?.error?.message}
-              flex={1}
-              valueFormat="YYYY-MM-DD"
-              value={
-                defaultValue && typeof defaultValue === 'string'
-                  ? parseISO(defaultValue)
-                  : field.value && typeof field.value === 'string'
-                  ? parseISO(field.value)
-                  : null
-              }
-              onChange={(value: DateValue) => {
-                field.onChange(value ? value.toISOString() : '');
-                handleChange();
-              }}
-            />
-          </>
+          <MantineDateInput
+            // {...field}
+            {...props}
+            minDate={new Date()}
+            error={fieldState?.error?.message}
+            flex={1}
+            valueFormat="YYYY-MM-DD"
+            defaultValue={new Date(defaultValue)}
+            // value={field.value}
+            onChange={(value: DateValue) => {
+              if (!value) return;
+              field.onChange(value.toISOString());
+              handleChange();
+            }}
+          />
         );
       }}
     />

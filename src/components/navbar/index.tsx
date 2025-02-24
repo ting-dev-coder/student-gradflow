@@ -47,12 +47,10 @@ export function Navbar() {
 
   return (
     <Stack h="100%" gap="sm" component={'nav'} className={classes.navbar}>
-      <Title c="var(--yellow1)">Gradflow</Title>
-      <Divider />
-      <Box px="md">
-        <ProfileButton />
-      </Box>
-      <Divider />
+      <Title order={2} ta="center" c="var(--primary)">
+        GradeFlow
+      </Title>
+      <ProfileButton />
       <Box>
         <div className={classes.collections}>{navItems}</div>
       </Box>

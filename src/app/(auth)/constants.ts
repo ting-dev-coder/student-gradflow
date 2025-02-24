@@ -1,1 +1,1 @@
-export const AUTH_COOKIE = "ting-gradflow-session";
+export const AUTH_COOKIE = 'ting-gradflow-session';

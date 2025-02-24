@@ -44,12 +44,12 @@ function ActionButtons({ deleteLoading, onEditClick, onDeleteClick }) {
 
       <Modal
         size="auto"
-        title="Delete this page?"
+        title="Are you sure you want to delete this task?"
         opened={opened}
         onClose={close}
         centered
       >
-        Are you sure you want to delete this task? This action cannot be undone.
+        This action cannot be undone.
         <Group mt="lg" justify="flex-end">
           <Button onClick={close} variant="default">
             Cancel
@@ -184,9 +184,9 @@ function ListTable({
         {/* Render data rows only when not loading or fetching */}
         {!loading &&
           !fetching &&
-          data?.map((task) => (
+          data?.map((task, idx) => (
             <TaskRow
-              key={task.name}
+              key={`${idx}-${task.name}`}
               task={task}
               deleteLoading={deleteLoading}
               onStatusChange={onStatusChange}

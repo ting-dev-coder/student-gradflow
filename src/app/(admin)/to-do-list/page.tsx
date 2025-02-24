@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Group, Stack, Title } from '@mantine/core';
+import { Button, Card, Group, Paper, Stack, Title } from '@mantine/core';
 import { useGetTodoList } from './api/use-get-todo-list';
 import TimeLine from './components/timeline';
 import DateCalendar from './components/weekly-calendar/page';
@@ -82,27 +82,39 @@ const ToDoList = () => {
   return (
     <Group h={'100dvh'} align="flex-start" wrap="nowrap" py="md" px="lg">
       <Stack flex={1} gap="sm" h="100%" style={{ overflow: 'auto' }}>
-        <Group justify="space-between">
-          <Title tt="capitalize">to-do list</Title>
+        <Card padding="sm">
           {!isTodayBefore(selectedDate.toISOString()) && (
-            <Button w="fit-content" onClick={handleAddTaskClick}>
+            <Button
+              style={{ zIndex: 1 }}
+              w="fit-content"
+              px="md"
+              size="compact-md"
+              color="var(--accent)"
+              onClick={handleAddTaskClick}
+              pos="absolute"
+              right="var(--mantine-spacing-sm)"
+              top="var(--mantine-spacing-sm)"
+            >
               Add
             </Button>
           )}
-        </Group>
-
-        <DateCalendar defaultDate={selectedDate} onChange={handleDateChange} />
-        <TaskStatus data={toDoList?.documents || []} loading={isFetching} />
-
-        <ListTable
-          loading={isLoading}
-          fetching={isFetching}
-          deleteLoading={deleteLoading}
-          data={toDoList?.documents}
-          onEditClick={handleEditClick}
-          onDeleteClick={handleDeleteClick}
-          onStatusChange={handleStatusChange}
-        />
+          <DateCalendar
+            defaultDate={selectedDate}
+            onChange={handleDateChange}
+          />
+          <TaskStatus data={toDoList?.documents || []} loading={isFetching} />
+        </Card>
+        <Card flex={1}>
+          <ListTable
+            loading={isLoading}
+            fetching={isFetching}
+            deleteLoading={deleteLoading}
+            data={toDoList?.documents}
+            onEditClick={handleEditClick}
+            onDeleteClick={handleDeleteClick}
+            onStatusChange={handleStatusChange}
+          />
+        </Card>
       </Stack>
 
       <DrawerHandleTask
@@ -112,7 +124,9 @@ const ToDoList = () => {
         close={detailClose}
         refetch={refetch}
       />
-      <TimeLine tasks={toDoList?.documents} currentDate={selectedDate} />
+      <Card h="100%" p="xs">
+        <TimeLine tasks={toDoList?.documents} currentDate={selectedDate} />
+      </Card>
     </Group>
   );
 };

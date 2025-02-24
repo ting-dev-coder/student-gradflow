@@ -18,25 +18,23 @@ export function ProfileButton() {
   if (!user) return null;
 
   return (
-    <Box w="100%" className={classes.profile}>
-      <Group gap={'xs'}>
-        <Avatar
-          src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-8.png"
-          radius="xl"
-        />
+    <Group px="xs" gap={'xs'} w="100%" className={classes.profile}>
+      <Avatar
+        src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-8.png"
+        radius="xl"
+      />
 
-        <div style={{ flex: 1 }}>
-          <Text size="sm" fw={500}>
-            {user.name}
-          </Text>
+      <div style={{ flex: 1 }}>
+        <Text size="sm" fw={600} c="#fff">
+          {user.name}
+        </Text>
 
-          <Text c="dimmed" size="xs">
-            {user.email}
-          </Text>
-        </div>
+        <Text c="dimmed" size="xs">
+          {user.email}
+        </Text>
+      </div>
 
-        {/* <MdOutlineChevronRight size={14} /> */}
-      </Group>
-    </Box>
+      {/* <MdOutlineChevronRight size={14} /> */}
+    </Group>
   );
 }

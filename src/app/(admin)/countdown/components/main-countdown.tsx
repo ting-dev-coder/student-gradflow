@@ -15,9 +15,10 @@ import EditableDateInput from './editable-date-input';
 import { useState } from 'react';
 
 export interface EventI {
-  image: string;
+  imageUrl?: File | undefined;
   name: string;
   endAt: string;
+  localImagePath?: string;
 }
 
 interface EventProps {
@@ -59,7 +60,7 @@ const MainCountdown = ({
 
   return (
     <Box flex={1} pos="relative" h="100%" c="var(--warning)">
-      <Image src={event?.localImagePath} h="100%" />
+      <Image src={event?.localImagePath || event?.imageUrl} h="100%" />
       <UnstyledButton
         pos="absolute"
         top="0"

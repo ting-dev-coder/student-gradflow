@@ -1,11 +1,12 @@
 :root {
-  --primary: #f6b40c;
-  --secondary: #f78c06;
-  --yellow1: #f6b40c;
-  --yellow2: #ffca4b;
-  --yellow3: #fcd16b;
+  --primary: #f0b40c;
+  --secondary: #0a2611;
+  --accent: #f8812d;
+  --yellow-10: #fff5db;
+  --yellow-20: #fcd16b;
   --yellow4: #ffdd8c;
   --info: #2f80ed;
+  --info-10: #eaf3ff;
   --success: #27ae60;
   --warning: #ffa963;
   --error: #ef4444;
@@ -22,6 +23,7 @@
 
 html,
 body {
+  --mantine-color-body: var(--gray5);
   max-width: 100vw;
   overflow-x: hidden;
 }
@@ -54,9 +56,4 @@ fieldset {
 
 .text-shadow {
   text-shadow: 2px 3px 8px #393939b0;
-}
-
-.sign-in,
-.sign-up {
-  view-transition-name: form-transition;
 }

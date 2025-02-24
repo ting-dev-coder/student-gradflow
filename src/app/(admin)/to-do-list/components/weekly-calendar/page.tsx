@@ -8,7 +8,14 @@ import {
   startOfWeek,
 } from 'date-fns';
 import 'react-day-picker/style.css';
-import { ActionIcon, Box, Group, Stack, UnstyledButton } from '@mantine/core';
+import {
+  ActionIcon,
+  Box,
+  Button,
+  Group,
+  Stack,
+  UnstyledButton,
+} from '@mantine/core';
 import styles from './weeky-calendar.module.scss';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 
@@ -77,6 +84,10 @@ const DateCalendar = ({ onChange, defaultDate }) => {
     <DayPicker
       classNames={{
         root: styles['root'],
+        months: styles['months'],
+        month: styles['month'],
+        nav: styles['nav'],
+        month_caption: styles['month_caption'],
         day_button: styles['day_button'],
         weekday: styles['weekday'],
         day: styles['day'],
@@ -87,20 +98,24 @@ const DateCalendar = ({ onChange, defaultDate }) => {
         DayButton,
         Week: (weekProps) => <CurrentWeekRow {...weekProps} date={value} />,
         NextMonthButton: () => (
-          <ActionIcon
-            variant="default"
+          <Button
+            size="compact-lg"
+            variant="transparent"
+            color="var(--accent)"
             onClick={(e) => handleMonthChange(e, 1)}
           >
             <IoIosArrowForward />
-          </ActionIcon>
+          </Button>
         ),
         PreviousMonthButton: () => (
-          <ActionIcon
-            variant="default"
+          <Button
+            size="compact-lg"
+            variant="transparent"
+            color="var(--accent)"
             onClick={(e) => handleMonthChange(e, -1)}
           >
             <IoIosArrowBack />
-          </ActionIcon>
+          </Button>
         ),
       }}
       selected={selectedDate}

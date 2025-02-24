@@ -6,7 +6,6 @@ import { z } from 'zod';
 export const DEFAULT_FORM_VALUES = {
   title: '',
   category: 'personal',
-  startDate: new Date().toISOString(),
   startTime: [0, 0, 'PM'],
   description: '',
   allDay: false,
