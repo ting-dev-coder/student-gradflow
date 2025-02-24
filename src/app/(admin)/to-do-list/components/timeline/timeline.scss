@@ -1,3 +1,45 @@
-.fc {
+.to-do-timeline .fc {
+  flex: 1;
+  .fc-daygrid-day {
+    background: transparent;
+  }
+  td,
+  th {
+    border: 0;
+    background: #fff;
+  }
+  .to-do-timeline,
+  .fc-v-event,
+  .fc-scrollgrid,
+  .fc-h-event {
+    border: none;
+  }
+
+  .fc-timegrid-slot-label-cushion,
+  .fc-timegrid-axis-cushion {
+    color: var(--gray3);
+  }
+}
+.fc-timegrid-col-events .fc-timegrid-event-harness:first-child .fc-event-main {
+  max-width: 50%;
+}
+.to-do-timeline .fc-v-event {
+  background-color: transparent;
+}
+
+.to-do-timeline .event-card {
+  padding-left: 4px;
   height: 100%;
+  background: var(--yellow-10);
+  border-left: 3px solid var(--primary);
+  color: var(--primary);
+  font-weight: 600;
+  &_category {
+    padding: 0 2px;
+    width: fit-content;
+    background: var(--primary);
+    color: #fff;
+    font-weight: 400;
+    border-radius: 4px;
+  }
 }

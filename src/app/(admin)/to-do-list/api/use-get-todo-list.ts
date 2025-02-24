@@ -1,12 +1,25 @@
 import { client } from '@/lib/rpc';
 import { useQuery } from '@tanstack/react-query';
+import dayjs from 'dayjs';
 
-export const useGetTodoList = (createdAt) => {
+interface useGetTodoListI {
+  createdAt?: Date;
+  range?: Date[];
+}
+
+export const useGetTodoList = ({ createdAt, range }: useGetTodoListI) => {
   const query = useQuery({
-    queryKey: ['todo-list', createdAt?.toString()],
+    queryKey: ['todo-list', createdAt?.toString(), range],
     queryFn: async () => {
+      console.log('queyFn', range);
+      const query = {
+        createdAt: createdAt || undefined,
+        range: range
+          ? range.map((date) => dayjs(date).format('YYYY-MM-DD')).join(',')
+          : undefined,
+      };
       const res = await client.api['todo-list'].$get({
-        query: createdAt ? { createdAt } : undefined,
+        query: query,
       });
 
       if (!res.ok) {

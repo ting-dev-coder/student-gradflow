@@ -14,9 +14,12 @@ import { isTodayBefore } from '@/lib/utils';
 import { useUpdateTodoList } from './api/use-update-todo-list';
 import { notifications } from '@mantine/notifications';
 import { useDeleteTodoList } from './api/use-delete-todo-list';
+import { addDays, startOfDay } from 'date-fns';
+
+const today = startOfDay(addDays(new Date(), 1));
+const threeDaysLater = startOfDay(addDays(new Date(), 3));
 
 const ToDoList = () => {
-  const [opened, { toggle }] = useDisclosure(false);
   const [detailOpened, { open: detailOpen, close: detailClose }] =
     useDisclosure(false);
   const selectedTaskIdRef = useRef(null);
@@ -28,10 +31,14 @@ const ToDoList = () => {
     error,
     isLoading,
     isFetching,
-    isPending,
     isError,
-  } = useGetTodoList(selectedDate);
-  const { mutate: updateMutate, isPending: editPending } = useUpdateTodoList();
+  } = useGetTodoList({ createdAt: selectedDate });
+
+  const { data: rangeData, isFetching: isFetchingRange } = useGetTodoList({
+    range: [today, threeDaysLater],
+  });
+
+  const { mutate: updateMutate } = useUpdateTodoList();
 
   const { mutate: deleteMutate, isPending: deleteLoading } =
     useDeleteTodoList();
@@ -124,8 +131,12 @@ const ToDoList = () => {
         close={detailClose}
         refetch={refetch}
       />
-      <Card h="100%" p="xs">
-        <TimeLine tasks={toDoList?.documents} currentDate={selectedDate} />
+      <Card h="100%" p="xs" flex={0.5} style={{ overflow: 'auto' }}>
+        <TimeLine
+          tasks={toDoList?.documents}
+          upcomingTasks={rangeData?.documents}
+          currentDate={selectedDate}
+        />
       </Card>
     </Group>
   );

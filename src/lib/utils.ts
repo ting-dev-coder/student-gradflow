@@ -1,6 +1,7 @@
 import { clsx, type ClassValue } from 'clsx';
 import { isBefore, format } from 'date-fns';
 import dayjs from 'dayjs';
+import { parseISO, isSameDay, startOfDay } from 'date-fns';
 
 export function dateFormat(date, format = 'YYYY-MM-DD') {
   return dayjs(date).format(format);
@@ -35,16 +36,6 @@ export function convertCustomTimeToISO(dateStr, timeArray) {
 
   return baseDate.toISOString();
 }
-
-import { parseISO, isSameDay, startOfDay } from 'date-fns';
-
-const data = [
-  { id: 1, date: '2025-02-01T10:00:00Z', mins: 30 },
-  { id: 2, date: '2025-02-01T12:00:00Z', mins: 45 },
-  { id: 3, date: '2025-02-02T09:00:00Z', mins: 60 },
-  { id: 4, date: '2025-02-02T14:00:00Z', mins: 30 },
-  { id: 5, date: '2025-02-03T08:00:00Z', mins: 20 },
-];
 
 export function groupByDateAndSumMins(data: { date: string; mins: number }[]) {
   if (!data) return 0;

@@ -35,7 +35,7 @@ function ActionButtons({ deleteLoading, onEditClick, onDeleteClick }) {
   const [opened, { close, open }] = useDisclosure(false);
   return (
     <Group gap={'xxs'}>
-      <ActionIcon onClick={onEditClick}>
+      <ActionIcon onClick={onEditClick} bg="var(--accent)">
         <BiSolidEdit />
       </ActionIcon>
       <ActionIcon onClick={open} color="var(--gray4)">
@@ -103,6 +103,20 @@ function TaskRow({
             data={taskOpts}
             onChange={handleChange}
             disabled={loading}
+            leftSection={
+              <Box
+                style={{ borderRadius: '50%' }}
+                w=".5rem"
+                h={'.5rem'}
+                bg={
+                  status === 'done'
+                    ? 'var(--success)'
+                    : status === 'in-progress'
+                    ? 'var(--primary)'
+                    : 'var(--gray4)'
+                }
+              />
+            }
             rightSection={
               loading && <ActionIcon variant="subtle" loading={loading} />
             }

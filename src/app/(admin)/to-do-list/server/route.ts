@@ -12,9 +12,19 @@ const app = new Hono()
     const databases = c.get('databases');
     const user = c.get('user');
 
-    const { createdAt } = c.req.query();
+    const { createdAt, range } = c.req.query();
     const queries = [Query.equal('userId', user.$id)];
-    if (createdAt) {
+    if (range) {
+      const rangeArray = range.split(',');
+      console.log('rangeArray', rangeArray);
+      queries.push(
+        Query.between(
+          'startDate',
+          dayjs(rangeArray[0]).format('YYYY-MM-DD'),
+          dayjs(rangeArray[1]).format('YYYY-MM-DD')
+        )
+      );
+    } else if (createdAt) {
       queries.push(
         Query.equal('startDate', dayjs(createdAt).format('YYYY-MM-DD'))
       );
