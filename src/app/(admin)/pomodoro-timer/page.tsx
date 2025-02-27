@@ -1,10 +1,13 @@
 'use client';
-
-import { Text, Button, Center, Flex, Stack, Title, Box } from '@mantine/core';
+import React, { createContext, useContext, useState } from 'react';
 import { UseCountdownTimer } from './hooks/use-countdown-timer';
-import { useState } from 'react';
-import { useCreateFocusRecord } from './api/use-create-focus-record';
 import { notifications } from '@mantine/notifications';
+import { useCreateFocusRecord } from './api/use-create-focus-record';
+import { Box } from '@mantine/core';
+import MainView from './components/main-view';
+import { ToolBar } from './components/toolbar';
+import DrawerFocusQueue from './components/drawer-focus-queue';
+import { useFocusList, FocusContextType } from './hooks/use-focus-list';
 
 const modes = {
   pomodoro: 25 * 60,
@@ -12,8 +15,32 @@ const modes = {
   longBreak: 10 * 60,
   demo: 3,
 };
+
+interface PomodoroContextType extends FocusContextType {
+  mode: string;
+  setMode: (mode: string) => void;
+  formattedTime: { mins: string; secs: string };
+  time: number;
+  onReset: () => void;
+  isRunning: boolean;
+  onPause: () => void;
+  onSetTime: (time: number) => void;
+  isOngoing: boolean;
+  onSaveRecord: () => void;
+  onStart: () => void;
+  focusListOpened: boolean;
+  onFocusListOpenChange: (opened: boolean) => void;
+}
+
+export const PomodoroContext = createContext<PomodoroContextType | undefined>(
+  undefined
+);
+
 export default function PomodoroTimer() {
+  const [focusListOpened, setFocusListOpened] = useState(false);
   const [mode, setMode] = useState('pomodoro');
+
+  const { focusList, addFocus, deleteFocus, toggleFocus } = useFocusList();
   const {
     time,
     handleReset,
@@ -25,13 +52,7 @@ export default function PomodoroTimer() {
   } = UseCountdownTimer();
   const { mutate } = useCreateFocusRecord();
 
-  function onModeClick(mode: string) {
-    setMode(mode);
-    console.log(mode);
-    handleSetTime(modes[mode]);
-  }
-
-  function handleSaveRecord() {
+  const saveRecord = () => {
     mutate(
       {
         form: {
@@ -48,56 +69,34 @@ export default function PomodoroTimer() {
         },
       }
     );
-  }
+  };
+
   return (
-    <Box px="xl" py="sm">
-      <Title>Pomodoro Timer</Title>
-      <Flex justify={'center'} align="center">
-        <Stack pt="120px">
-          <Button.Group>
-            <Button
-              variant={mode === 'pomodoro' ? 'filled' : 'default'}
-              onClick={() => onModeClick('pomodoro')}
-            >
-              Pomodoro
-            </Button>
-            <Button
-              variant={mode === 'shortBreak' ? 'filled' : 'default'}
-              onClick={() => onModeClick('shortBreak')}
-            >
-              Short break
-            </Button>
-            <Button
-              variant={mode === 'longBreak' ? 'filled' : 'default'}
-              onClick={() => onModeClick('longBreak')}
-            >
-              Long break
-            </Button>
-            <Button
-              variant={mode === 'demo' ? 'filled' : 'default'}
-              onClick={() => onModeClick('demo')}
-            >
-              3s for demo
-            </Button>
-          </Button.Group>
-          <Text ta="center">{formatTime(time)}</Text>
-          {time !== 0 && (
-            <Button onClick={handleStartPause}>
-              {isRunning ? 'Pause' : isOngoing ? 'Resume' : 'Start'}
-            </Button>
-          )}
+    <PomodoroContext.Provider
+      value={{
+        mode,
+        isRunning,
+        isOngoing,
+        setMode,
+        formattedTime: formatTime(time),
+        time: time,
+        onReset: handleReset,
+        onPause: handleStartPause,
+        onSetTime: handleSetTime,
+        onStart: handleStartPause,
+        onSaveRecord: saveRecord,
+        focusListOpened,
+        onFocusListOpenChange: setFocusListOpened,
+        focusList,
+        addFocus,
+        deleteFocus,
+        toggleFocus,
+      }}
+    >
+      {!isRunning && !isOngoing && <ToolBar />}
 
-          {isOngoing && time !== 0 && (
-            <Button onClick={handleReset}>Reset</Button>
-          )}
-
-          {time === 0 && (
-            <Button onClick={handleSaveRecord}>
-              Record this session and reset
-            </Button>
-          )}
-        </Stack>
-      </Flex>
-    </Box>
+      <MainView />
+      <DrawerFocusQueue />
+    </PomodoroContext.Provider>
   );
 }

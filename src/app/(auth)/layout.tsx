@@ -2,17 +2,7 @@
 
 import { ReactNode, useState } from 'react';
 //import Image from 'next/image';
-import {
-  Box,
-  Image,
-  Button,
-  Center,
-  Group,
-  Text,
-  SegmentedControl,
-  Stack,
-  Title,
-} from '@mantine/core';
+import { Box, Image, Center, Group, Title } from '@mantine/core';
 import styles from './auth.module.scss';
 import WindowAnimation from './components/window-animation';
 import { usePathname } from 'next/navigation';
