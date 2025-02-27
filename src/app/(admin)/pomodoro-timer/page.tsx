@@ -1,5 +1,5 @@
 'use client';
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { UseCountdownTimer } from './hooks/use-countdown-timer';
 import { notifications } from '@mantine/notifications';
 import { useCreateFocusRecord } from './api/use-create-focus-record';
@@ -8,18 +8,21 @@ import MainView from './components/main-view';
 import { ToolBar } from './components/toolbar';
 import DrawerFocusQueue from './components/drawer-focus-queue';
 import { useFocusList, FocusContextType } from './hooks/use-focus-list';
+import ModalTimeUp from './components/modal-time-up';
+import { useDisclosure } from '@mantine/hooks';
 
-const modes = {
-  pomodoro: 25 * 60,
-  shortBreak: 5 * 60,
-  longBreak: 10 * 60,
-  demo: 3,
-};
+const timerOpts = [
+  ,
+  { label: 'demo', value: 10 },
+
+  { label: '5 mins', value: 10 * 60 },
+
+  { label: '15 mins', value: 5 * 60 },
+  { label: '25 mins', value: 25 * 60 },
+];
 
 interface PomodoroContextType extends FocusContextType {
-  mode: string;
-  setMode: (mode: string) => void;
-  formattedTime: { mins: string; secs: string };
+  formatTime: (sec: string) => { mins: string; secs: string };
   time: number;
   onReset: () => void;
   isRunning: boolean;
@@ -29,6 +32,9 @@ interface PomodoroContextType extends FocusContextType {
   onSaveRecord: () => void;
   onStart: () => void;
   focusListOpened: boolean;
+  timerOpts: typeof timerOpts;
+  timerSecs: number;
+  onTimerChange: (secs: number) => void;
   onFocusListOpenChange: (opened: boolean) => void;
 }
 
@@ -37,8 +43,11 @@ export const PomodoroContext = createContext<PomodoroContextType | undefined>(
 );
 
 export default function PomodoroTimer() {
+  const [timeUpModalOpened, { open: openTimUpModal, close: closeTimUpModal }] =
+    useDisclosure(false);
+  const [timerSecs, setTimeSecs] = useState(timerOpts[timerOpts.length]?.value);
   const [focusListOpened, setFocusListOpened] = useState(false);
-  const [mode, setMode] = useState('pomodoro');
+  const [introModalOpened, { toggle: toggleIntroModal }] = useDisclosure(false);
 
   const { focusList, addFocus, deleteFocus, toggleFocus } = useFocusList();
   const {
@@ -49,15 +58,20 @@ export default function PomodoroTimer() {
     handleSetTime,
     formatTime,
     isOngoing,
-  } = UseCountdownTimer();
+    onTimerUp,
+  } = UseCountdownTimer(timerSecs);
   const { mutate } = useCreateFocusRecord();
+
+  useEffect(() => {
+    onTimerUp(openTimUpModal);
+  }, []);
 
   const saveRecord = () => {
     mutate(
       {
         form: {
           date: new Date(),
-          mins: Number(modes[mode]),
+          mins: timerSecs,
         },
       },
       {
@@ -71,14 +85,19 @@ export default function PomodoroTimer() {
     );
   };
 
+  useEffect(() => {
+    console.log(timerSecs);
+  }, [timerSecs]);
+
   return (
     <PomodoroContext.Provider
       value={{
-        mode,
+        timerSecs,
+        timerOpts,
+        onTimerChange: setTimeSecs,
         isRunning,
         isOngoing,
-        setMode,
-        formattedTime: formatTime(time),
+        formatTime,
         time: time,
         onReset: handleReset,
         onPause: handleStartPause,
@@ -91,12 +110,15 @@ export default function PomodoroTimer() {
         addFocus,
         deleteFocus,
         toggleFocus,
+        introModalOpened,
+        toggleIntroModal,
       }}
     >
-      {!isRunning && !isOngoing && <ToolBar />}
+      {!isRunning && <ToolBar />}
 
       <MainView />
       <DrawerFocusQueue />
+      <ModalTimeUp opened={timeUpModalOpened} close={closeTimUpModal} />
     </PomodoroContext.Provider>
   );
 }

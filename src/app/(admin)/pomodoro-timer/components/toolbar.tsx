@@ -23,6 +23,7 @@ import { FaListCheck } from 'react-icons/fa6';
 import { MdInfo } from 'react-icons/md';
 import { RiTimerLine } from 'react-icons/ri';
 import { PomodoroContext } from '../page';
+import ModalHowItWorks from './modal-how-it-works';
 
 const groceries = [
   '🍎 Apples',
@@ -35,17 +36,35 @@ const groceries = [
 export function ToolBar() {
   const context = useContext(PomodoroContext);
   if (!context) return;
-  const { onFocusListOpenChange } = context;
+  const {
+    onFocusListOpenChange,
+    onTimerChange,
+    timerOpts,
+    introModalOpened,
+    toggleIntroModal,
+  } = context;
 
   const [alertSound, setAlertSound] = useState('wonderful morning');
 
   function onSoundPlayClick() {}
   return (
-    <Paper w="fit-content" radius={20} py="xs" px="xl" ml="auto" bg="#fff">
+    <Paper
+      mt="xs"
+      mr="xs"
+      w="fit-content"
+      radius={20}
+      py="xs"
+      px="xl"
+      ml="auto"
+      bg="#fff"
+    >
       <Group gap="sm">
         {/* intro */}
         <Tooltip label="How the Pomodoro Timer works">
-          <ActionIcon variant="transparent">
+          <ActionIcon
+            variant="transparent"
+            onClick={() => toggleIntroModal(true)}
+          >
             <MdInfo color="var(--gray2)" size={'24'} />
           </ActionIcon>
         </Tooltip>
@@ -67,9 +86,14 @@ export function ToolBar() {
             </ActionIcon>
           </Menu.Target>
           <Menu.Dropdown>
-            <Menu.Item>5 mins</Menu.Item>
-            <Menu.Item>15 mins</Menu.Item>
-            <Menu.Item>25 mins</Menu.Item>
+            {timerOpts.map((t, idx) => (
+              <Menu.Item
+                key={`timer-opt-${idx}`}
+                onClick={() => onTimerChange(t.value)}
+              >
+                {t.label}
+              </Menu.Item>
+            ))}
           </Menu.Dropdown>
         </Menu>
         {/* alert sound */}
@@ -89,19 +113,25 @@ export function ToolBar() {
             </InputBase>
           </Menu.Target>
           <Menu.Dropdown miw={195}>
+            <Menu.Label>Alert Sounds</Menu.Label>
             <Group gap={0} wrap="nowrap">
               <Menu.Item>Settings</Menu.Item>
               <ActionIcon
-                variant="filled"
+                variant="white"
+                color="var(--gray2)"
                 aria-label="Settings"
                 onClick={onSoundPlayClick}
               >
-                <MdOutlinePlayCircleFilled />
+                <MdOutlinePlayCircleFilled size={24} />
               </ActionIcon>
             </Group>
           </Menu.Dropdown>
         </Menu>
       </Group>
+      <ModalHowItWorks
+        opened={introModalOpened}
+        close={() => toggleIntroModal(false)}
+      />
     </Paper>
   );
 }
