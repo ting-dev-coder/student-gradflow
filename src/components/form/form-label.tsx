@@ -14,7 +14,7 @@ const FormLabel = ({ label, field, ...props }: FormLabelProps) => {
         tt="capitalize"
         ta="left"
         w="100px"
-        miw={'100px'}
+        miw={'80px'}
       >
         {label}
       </Input.Label>

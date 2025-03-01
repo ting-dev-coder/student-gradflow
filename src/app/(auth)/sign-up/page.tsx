@@ -50,19 +50,10 @@ export default function SignUp() {
     router.push('/sign-in');
   }
   return (
-    <Card w="100%">
-      <Button
-        w="fit-content"
-        leftSection={<IconArrowLeft size={14} />}
-        variant="subtle"
-        color="var(--primary)"
-        onClick={navToSignin}
-      >
+    <Card w="100%" bg="transparent">
+      <Title mb="50" ta="center" c="var(--primary)">
         Sign up
-      </Button>
-
-      <Divider my="md" />
-
+      </Title>
       <form
         style={{ margin: 'auto', width: '80%' }}
         onSubmit={form.handleSubmit(onSubmit)}
@@ -83,7 +74,7 @@ export default function SignUp() {
           />
           <Button
             px="xl"
-            color="var(--secondary)"
+            color="var(--accent)"
             size="md"
             loading={isPending}
             type="submit"

@@ -38,9 +38,12 @@ const WeeklyFocusChart = ({ data, loading }) => {
   return (
     <Skeleton visible={loading} h="95%">
       <Stack h="100%">
-        <Group justify="space-between">
-          <Text>Weekly focus time</Text>
+        <Group p="xs" justify="space-between">
+          <Text pl="md" c="var(--gray3)">
+            Weekly focus time
+          </Text>
           <Button
+            c="var(--accent)"
             rightSection={<MdKeyboardArrowRight />}
             variant="white"
             onClick={() => router.push('/pomodoro-timer')}
@@ -54,11 +57,11 @@ const WeeklyFocusChart = ({ data, loading }) => {
             data={chartData}
             margin={{ top: 0, left: -20, right: 10, bottom: -10 }}
           >
-            <Bar dataKey="value" fill="var(--yellow2)" />
+            <Bar dataKey="value" fill="var(--primary)" />
             <XAxis
               dataKey="name"
               tickLine={false}
-              axisLine={{ stroke: 'var(--yellow2)', strokeWidth: 2 }}
+              axisLine={{ stroke: 'var(--primary)', strokeWidth: 2 }}
             />
             <YAxis tickLine={false} axisLine={false} />
           </BarChart>

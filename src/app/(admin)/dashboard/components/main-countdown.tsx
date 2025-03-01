@@ -11,7 +11,12 @@ import { differenceInDays } from 'date-fns';
 
 const MainCountdown = ({ event }) => {
   return (
-    <BackgroundImage py="sm" src={event.localImagePath} radius="sm" h="100%">
+    <BackgroundImage
+      py="sm"
+      src={event.localImagePath || event.imageUrl}
+      radius="sm"
+      h="100%"
+    >
       <Paper
         w="70%"
         h="fit-content"

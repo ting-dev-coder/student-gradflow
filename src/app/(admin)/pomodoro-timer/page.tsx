@@ -11,6 +11,7 @@ import { useFocusList, FocusContextType } from './hooks/use-focus-list';
 import ModalTimeUp from './components/modal-time-up';
 import { useDisclosure } from '@mantine/hooks';
 import { useAudioPlayer } from './hooks/use-audio-loop';
+import FocusMask from './components/focus-mask';
 
 const timerOpts = [
   ,
@@ -28,9 +29,9 @@ interface PomodoroContextType extends FocusContextType {
   onReset: () => void;
   isRunning: boolean;
   onPause: () => void;
+  onStop: () => void;
   onSetTime: (time: number) => void;
   isOngoing: boolean;
-  onSaveRecord: () => void;
   onStart: () => void;
   focusListOpened: boolean;
   timerOpts: typeof timerOpts;
@@ -58,10 +59,9 @@ export default function PomodoroTimer() {
   const [focusTaskId, setFocusTaskId] = useState('');
   // how it work
   const [introModalOpened, { toggle: toggleIntroModal }] = useDisclosure(false);
-
+  console.log('主頁', timerSecs);
   // alert sound
   const [alertSound, setAlertSound] = useState('');
-
   const {
     time,
     handleReset,
@@ -70,32 +70,15 @@ export default function PomodoroTimer() {
     handleSetTime,
     formatTime,
     isOngoing,
+    handleStop,
     onTimerUp,
   } = UseCountdownTimer(timerSecs);
-  const { mutate } = useCreateFocusRecord();
 
   useEffect(() => {
-    onTimerUp(openTimUpModal);
+    onTimerUp(() => {
+      openTimUpModal();
+    });
   }, []);
-
-  const saveRecord = () => {
-    mutate(
-      {
-        form: {
-          date: new Date(),
-          mins: timerSecs,
-        },
-      },
-      {
-        onSuccess: () => {
-          notifications.show({
-            message: 'Successfully Saved',
-          });
-          handleReset();
-        },
-      }
-    );
-  };
 
   return (
     <PomodoroContext.Provider
@@ -109,11 +92,11 @@ export default function PomodoroTimer() {
         alertSound,
         onAlertSoundChange: setAlertSound,
         time: time,
+        onStop: handleStop,
         onReset: handleReset,
         onPause: handleStartPause,
         onSetTime: handleSetTime,
         onStart: handleStartPause,
-        onSaveRecord: saveRecord,
         focusListOpened,
         onFocusListOpenChange: setFocusListOpened,
         focusList,
@@ -126,8 +109,7 @@ export default function PomodoroTimer() {
         toggleIntroModal,
       }}
     >
-      {!isRunning && <ToolBar />}
-
+      {!isRunning && !isOngoing && <ToolBar />}
       <MainView />
       <DrawerFocusQueue />
       <ModalTimeUp opened={timeUpModalOpened} close={closeTimUpModal} />

@@ -16,11 +16,6 @@ const AdminLayout = ({ children }) => {
       }}
       padding="0"
     >
-      {/* <AppShell.Header>
-  			<Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-  			<div>Logo</div>
-  		</AppShell.Header> */}
-
       <AppShell.Navbar
         style={{
           boxShadow: '0 4px 4px rgba(0,0,0,.25)',

@@ -23,7 +23,7 @@ import { usePathname } from 'next/navigation';
 import { UserButton } from '@/app/(auth)/components/user-button';
 
 const links = [
-  { icon: <></>, label: 'Dashboard', path: '/' },
+  { icon: <></>, label: 'Dashboard', path: '/dashboard' },
   { icon: <></>, label: 'Countdown', path: '/countdown' },
   { icon: <></>, label: 'To-do List', path: '/to-do-list' },
   { icon: <></>, label: 'Pomodoro Timer', path: '/pomodoro-timer' },
@@ -31,7 +31,7 @@ const links = [
 
 export function Navbar() {
   const isActive = (path: string) => usePathname() == path;
-
+  console.log(usePathname());
   const navItems = links.map((item, idx) => (
     <NavLink
       key={`sidebar-${idx}}`}

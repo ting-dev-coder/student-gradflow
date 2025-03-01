@@ -6,17 +6,15 @@ export function UseCountdownTimer(initialSeconds = 25 * 60) {
   const [time, setTime] = useState(initialSeconds);
   const [startTime, setStartTime] = useState(initialSeconds);
   const [isRunning, setIsRunning] = useState(false);
+  const [isOngoing, setIsOngoing] = useState(false); // 取代 hasStarted
   const timerId = useRef<NodeJS.Timeout | null>(null);
   const timerUpCallback = useRef<(() => void) | null>(null);
-
-  const isOngoing = time !== startTime;
-
   useEffect(() => {
     if (!isRunning) {
       setTime(initialSeconds);
       setStartTime(initialSeconds);
     }
-  }, [initialSeconds, isRunning]);
+  }, [initialSeconds]);
 
   useEffect(() => {
     if (!isRunning || time <= 0) {
@@ -45,13 +43,10 @@ export function UseCountdownTimer(initialSeconds = 25 * 60) {
 
   const handleStartPause = () => {
     if (isRunning) {
-      setIsRunning(false);
-      if (timerId.current) {
-        clearTimeout(timerId.current);
-        timerId.current = null;
-      }
+      setIsRunning(false); // 暫停計時
     } else {
-      setIsRunning(true);
+      setIsRunning(true); // 開始計時
+      setIsOngoing(true); // 曾經開始過倒數，確保不會回到 false
     }
   };
 
@@ -68,6 +63,7 @@ export function UseCountdownTimer(initialSeconds = 25 * 60) {
     setTime(seconds);
     setStartTime(seconds);
     setIsRunning(false);
+    setIsOngoing(false);
     if (timerId.current) {
       clearTimeout(timerId.current);
       timerId.current = null;
@@ -87,14 +83,20 @@ export function UseCountdownTimer(initialSeconds = 25 * 60) {
     timerUpCallback.current = callback;
   };
 
+  function handleStop() {
+    handleReset();
+    setIsOngoing(false);
+  }
+
   return {
+    handleStop,
     handleStartPause,
     handleReset,
     handleSetTime,
     formatTime,
     onTimerUp,
     time,
-    isRunning: !!timerId.current, // 用 timerId 判斷是否真的在倒數
-    isOngoing,
+    isRunning, // true: 計時中, false: 暫停
+    isOngoing, // true: 曾經開始過倒數，不因暫停變 false
   };
 }

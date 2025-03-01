@@ -20,3 +20,17 @@
     transform: translate(-50%, -50%);
   }
 }
+
+.desktop-mask::before {
+  content: '';
+  position: absolute;
+  z-index: 9;
+  width: min(300px, 20vw);
+  height: min(300px, 20vw);
+  border-radius: 50%;
+  left: 50%;
+  top: 50%;
+
+  transform: translate(-50%, -50%); /*默认居中*/
+  box-shadow: 0 0 0 999vw rgba(0, 0, 0, 0.5); /*足够大的投影*/
+}

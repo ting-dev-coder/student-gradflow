@@ -35,7 +35,9 @@ const CountdownList = ({ events, loading, setEventUpdate }) => {
   return (
     <Box flex={1} pr="sm">
       <ModalAddEvent>
-        <Button>Add Task</Button>
+        <Button mt="sm" color="var(--accent)">
+          Add Event
+        </Button>
       </ModalAddEvent>
       {isLoading ? (
         <CardSkeleton

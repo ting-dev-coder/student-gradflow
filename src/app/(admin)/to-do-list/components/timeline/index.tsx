@@ -55,13 +55,13 @@ const TimeLine = ({ tasks, currentDate, upcomingTasks }) => {
 
   return (
     <Stack gap="0" className="to-do-timeline" miw="230" h="100%">
-      <Group>
-        <Group gap="xs">
+      <Group pt="xs" px="md">
+        {/* <Group gap="xs">
           <Box w="1rem" h="1rem" bg="var(--primary)" />
           <Text>Weekly</Text>
-        </Group>
+        </Group> */}
         <Group gap="xs">
-          <Box w="1rem" h="1rem" bg="var(--info)" />
+          <Box w="1rem" h="1rem" bg="var(--primary)" />
           <Text>Today</Text>
         </Group>
       </Group>

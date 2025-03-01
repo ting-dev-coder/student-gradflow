@@ -21,11 +21,8 @@ import { getCurrent } from '../actions';
 import ControllerInput from '@/components/form/input';
 import { useSignIn } from './use-sign-in';
 import ControllerPasswordInput from '@/components/form/password-input';
-import { useRouter } from 'next/navigation';
-import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
 
 export default function SignIn() {
-  const router = useRouter();
   const { mutate, isPending, isError, error } = useLogin();
 
   const {
@@ -45,22 +42,9 @@ export default function SignIn() {
       }
     );
   }
-  function navToSignup() {
-    router.push('/sign-up');
-  }
+
   return (
     <Card w="100%" pt="md" bg="transparent">
-      <Button
-        ml="auto"
-        size="compact-md"
-        color="var(--primary)"
-        w="fit-content"
-        variant="subtle"
-        rightSection={<IconArrowRight size={14} />}
-        onClick={navToSignup}
-      >
-        Sign in
-      </Button>
       <Stack gap={0} justify="center" align="center">
         <Title pt="xl" c="#fff">
           Hi Student
@@ -74,9 +58,15 @@ export default function SignIn() {
           onSubmit={handleSubmit(onSubmit)}
         >
           <Stack>
-            <ControllerInput name="email" control={control} size="md" />
+            <ControllerInput
+              label="Email"
+              name="email"
+              control={control}
+              size="md"
+            />
 
             <ControllerPasswordInput
+              label="Password"
               size="md"
               name="password"
               control={control}
@@ -84,7 +74,7 @@ export default function SignIn() {
             {isError && <Text c="var(--error)">{error.message}</Text>}
             <Button
               px="xl"
-              color="var(--secondary)"
+              color="var(--primary)"
               size="md"
               loading={isPending}
               type="submit"

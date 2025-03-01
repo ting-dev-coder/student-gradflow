@@ -2,15 +2,31 @@ import { Button, Modal, Title, Text, Stack, Image } from '@mantine/core';
 import { useAudioPlayer } from '../hooks/use-audio-loop';
 import { useContext, useEffect } from 'react';
 import { PomodoroContext } from '../page';
+import { useCreateFocusRecord } from '../api/use-create-focus-record';
 
 export default function ModalTimeUp({ opened, close }) {
   const context = useContext(PomodoroContext);
   if (!context) return;
-  const { alertSound } = context;
+  const { alertSound, timerSecs, onStop } = context;
+  const { mutate } = useCreateFocusRecord();
+
   const { playAudio, stopAudio } = useAudioPlayer();
   useEffect(() => {
     if (!opened || !alertSound) return;
     playAudio(alertSound);
+  }, [opened]);
+
+  useEffect(() => {
+    if (!opened) return;
+    mutate(
+      {
+        form: {
+          date: new Date(),
+          mins: timerSecs,
+        },
+      },
+      []
+    );
   }, [opened]);
   return (
     <Modal
@@ -33,6 +49,7 @@ export default function ModalTimeUp({ opened, close }) {
           tt="uppercase"
           onClick={() => {
             stopAudio();
+            onStop();
             close();
           }}
         >
