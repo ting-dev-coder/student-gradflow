@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 
 export function useAudioPlayer() {
-  const audioRef = useRef(new Audio());
+  const audioRef = useRef(typeof window !== 'undefined' ? new Audio() : null);
   const [isPlaying, setIsPlaying] = useState(false);
 
   // To stop and reset audio when the component unmounts
