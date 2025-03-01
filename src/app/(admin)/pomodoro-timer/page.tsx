@@ -10,6 +10,7 @@ import DrawerFocusQueue from './components/drawer-focus-queue';
 import { useFocusList, FocusContextType } from './hooks/use-focus-list';
 import ModalTimeUp from './components/modal-time-up';
 import { useDisclosure } from '@mantine/hooks';
+import { useAudioPlayer } from './hooks/use-audio-loop';
 
 const timerOpts = [
   ,
@@ -36,6 +37,8 @@ interface PomodoroContextType extends FocusContextType {
   timerSecs: number;
   onTimerChange: (secs: number) => void;
   onFocusListOpenChange: (opened: boolean) => void;
+  focusTaskId: string;
+  setFocusTaskId: (id: string) => void;
 }
 
 export const PomodoroContext = createContext<PomodoroContextType | undefined>(
@@ -43,13 +46,22 @@ export const PomodoroContext = createContext<PomodoroContextType | undefined>(
 );
 
 export default function PomodoroTimer() {
+  // time up modal
   const [timeUpModalOpened, { open: openTimUpModal, close: closeTimUpModal }] =
     useDisclosure(false);
+  // time session
   const [timerSecs, setTimeSecs] = useState(timerOpts[timerOpts.length]?.value);
+  // focus queue
   const [focusListOpened, setFocusListOpened] = useState(false);
+  // focus queue hook
+  const { focusList, addFocus, deleteFocus, toggleFocus } = useFocusList();
+  const [focusTaskId, setFocusTaskId] = useState('');
+  // how it work
   const [introModalOpened, { toggle: toggleIntroModal }] = useDisclosure(false);
 
-  const { focusList, addFocus, deleteFocus, toggleFocus } = useFocusList();
+  // alert sound
+  const [alertSound, setAlertSound] = useState('');
+
   const {
     time,
     handleReset,
@@ -85,10 +97,6 @@ export default function PomodoroTimer() {
     );
   };
 
-  useEffect(() => {
-    console.log(timerSecs);
-  }, [timerSecs]);
-
   return (
     <PomodoroContext.Provider
       value={{
@@ -98,6 +106,8 @@ export default function PomodoroTimer() {
         isRunning,
         isOngoing,
         formatTime,
+        alertSound,
+        onAlertSoundChange: setAlertSound,
         time: time,
         onReset: handleReset,
         onPause: handleStartPause,
@@ -107,6 +117,8 @@ export default function PomodoroTimer() {
         focusListOpened,
         onFocusListOpenChange: setFocusListOpened,
         focusList,
+        focusTaskId,
+        setFocusTaskId,
         addFocus,
         deleteFocus,
         toggleFocus,

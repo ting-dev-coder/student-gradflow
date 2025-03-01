@@ -1,6 +1,17 @@
 import { Button, Modal, Title, Text, Stack, Image } from '@mantine/core';
+import { useAudioPlayer } from '../hooks/use-audio-loop';
+import { useContext, useEffect } from 'react';
+import { PomodoroContext } from '../page';
 
 export default function ModalTimeUp({ opened, close }) {
+  const context = useContext(PomodoroContext);
+  if (!context) return;
+  const { alertSound } = context;
+  const { playAudio, stopAudio } = useAudioPlayer();
+  useEffect(() => {
+    if (!opened || !alertSound) return;
+    playAudio(alertSound);
+  }, [opened]);
   return (
     <Modal
       style={{ '--mantine-color-body': '#fff' }}
@@ -17,7 +28,14 @@ export default function ModalTimeUp({ opened, close }) {
         />
         <Title ta="center">Awesome work! </Title>
         <Text ta="center">Enjoy a well-deserved 15 minute break</Text>
-        <Button color="var(--accent)" tt="uppercase" onClick={close}>
+        <Button
+          color="var(--accent)"
+          tt="uppercase"
+          onClick={() => {
+            stopAudio();
+            close();
+          }}
+        >
           i go it
         </Button>
       </Stack>

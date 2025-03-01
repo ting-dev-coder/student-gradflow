@@ -24,13 +24,19 @@ import { MdInfo } from 'react-icons/md';
 import { RiTimerLine } from 'react-icons/ri';
 import { PomodoroContext } from '../page';
 import ModalHowItWorks from './modal-how-it-works';
+import { useAudioPlayer } from '../hooks/use-audio-loop';
 
-const groceries = [
-  '🍎 Apples',
-  '🍌 Bananas',
-  '🥦 Broccoli',
-  '🥕 Carrots',
-  '🍫 Chocolate',
+const audioFiles = [
+  { label: 'alarm clock 1', value: '/alarm-clock-1.mp3' },
+  { label: 'alarm clock 2', value: '/alarm-clock-2.mp3' },
+  { label: 'chiptune', value: '/chiptune.mp3' },
+  { label: 'hand clock', value: '/hand-clock.mp3' },
+  { label: 'imminent', value: '/imminent.mp3' },
+  { label: 'lofi clock', value: '/lofi-clock.mp3' },
+  { label: 'morning joy', value: '/morning-joy.mp3' },
+  { label: 'wonderful morning', value: '/wonderful-morning.mp3' },
+  { label: 'ringtone', value: '/ringtone.mp3' },
+  { label: 'soft plucks', value: '/soft-plucks.mp3' },
 ];
 
 export function ToolBar() {
@@ -42,11 +48,21 @@ export function ToolBar() {
     timerOpts,
     introModalOpened,
     toggleIntroModal,
+    alertSound,
+    onAlertSoundChange,
   } = context;
 
-  const [alertSound, setAlertSound] = useState('wonderful morning');
+  const { playAudio, stopAudio, toggleAudio, isPlaying } = useAudioPlayer();
 
-  function onSoundPlayClick() {}
+  const selectAudio = audioFiles.find((a) => a.value === alertSound);
+
+  function onSoundPlayClick(src: string) {
+    onAlertSoundChange(src);
+    playAudio(src);
+  }
+  function handleAlertSoundClose() {
+    stopAudio();
+  }
   return (
     <Paper
       mt="xs"
@@ -97,10 +113,14 @@ export function ToolBar() {
           </Menu.Dropdown>
         </Menu>
         {/* alert sound */}
-        <Menu trigger="hover" closeOnClickOutside>
+        <Menu
+          trigger="hover"
+          closeOnClickOutside
+          onClose={handleAlertSoundClose}
+        >
           <Menu.Target>
             <InputBase
-              miw={195}
+              miw={232}
               component="button"
               type="button"
               variant="filled"
@@ -109,22 +129,26 @@ export function ToolBar() {
               rightSection={<Combobox.Chevron />}
               rightSectionPointerEvents="none"
             >
-              {alertSound}
+              {selectAudio?.label || 'Please select alert sound'}
             </InputBase>
           </Menu.Target>
           <Menu.Dropdown miw={195}>
             <Menu.Label>Alert Sounds</Menu.Label>
-            <Group gap={0} wrap="nowrap">
-              <Menu.Item>Settings</Menu.Item>
-              <ActionIcon
-                variant="white"
-                color="var(--gray2)"
-                aria-label="Settings"
-                onClick={onSoundPlayClick}
-              >
-                <MdOutlinePlayCircleFilled size={24} />
-              </ActionIcon>
-            </Group>
+            {audioFiles.map((audio) => (
+              <Group gap={0} wrap="nowrap">
+                <Menu.Item onClick={() => onAlertSoundChange(audio.value)}>
+                  {audio.label}
+                </Menu.Item>
+                <ActionIcon
+                  variant="white"
+                  color="var(--gray2)"
+                  aria-label="Settings"
+                  onClick={() => onSoundPlayClick(audio.value)}
+                >
+                  <MdOutlinePlayCircleFilled size={24} />
+                </ActionIcon>
+              </Group>
+            ))}
           </Menu.Dropdown>
         </Menu>
       </Group>

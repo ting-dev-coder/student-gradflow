@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-interface Focus {
+export interface Focus {
   id: string;
   text: string;
   completed: boolean;

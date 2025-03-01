@@ -8,11 +8,13 @@ import {
   Group,
   Text,
   Stack,
+  TextInput,
 } from '@mantine/core';
 import { useContext, useState } from 'react';
 import { PomodoroContext } from '../page';
 import { useClickOutside } from '@mantine/hooks';
 import { IoClose } from 'react-icons/io5';
+import { IoMdAdd } from 'react-icons/io';
 
 function ListItem({ text, onDelete, completed, toggleFocus, showDivider }) {
   const [checked, setChecked] = useState(completed);
@@ -48,14 +50,17 @@ function ListItem({ text, onDelete, completed, toggleFocus, showDivider }) {
 export default function DrawerFocusQueue() {
   const context = useContext(PomodoroContext);
   if (!context) return;
+  const [taskText, setTaskText] = useState('');
   const {
     focusListOpened,
     onFocusListOpenChange,
     focusList,
     deleteFocus,
     toggleFocus,
+    addFocus,
   } = context;
   const ref = useClickOutside(() => onFocusListOpenChange(false));
+
   return (
     <Dialog
       ref={ref}
@@ -69,6 +74,23 @@ export default function DrawerFocusQueue() {
       bg="white"
     >
       <Stack gap="sm">
+        <Group gap="xs">
+          <TextInput
+            flex={1}
+            style={{ '--input-bd': 'var(--primary)' }}
+            value={taskText}
+            onChange={(event) => setTaskText(event.currentTarget.value)}
+          />
+          <ActionIcon
+            color="var(--warning)"
+            onClick={() => {
+              addFocus(taskText);
+              setTaskText('');
+            }}
+          >
+            <IoMdAdd />
+          </ActionIcon>
+        </Group>
         {focusList.map((focusTask, idx) => (
           <ListItem
             key={`focus-list${idx}`}

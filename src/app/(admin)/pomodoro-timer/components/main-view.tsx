@@ -11,6 +11,7 @@ import {
   Text,
   Box,
   Paper,
+  Select,
 } from '@mantine/core';
 import { IoMdAdd } from 'react-icons/io';
 import { UseCountdownTimer } from '../hooks/use-countdown-timer';
@@ -20,33 +21,48 @@ import { IoMdPlay } from 'react-icons/io';
 import { useContext, useState } from 'react';
 import { PomodoroContext } from '../page';
 import React from 'react';
+import type { Focus } from '../hooks/use-focus-list';
 
-function CountdownView() {
+function parseFocusData(data) {
+  return data
+    .filter((t) => t.completed)
+    .map((task) => ({
+      ...task,
+      label: task.text,
+      value: task.id,
+    }));
+}
+
+function CountdownView({ selectedFocusTask }: { selectedFocusTask: Object }) {
   const context = useContext(PomodoroContext);
   if (!context) return;
   const { onPause, onReset, isRunning, time, formatTime, isOngoing } = context;
-  console.log('countdown view', time, formatTime(time));
+  console.log('countdow', selectedFocusTask);
   return (
     <Stack gap={0} w="28vw" maw="600px">
       <Stack gap={0}>
         {isRunning && (
           <Stack gap="0">
-            <Title ta="center" c="#fff">
-              Homework
-            </Title>
+            {selectedFocusTask?.text && (
+              <Title ta="center" c="#fff">
+                {selectedFocusTask.text}
+              </Title>
+            )}
             <Text ta="center" c="#fff">
               Focus Time Remaining
             </Text>
           </Stack>
         )}
 
-        <Group>
+        <Group justify="center">
           <Paper py="xs" radius={12} px="md" bg="var(--primary)">
             <Text lh="1" fz="4rem" c="#fff" ta="center">
               {formatTime(time).mins}
             </Text>
           </Paper>
-          <Text fz="5rem">:</Text>
+          <Text c="var(--primary)" fz="5rem">
+            :
+          </Text>
           <Paper py="xs" radius={12} px="md" bg="var(--primary)">
             <Text lh="1" fz="4rem" c="#fff" ta="center">
               {formatTime(time).secs}
@@ -85,11 +101,15 @@ function CountdownView() {
 export default function MainView() {
   const context = useContext(PomodoroContext);
   if (!context) return;
-  const [taskText, setTaskText] = useState('');
-  const { onStart, isRunning, addFocus, onFocusListOpenChange } = context;
+
+  const { onStart, isRunning, focusList, focusTaskId, setFocusTaskId } =
+    context;
+
+  const selectedFocusTask = focusList.find((t) => t.id === focusTaskId);
+
   return (
     <Group justify="center" gap="0">
-      <CountdownView />
+      <CountdownView selectedFocusTask={selectedFocusTask} />
 
       {!isRunning && (
         <Stack pl="xl">
@@ -97,24 +117,14 @@ export default function MainView() {
             Time to Focus!
           </Title>
 
-          <Group gap="xs">
-            <TextInput
-              flex={1}
-              value={taskText}
-              onChange={(event) => setTaskText(event.currentTarget.value)}
-            />
-            <ActionIcon
-              color="var(--warning)"
-              variant="subtle"
-              onClick={() => {
-                addFocus(taskText);
-                setTaskText('');
-                onFocusListOpenChange(true);
-              }}
-            >
-              <IoMdAdd />
-            </ActionIcon>
-          </Group>
+          <Select
+            data={parseFocusData(focusList)}
+            value={selectedFocusTask}
+            onChange={(taskId) => {
+              console.log('set', taskId);
+              setFocusTaskId(taskId);
+            }}
+          />
 
           <Button color="var(--warning)" onClick={onStart}>
             Start

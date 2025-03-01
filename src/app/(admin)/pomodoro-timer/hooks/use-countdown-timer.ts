@@ -9,10 +9,8 @@ export function UseCountdownTimer(initialSeconds = 25 * 60) {
   const timerId = useRef<NodeJS.Timeout | null>(null);
   const timerUpCallback = useRef<(() => void) | null>(null);
 
-  // isOngoing 代表計時是否已開始過
   const isOngoing = time !== startTime;
 
-  // **監聽外部傳入的 initialSeconds**
   useEffect(() => {
     if (!isRunning) {
       setTime(initialSeconds);
@@ -37,10 +35,10 @@ export function UseCountdownTimer(initialSeconds = 25 * 60) {
   }, [isRunning, time]);
 
   useEffect(() => {
-    if (time === 0) {
+    if (time <= 0) {
       setIsRunning(false);
       if (timerUpCallback.current) {
-        timerUpCallback.current(); // 呼叫倒數結束時的回調函數
+        timerUpCallback.current();
       }
     }
   }, [time]);
