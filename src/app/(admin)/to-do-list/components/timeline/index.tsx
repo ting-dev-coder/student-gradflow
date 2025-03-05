@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import { Badge, Box, Group, Stack, Tabs, Text } from '@mantine/core';
+import { Badge, Box, Group, Stack, Tabs, Text, Tooltip } from '@mantine/core';
 import { convertCustomTimeToISO, dateFormat } from '@/lib/utils';
 import { parseISO } from 'date-fns';
 import './timeline.scss';
@@ -27,16 +27,25 @@ const TimeLine = ({ tasks, currentDate, upcomingTasks }) => {
       const todayTitle = task.allDay
         ? task.startDate
         : convertCustomTimeToISO(task.startDate, task.startTime);
+      console.log(
+        'date',
+        activeTab === 'today' ? todayTitle : currentDate.toISOString()
+      );
       return {
         id: createEventId(),
         title: task.title,
-        start: activeTab === 'today' ? todayTitle : currentDate,
+        start:
+          activeTab === 'today'
+            ? todayTitle
+            : convertCustomTimeToISO(currentDate.toISOString(), task.startTime),
         extendedProps: {
+          isComingDay: activeTab !== 'today',
           category: task.category,
+          date: task.startDate,
         },
       };
     });
-  }, [taskList]);
+  }, [taskList, currentDate, activeTab]);
 
   useEffect(() => {
     if (!calendarRef?.current) return;
@@ -55,16 +64,16 @@ const TimeLine = ({ tasks, currentDate, upcomingTasks }) => {
 
   return (
     <Stack gap="0" className="to-do-timeline" miw="230" h="100%">
-      <Group pt="xs" px="md">
-        {/* <Group gap="xs">
+      {/* <Group pt="xs" px="md">
+        <Group gap="xs">
           <Box w="1rem" h="1rem" bg="var(--primary)" />
           <Text>Weekly</Text>
-        </Group> */}
+        </Group>
         <Group gap="xs">
           <Box w="1rem" h="1rem" bg="var(--primary)" />
           <Text>Today</Text>
         </Group>
-      </Group>
+      </Group> */}
 
       <Tabs
         mb="md"
@@ -104,11 +113,23 @@ const TimeLine = ({ tasks, currentDate, upcomingTasks }) => {
 };
 
 function renderEventContent({ event }) {
-  return (
-    <Box className="event-card">
+  console.log(event);
+  const renderContent = () => (
+    <Box
+      className="event-card"
+      style={{
+        cursor: event.extendedProps.isComingDay ? 'pointer' : 'default',
+      }}
+    >
       <Text truncate>{event.title}</Text>
       <div className="event-card_category">{event.extendedProps.category}</div>
     </Box>
+  );
+
+  return event?.extendedProps?.isComingDay ? (
+    <Tooltip label={event.extendedProps.date}>{renderContent()}</Tooltip>
+  ) : (
+    renderContent()
   );
 }
 

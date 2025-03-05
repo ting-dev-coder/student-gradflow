@@ -76,7 +76,7 @@ export default function AddEventBackgroundImage({
     const [selectedImageId, setImageSelectedId] = useState<number | null>(
       DEFAULT_BACKGROUND_IMAGES[0].id
     );
-    console.log('selectedImageId', selectedImageId === null);
+
     const [loaded, setLoaded] = useState(false);
 
     function onImageClick(image: DefaultImageI) {

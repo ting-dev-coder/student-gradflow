@@ -6,7 +6,7 @@ import {
   Drawer,
   Group,
   Input,
-  List,
+  Text,
   LoadingOverlay,
   Stack,
   Title,
@@ -77,13 +77,32 @@ const DrawerHandleTask = ({
 
   useEffect(() => {
     if (!mounted) return;
+
     if (taskId && data) {
-      reset((prev) => ({ ...prev, ...data }));
+      // 在編輯時使用原來的資料
+      reset((prev) => ({
+        ...prev,
+        title: data.title,
+        category: data.category,
+        status: data.status,
+        startDate: data.startDate,
+        startTime: data.startTime,
+        allDay: data.allDay,
+        description: data.description,
+      }));
     } else {
-      console.log(dayjs(defaultDate).format('YYYY-MM-DD'));
-      reset({ startDate: dateFormat(defaultDate) });
+      const formattedStartDate = new Date(parseISO(defaultDate)).toISOString();
+      reset({
+        title: '',
+        category: '',
+        status: '',
+        startDate: formattedStartDate,
+        startTime: [],
+        allDay: false,
+        description: '',
+      });
     }
-  }, [opened]);
+  }, [opened, mounted, taskId, data, defaultDate, reset]);
 
   function onAddSubmit(values: z.infer<typeof createTodoSchema>) {
     mutate(
@@ -122,7 +141,11 @@ const DrawerHandleTask = ({
     <Drawer
       opened={opened}
       onClose={onClose}
-      title={taskId ? 'Edit Task' : `Add task`}
+      title={
+        <Text p="md" pb="none" fz={'lg'}>
+          {taskId ? 'Edit Task' : `Add task`}
+        </Text>
+      }
       position="right"
       transitionProps={{
         transition: 'slide-left',
@@ -161,12 +184,7 @@ const DrawerHandleTask = ({
             />
             <Divider />
             <Title order={5}>Dates</Title>
-            <DateInput
-              label="Start Date"
-              name="startDate"
-              control={control}
-              defaultValue={taskId ? null : defaultDate}
-            />
+            <DateInput label="Start Date" name="startDate" control={control} />
             <Checkbox control={control} name="allDay" label="All day " />
             {!showStartTimeField && (
               <FormLabel

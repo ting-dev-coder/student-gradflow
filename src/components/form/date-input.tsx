@@ -5,10 +5,8 @@ import {
 } from '@mantine/dates';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import FormLabel from './form-label';
-import dayjs from 'dayjs';
-import { parse, parseISO } from 'date-fns';
+import { parseISO } from 'date-fns';
 import { BoxProps } from '@mantine/core';
-import { useMounted } from '@mantine/hooks';
 
 interface DateInputWrapper<T extends FieldValues> extends BoxProps {
   control: Control<T>;
@@ -37,6 +35,7 @@ function DateInput<T extends FieldValues>({
     <Controller
       name={name}
       control={control}
+      // defaultValue={defaultValue ? parseISO(defaultValue) : new Date()}
       render={({ field, fieldState }) => {
         return (
           <MantineDateInput
@@ -46,12 +45,16 @@ function DateInput<T extends FieldValues>({
             error={fieldState?.error?.message}
             flex={1}
             valueFormat="YYYY-MM-DD"
-            defaultValue={defaultValue ? new Date(defaultValue) : undefined}
-            // value={field.value}
+            value={field.value ? new Date(field.value) : null}
             onChange={(value: DateValue) => {
-              if (!value) return;
+              if (!value) {
+                field.onChange(null);
+                return;
+              }
 
-              field.onChange(value);
+              // Ensure ISO string is always used
+              const isoString = value.toISOString();
+              field.onChange(isoString);
               handleChange();
             }}
           />
