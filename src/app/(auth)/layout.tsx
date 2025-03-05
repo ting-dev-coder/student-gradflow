@@ -24,7 +24,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
     router.push(route);
   };
   return (
-    <Center mt="50" p="sm" w="100vw" h="100vh" bg={'var(--secondary)'}>
+    <Center p="sm" w="100vw" h="100vh" bg={'var(--secondary)'}>
       <Group pos="relative" maw="1200px" w="100%" h="100%">
         <Center
           flex={1}

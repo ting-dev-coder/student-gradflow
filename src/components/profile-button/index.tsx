@@ -20,7 +20,8 @@ export function ProfileButton() {
   return (
     <Group px="xs" gap={'xs'} w="100%" className={classes.profile}>
       <Avatar
-        src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-8.png"
+        src="https://i.ibb.co/RT7dW1fF/xnbadnpuvlw.jpg"
+        alt="xnbadnpuvlw"
         radius="xl"
       />
 
@@ -33,8 +34,6 @@ export function ProfileButton() {
           {user.email}
         </Text>
       </div>
-
-      {/* <MdOutlineChevronRight size={14} /> */}
     </Group>
   );
 }

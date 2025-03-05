@@ -20,10 +20,6 @@ interface DateInputWrapper<T extends FieldValues> extends BoxProps {
 
 type DateInput<T extends FieldValues> = Omit<DateInputWrapper<T>, 'label'>;
 
-const dateParser: DateInputProps['dateParser'] = (input: string) => {
-  return parseISO(input);
-};
-
 function DateInput<T extends FieldValues>({
   control,
   name,
@@ -31,7 +27,6 @@ function DateInput<T extends FieldValues>({
   handleInputChange,
   ...props
 }: DateInput<T>) {
-  console.log('defaultValue', defaultValue);
   const handleChange = () => {
     if (handleInputChange) {
       handleInputChange(name);
@@ -45,17 +40,18 @@ function DateInput<T extends FieldValues>({
       render={({ field, fieldState }) => {
         return (
           <MantineDateInput
-            // {...field}
+            {...field}
             {...props}
             minDate={new Date()}
             error={fieldState?.error?.message}
             flex={1}
             valueFormat="YYYY-MM-DD"
-            defaultValue={new Date(defaultValue)}
+            defaultValue={defaultValue ? new Date(defaultValue) : undefined}
             // value={field.value}
             onChange={(value: DateValue) => {
               if (!value) return;
-              field.onChange(value.toISOString());
+
+              field.onChange(value);
               handleChange();
             }}
           />

@@ -42,7 +42,7 @@ const ImageButton = ({
 }: ImageButtonI) => {
   return (
     <Indicator
-      color="var(--secondary)"
+      color="var(--primary)"
       size="18"
       offset={5}
       label={<MdCheck />}
@@ -52,7 +52,7 @@ const ImageButton = ({
         className="cursor-pointer"
         radius={4}
         p="xxs"
-        bd={`2px solid ${selected ? 'var(--secondary)' : 'var(--gray4)'}`}
+        bd={`2px solid ${selected ? 'var(--primary)' : 'var(--gray4)'}`}
         onClick={onImageClick}
       >
         <LoadingOverlay
@@ -137,7 +137,7 @@ export default function AddEventBackgroundImage({
               <FileInput
                 accept="image/jpg,image/jpeg,image/png"
                 onChange={onUploadImageAdd}
-                label="Upload files"
+                placeholder="Click to upload"
                 disabled={loading}
               />
             )}

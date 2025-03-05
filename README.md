@@ -26,6 +26,7 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 - Mantine UI framwork
 - Tanstack/react-query
 - Hono
+- Zod
 - Third -party
   - appwrite
   - weather api
@@ -34,6 +35,21 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 ## Project site list
 
 🔹 MVP 🔸 Features
+
+
+
+🔸 Features
+
+- Upload Custom background in countdown page
+
+- Check for upcoming days in to-do list page
+
+- Promdrom timer
+  - Focus list
+  - Nofication Sound
+  - Intro dialog
+
+
 
 🔹Auth
 
@@ -77,6 +93,7 @@ Dashboard
 - Update task
 - Delete task
 - View List
+- 🔸 Upcoming days
 
 Promdrom timer
 
@@ -88,4 +105,10 @@ Promdrom timer
 
 - Start
 
-  🔸Play misc
+- 🔸Set notifcation sound
+
+- 🔸Focus List (Local storage)
+
+  
+  
+  

@@ -6,27 +6,27 @@ import { z } from 'zod';
 export const DEFAULT_BACKGROUND_IMAGES = [
   {
     id: 1,
-    src: 'countdown-image-1.jpg',
+    src: 'birthday.jpg',
   },
   {
     id: 2,
-    src: 'countdown-image-2.jpg',
+    src: 'graduation.jpg',
   },
   {
     id: 3,
-    src: 'countdown-image-3.jpg',
+    src: 'christmas.jpg',
   },
   {
     id: 4,
-    src: 'countdown-image-4.jpg',
+    src: 'travel.jpg',
   },
   {
     id: 5,
-    src: 'countdown-image-5.png',
+    src: 'move-place.jpg',
   },
   {
     id: 6,
-    src: 'countdown-image-6.jpg',
+    src: 'countdown-image-5.jpg',
   },
 ];
 
