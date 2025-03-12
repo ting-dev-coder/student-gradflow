@@ -31,6 +31,7 @@ export default function ModalHowItWorks({ opened, close }) {
       size={'xl'}
       withCloseButton={false}
       padding={0}
+      zIndex={999}
     >
       <CloseButton
         size={'lg'}
@@ -41,18 +42,7 @@ export default function ModalHowItWorks({ opened, close }) {
         onClick={() => close()}
       />
       <Box className={styles['work-it-works_bg']} />
-      <Group
-        p={0}
-        h="100%"
-        wrap="nowrap"
-        align="flex-start"
-        // style={{
-        //   width: '100%',
-        //   height: '100%',
-        //   background: 'linear-gradient(to right, #ff7e5f, #feb47b)',
-        //   clipPath: 'circle(30% at 50% 50%)',
-        // }}
-      >
+      <Group p={0} h="100%" wrap="nowrap" align="flex-start">
         <Box flex={1} pt="xl" h={'100%'}>
           <Stack w="80%" pl="xl" pos={'relative'} h={'100%'}>
             <Title c="#fff">Pomodoro Timer</Title>
@@ -78,7 +68,7 @@ export default function ModalHowItWorks({ opened, close }) {
             color="#E0615A"
             py="xl"
             pr="lg"
-            active={3}
+            active={4}
             bulletSize={24}
             lineWidth={2}
           >

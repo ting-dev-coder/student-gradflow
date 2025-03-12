@@ -1,4 +1,4 @@
-# Student gadeflow
+# Student gradeflow
 
 ## Getting Started
 
@@ -36,8 +36,6 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 
 🔹 MVP 🔸 Features
 
-
-
 🔸 Features
 
 - Upload Custom background in countdown page
@@ -48,8 +46,6 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
   - Focus list
   - Nofication Sound
   - Intro dialog
-
-
 
 🔹Auth
 
@@ -108,7 +104,3 @@ Promdrom timer
 - 🔸Set notifcation sound
 
 - 🔸Focus List (Local storage)
-
-  
-  
-  

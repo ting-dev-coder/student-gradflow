@@ -6,6 +6,7 @@ import {
   LoadingOverlay,
   FileInput,
   Image,
+  Text,
 } from '@mantine/core';
 import { useState } from 'react';
 import { MdCheck } from 'react-icons/md';
@@ -59,6 +60,7 @@ const ImageButton = ({
           visible={!loaded}
           zIndex={1000}
           overlayProps={{ radius: 'sm', blur: 2 }}
+          h={'100%'}
         />
         <Image src={imageSrc} h={83} onLoad={onLoad} />
       </Paper>
@@ -76,7 +78,7 @@ export default function AddEventBackgroundImage({
     const [selectedImageId, setImageSelectedId] = useState<number | null>(
       DEFAULT_BACKGROUND_IMAGES[0].id
     );
-
+    const [error, setError] = useState<string | null>(null);
     const [loaded, setLoaded] = useState(false);
 
     function onImageClick(image: DefaultImageI) {
@@ -92,6 +94,14 @@ export default function AddEventBackgroundImage({
       onDefaultImageChange(null);
     }
     function onUploadImageAdd(payload: File | null) {
+      if (payload) {
+        const maxSize = 1048576; // 1MB in bytes
+        if (payload.size > maxSize) {
+          setError('File is too large. Max size is 1MB');
+          return;
+        }
+      }
+      setError(null);
       setImageSelectedId(null);
       onDefaultImageChange(null);
       onImageChange(payload);
@@ -103,47 +113,54 @@ export default function AddEventBackgroundImage({
     }
 
     return (
-      <FormLabel
-        pt="md"
-        label="background image"
-        wrap="nowrap"
-        align="flex-start"
-        field={
-          <SimpleGrid cols={3}>
-            {DEFAULT_BACKGROUND_IMAGES.map((image, idx) => (
-              <ImageButton
-                key={`${image}-${idx}`}
-                disabled={image.id !== selectedImageId}
-                selected={image.id === selectedImageId}
-                imageSrc={image.src}
-                onImageClick={() => onImageClick(image)}
-                onLoad={() => setLoaded(true)}
-                loaded={loaded}
-              />
-            ))}
-            {uploadImage ? (
-              <ImageButton
-                disabled={selectedImageId !== null}
-                loaded={true}
-                selected={selectedImageId === null}
-                imageSrc={
-                  uploadImage instanceof File
-                    ? URL.createObjectURL(uploadImage)
-                    : uploadImage
-                }
-                onImageClick={onUploadImageClick}
-              />
-            ) : (
-              <FileInput
-                accept="image/jpg,image/jpeg,image/png"
-                onChange={onUploadImageAdd}
-                placeholder="Click to upload"
-                disabled={loading}
-              />
-            )}
-          </SimpleGrid>
-        }
-      />
+      <>
+        <FormLabel
+          pt="md"
+          label="background image"
+          wrap="nowrap"
+          align="flex-start"
+          field={
+            <SimpleGrid cols={3}>
+              {DEFAULT_BACKGROUND_IMAGES.map((image, idx) => (
+                <ImageButton
+                  key={`${image}-${idx}`}
+                  disabled={image.id !== selectedImageId}
+                  selected={image.id === selectedImageId}
+                  imageSrc={image.src}
+                  onImageClick={() => onImageClick(image)}
+                  onLoad={() => setLoaded(true)}
+                  loaded={loaded}
+                />
+              ))}
+              {uploadImage ? (
+                <ImageButton
+                  disabled={selectedImageId !== null}
+                  loaded={true}
+                  selected={selectedImageId === null}
+                  imageSrc={
+                    uploadImage instanceof File
+                      ? URL.createObjectURL(uploadImage)
+                      : uploadImage
+                  }
+                  onImageClick={onUploadImageClick}
+                />
+              ) : (
+                <FileInput
+                  accept="image/jpg,image/jpeg,image/png"
+                  onChange={onUploadImageAdd}
+                  placeholder="Click to upload"
+                  disabled={loading}
+                />
+              )}
+            </SimpleGrid>
+          }
+        />
+        {error && (
+          <Text ta="center" c="red">
+            {error}
+          </Text>
+        )}
+      </>
     );
   }
 }

@@ -39,7 +39,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
             left={20}
             top={20}
           >
-            Student Gardflow
+            Student Gradeflow
           </Title>
           <Box className={styles['sign-in-square_skew']} />
           <Box className={styles['sign-in-square']} />

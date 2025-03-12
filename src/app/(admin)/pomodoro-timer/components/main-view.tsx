@@ -27,15 +27,19 @@ import styles from '../pomodoro-timer.module.scss';
 
 function parseFocusData(data) {
   return data
-    .filter((t) => t.completed)
+    .filter((t) => !t.completed)
     .map((task) => ({
-      ...task,
+      completed: false,
       label: task.text,
       value: task.id,
     }));
 }
 
-function CountdownView({ selectedFocusTask }: { selectedFocusTask: Object }) {
+function CountdownView({
+  selectedFocusTask = [],
+}: {
+  selectedFocusTask: Object;
+}) {
   const context = useContext(PomodoroContext);
   if (!context) return;
   const { onPause, onReset, onStop, isRunning, time, formatTime, isOngoing } =
@@ -44,8 +48,15 @@ function CountdownView({ selectedFocusTask }: { selectedFocusTask: Object }) {
   const isTimerRunning = isOngoing || isRunning;
 
   return (
-    <Stack gap={0} w="28vw" maw="600px" pos={'relative'}>
-      <Stack gap={0} pos={'relative'} style={{ zIndex: 999 }}>
+    <Stack gap={0} pos={'relative'}>
+      <Stack
+        gap={0}
+        pos={'relative'}
+        justify="center"
+        align="center"
+        top={10}
+        style={{ zIndex: isTimerRunning ? 10 : -1 }}
+      >
         {isTimerRunning && (
           <Stack gap="0">
             {selectedFocusTask?.text && (
@@ -59,7 +70,7 @@ function CountdownView({ selectedFocusTask }: { selectedFocusTask: Object }) {
           </Stack>
         )}
 
-        <Group justify="center" pos={'relative'} style={{ zIndex: 999 }}>
+        <Group w="28vw" maw="600px" justify="center" pos={'relative'}>
           <Paper py="xs" radius={12} px="md" bg="var(--primary)">
             <Text lh="1" fz="4rem" c="#fff" ta="center">
               {formatTime(time).mins}
@@ -75,13 +86,13 @@ function CountdownView({ selectedFocusTask }: { selectedFocusTask: Object }) {
           </Paper>
         </Group>
       </Stack>
-      <FocusMask />
+      <Image h="300px" fit="contain" src="/desktop.svg" />
       {/* <Image maw="100%" src={'/desktop.svg'} /> */}
       <Box className={(isTimerRunning && styles['desktop-mask']) || ''} />
       {isTimerRunning && (
         <Group
           pos={'relative'}
-          style={{ zIndex: 999 }}
+          style={{ zIndex: 9 }}
           mb="md"
           mt="sm"
           justify="center"
@@ -130,7 +141,7 @@ export default function MainView() {
 
   const selectedFocusTask = focusList.find((t) => t.id === focusTaskId);
   const isTimerRunning = isOngoing || isRunning;
-  console.log('isTimerRunning', isTimerRunning, isOngoing, isRunning);
+
   return (
     <Group mih={'100vh'} justify="center" gap="0">
       <CountdownView selectedFocusTask={selectedFocusTask} />
@@ -143,7 +154,7 @@ export default function MainView() {
 
           <Select
             data={parseFocusData(focusList)}
-            value={selectedFocusTask}
+            value={selectedFocusTask?.id}
             onChange={(taskId) => {
               console.log('set', taskId);
               setFocusTaskId(taskId);
