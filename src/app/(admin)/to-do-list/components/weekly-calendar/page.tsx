@@ -1,3 +1,4 @@
+'use client';
 import { createContext, use, useState } from 'react';
 import { DayPicker, Week, WeekProps, DayButtonProps } from 'react-day-picker';
 import {
