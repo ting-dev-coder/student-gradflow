@@ -30,8 +30,8 @@ const aggregateMinsByDay = (data, weekDays) => {
 };
 
 const WeeklyFocusChart = ({ data, loading }) => {
-  if (!data) return;
   const router = useRouter();
+  if (!data) return;
   const groupedData = groupByDateAndSumMins(data);
   const chartData = aggregateMinsByDay(groupedData, weekDays);
 

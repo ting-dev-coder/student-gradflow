@@ -1,18 +1,6 @@
 'use client';
 
-import {
-  Card,
-  Box,
-  Button,
-  Divider,
-  Title,
-  Text,
-  Stack,
-  Center,
-} from '@mantine/core';
-import { FcGoogle } from 'react-icons/fc';
-import { FaGithub } from 'react-icons/fa';
-import Link from 'next/link';
+import { Card, Button, Title, Stack } from '@mantine/core';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -20,9 +8,7 @@ import { registerSchema } from '../schemas';
 import { useRegister } from '../api/user-register';
 import ControllerInput from '@/components/form/input';
 import ControllerPasswordInput from '@/components/form/password-input';
-import { getCurrent } from '../actions';
-import { redirect, useRouter } from 'next/navigation';
-import { IconArrowLeft } from '@tabler/icons-react';
+import { useRouter } from 'next/navigation';
 
 export default function SignUp() {
   const router = useRouter();

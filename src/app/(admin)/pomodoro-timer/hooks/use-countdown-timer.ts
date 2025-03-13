@@ -14,7 +14,7 @@ export function UseCountdownTimer(initialSeconds = 25 * 60) {
       setTime(initialSeconds);
       setStartTime(initialSeconds);
     }
-  }, [initialSeconds]);
+  }, [initialSeconds, isRunning]);
 
   useEffect(() => {
     if (!isRunning || time <= 0) {

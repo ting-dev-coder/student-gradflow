@@ -29,7 +29,6 @@ const app = new Hono()
         ]
       );
     }
-    startOfWeek;
     const countdownList = await databases.listDocuments(
       DATABASE_ID,
       FOCUS_MINS_ID,

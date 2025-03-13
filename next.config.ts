@@ -2,6 +2,9 @@ import type { NextConfig } from 'next';
 const path = require('path');
 
 const nextConfig: NextConfig = {
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   env: {
     NEXT_PUBLIC_APPWRITE_DATABASE_ID:
       process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID,

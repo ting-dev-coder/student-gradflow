@@ -37,6 +37,7 @@ const audioFiles = [
 ];
 
 export function ToolBar() {
+  const { playAudio, stopAudio } = useAudioPlayer();
   const context = useContext(PomodoroContext);
   if (!context) return;
   const {
@@ -48,9 +49,6 @@ export function ToolBar() {
     alertSound,
     onAlertSoundChange,
   } = context;
-
-  const { playAudio, stopAudio, toggleAudio, isPlaying } = useAudioPlayer();
-
   const selectAudio = audioFiles.find((a) => a.value === alertSound);
 
   function onSoundPlayClick(src: string) {
@@ -131,8 +129,8 @@ export function ToolBar() {
           </Menu.Target>
           <Menu.Dropdown miw={195}>
             <Menu.Label>Alert Sounds</Menu.Label>
-            {audioFiles.map((audio) => (
-              <Group gap={0} wrap="nowrap">
+            {audioFiles.map((audio, idx) => (
+              <Group key={`audio-file-${idx}`} gap={0} wrap="nowrap">
                 <Menu.Item onClick={() => onAlertSoundChange(audio.value)}>
                   {audio.label}
                 </Menu.Item>

@@ -45,9 +45,10 @@ function ListItem({ text, onDelete, completed, toggleFocus, showDivider }) {
 }
 
 export default function DrawerFocusQueue() {
+  const [taskText, setTaskText] = useState('');
+  const ref = useClickOutside(() => onFocusListOpenChange(false));
   const context = useContext(PomodoroContext);
   if (!context) return;
-  const [taskText, setTaskText] = useState('');
   const {
     focusListOpened,
     onFocusListOpenChange,
@@ -56,7 +57,6 @@ export default function DrawerFocusQueue() {
     toggleFocus,
     addFocus,
   } = context;
-  const ref = useClickOutside(() => onFocusListOpenChange(false));
 
   return (
     <Dialog

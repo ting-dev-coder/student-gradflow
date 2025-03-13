@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { MotionPathPlugin } from 'gsap/MotionPathPlugin';
 
@@ -13,40 +13,64 @@ gsap.registerPlugin(MotionPathPlugin);
  */
 
 export default function WindowAnimation({ isDay, onAnimationStateChange }) {
-  // 用來儲存當前動畫的 timeline 與 timer
   const currentTimeline = useRef(null);
-  const timerRef = useRef(null);
   const isFirstLoad = useRef(true);
 
-  useEffect(() => {
-    console.log('isDay changed:', isDay);
-    if (isFirstLoad.current) {
-      isFirstLoad.current = false;
-      return;
-    }
-    // 如果有前一個動畫，先清除它
-    if (currentTimeline.current) {
-      currentTimeline.current.kill();
-      currentTimeline.current = null;
-    }
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-      timerRef.current = null;
-    }
+  const animateSunIn = useCallback(() => {
+    const tl = gsap.timeline({
+      onComplete: () => onAnimationStateChange(false),
+    });
 
-    // 根據 isDay 值決定要執行哪個動畫
-    // 假設 isDay 為 true 表示日間，則要執行從夜到日的動畫（animateMoonOut 結束後呼叫 animateSunIn）
-    // isDay 為 false 則表示夜間，則執行從日到夜的動畫（animateSunOut 結束後呼叫 animateMoonIn）
+    tl.to('#day', { opacity: 1, duration: 0.2 })
+      .to('#sun', { opacity: 1, y: 0, duration: 0.8 })
+      .to('#cloud-big', { x: 0, opacity: 0.5, ease: 'power2.out' })
+      .to('#cloud-small', { x: 0, opacity: 0.5, ease: 'power2.out' }, '-=0.5');
 
-    onAnimationStateChange(true);
-    if (isDay) {
-      currentTimeline.current = animateMoonOut();
-    } else {
-      currentTimeline.current = animateSunOut();
-    }
-  }, [isDay]);
+    return tl;
+  }, [onAnimationStateChange]);
 
-  function animateSunOut() {
+  const animateMoonOut = useCallback(() => {
+    const tl = gsap.timeline();
+    tl.to('#moon', {
+      motionPath: {
+        path: '#moon-track',
+        align: '#moon-track',
+        alignOrigin: [0.5, 0.5],
+      },
+    })
+      .to('#stars', { y: 100, opacity: 0, duration: 0.5 }, '-=0.5')
+      .to('#night-sky', { opacity: 0, duration: 1, delay: 0.2 })
+      .call(animateSunIn, [], '-=1.5');
+
+    return tl;
+  }, [animateSunIn]);
+
+  const animateMoonIn = useCallback(() => {
+    const tl = gsap.timeline({
+      onComplete: () => onAnimationStateChange(false),
+    });
+    gsap.set('#night-sky', { opacity: 1 });
+    gsap.set('#stars', { y: 100 });
+
+    tl.from(
+      '#moon',
+      {
+        motionPath: {
+          path: '#moon-track',
+          align: '#moon-track',
+          alignOrigin: [0.5, 0.5],
+          start: 0,
+          end: 1,
+        },
+      },
+      '-=0.5'
+    ).to('#stars', { y: 0, opacity: 1, duration: 1 }, '-=0.2');
+
+    return tl;
+  }, [onAnimationStateChange]);
+
+  // 用 useCallback 確保函式記憶化，避免 `useEffect` 依賴陣列變動
+  const animateSunOut = useCallback(() => {
     const tl = gsap.timeline();
 
     tl.to('#cloud-big', {
@@ -77,98 +101,26 @@ export default function WindowAnimation({ isDay, onAnimationStateChange }) {
           });
         },
       });
-  }
+  }, [animateMoonIn]);
+  useEffect(() => {
+    console.log('isDay changed:', isDay);
+    if (isFirstLoad.current) {
+      isFirstLoad.current = false;
+      return;
+    }
 
-  function animateSunIn() {
-    const tl = gsap.timeline({
-      onComplete: () => onAnimationStateChange(false), // 動畫結束，允許切換路由
-    });
+    if (currentTimeline.current) {
+      currentTimeline.current.kill();
+      currentTimeline.current = null;
+    }
 
-    tl.to('#day', {
-      opacity: 1,
-      duration: 0.2,
-    })
-      .to('#sun', {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-      })
-      .to('#cloud-big', {
-        x: 0,
-        opacity: 0.5,
-        ease: 'power2.out',
-      })
-      .to(
-        '#cloud-small',
-        {
-          x: 0,
-          opacity: 0.5,
-          ease: 'power2.out',
-        },
-        '-=0.5'
-      );
-    return tl;
-  }
-
-  function animateMoonOut() {
-    const tl = gsap.timeline();
-    tl.to('#moon', {
-      motionPath: {
-        path: '#moon-track',
-        align: '#moon-track',
-        alignOrigin: [0.5, 0.5],
-      },
-    })
-      .to(
-        '#stars',
-        {
-          y: 100,
-          opacity: 0,
-          duration: 0.5,
-        },
-        '-=0.5'
-      )
-      .to('#night-sky', {
-        opacity: 0, // 讓 #night-sky 淡出
-        duration: 1, // 動畫持續時間 1 秒
-        delay: 0.2,
-      })
-      // 在離場的 1.5 秒前呼叫 animateSunIn
-      .call(animateSunIn, [], '-=1.5');
-
-    return tl;
-  }
-
-  function animateMoonIn() {
-    const tl = gsap.timeline({
-      onComplete: () => onAnimationStateChange(false), // 動畫結束，允許切換路由
-    });
-    gsap.set('#night-sky', { opacity: 1 });
-    gsap.set('#stars', { y: 100 });
-    tl.from(
-      '#moon',
-      {
-        motionPath: {
-          path: '#moon-track',
-          align: '#moon-track',
-          alignOrigin: [0.5, 0.5],
-          start: 0,
-          end: 1,
-        },
-      },
-      '-=0.5'
-    ).to(
-      '#stars',
-      {
-        y: 0,
-        opacity: 1,
-        duration: 1,
-      },
-      '-=0.2'
-    );
-
-    return tl;
-  }
+    onAnimationStateChange(true);
+    if (isDay) {
+      currentTimeline.current = animateMoonOut();
+    } else {
+      currentTimeline.current = animateSunOut();
+    }
+  }, [isDay, animateMoonOut, animateSunOut, onAnimationStateChange]);
 
   return (
     <svg viewBox="0 0 659 753" fill="none" xmlns="http://www.w3.org/2000/svg">

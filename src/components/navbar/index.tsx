@@ -30,8 +30,9 @@ const links = [
 ];
 
 export function Navbar() {
-  const isActive = (path: string) => usePathname() == path;
-  console.log(usePathname());
+  const pathname = usePathname();
+  const isActive = (path: string) => pathname == path;
+
   const navItems = links.map((item, idx) => (
     <NavLink
       key={`sidebar-${idx}}`}

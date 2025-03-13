@@ -54,7 +54,9 @@ const DrawerHandleTask = ({
     useApiHook = useEditTask;
     onSubmit = onEditSubmit;
   } else {
-    typeof useApiHook?.reset === 'function' && useApiHook.reset();
+    if (typeof useApiHook?.reset === 'function') {
+      useApiHook.reset();
+    }
   }
 
   const {

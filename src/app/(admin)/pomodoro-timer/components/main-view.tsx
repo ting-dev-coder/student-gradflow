@@ -31,7 +31,7 @@ function parseFocusData(data) {
 function CountdownView({
   selectedFocusTask = [],
 }: {
-  selectedFocusTask: Object;
+  selectedFocusTask: object;
 }) {
   const context = useContext(PomodoroContext);
   if (!context) return;

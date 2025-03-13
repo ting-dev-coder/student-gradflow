@@ -22,3 +22,5 @@ export const UserButton = memo(({ ...props }: ButtonProps) => {
     </Button>
   );
 });
+
+UserButton.displayName = 'UserButton';

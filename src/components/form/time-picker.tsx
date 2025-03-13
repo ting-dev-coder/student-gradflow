@@ -11,7 +11,6 @@ import {
 } from '@mantine/core';
 import { Controller, Control, FieldValues, Path } from 'react-hook-form';
 import { useEffect, useRef, useState } from 'react';
-import { useMounted } from '@mantine/hooks';
 
 type SessionT = 'AM' | 'PM';
 
@@ -79,13 +78,14 @@ const TimePicker = ({
       setMin(value[1]);
       setSession(value[2] as SessionT);
     } else {
-      console.log('change', [HOURS[0], MINIS[1], SESSIONS[0]]);
-      onChange([HOURS[0], MINIS[1], SESSIONS[0]]);
+      if (onChange) {
+        onChange([HOURS[0], MINIS[1], SESSIONS[0]]);
+      }
     }
-  }, [value]);
+  }, [value, onChange]);
 
   function handleClick(type: 'hour' | 'min', idx: number) {
-    let viewport = type === 'hour' ? hourViewport : minViewport;
+    const viewport = type === 'hour' ? hourViewport : minViewport;
     viewport.current
       ?.querySelectorAll(`.${type}-list-item`)
       ?.[idx]?.scrollIntoView({ block: 'start', behavior: 'smooth' });

@@ -87,8 +87,9 @@ export default function ModalHowItWorks({ opened, close }) {
               title=" Set the Timer"
             >
               <Text c="dimmed">
-                Set the timer to 25 minutes. This is your "Pomodoro" session.
-                The timer will countdown as you work, keeping you focused.
+                Set the timer to 25 minutes. This is your &quot;Pomodoro&quot;
+                session. The timer will countdown as you work, keeping you
+                focused.
               </Text>
             </Timeline.Item>
 
