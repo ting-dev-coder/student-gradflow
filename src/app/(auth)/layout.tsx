@@ -1,7 +1,7 @@
 'use client';
 
 import { ReactNode, useState } from 'react';
-import { Box, Image, Center, Group, Title, Button } from '@mantine/core';
+import { Box, Image, Center, Group, Title, Button, Stack } from '@mantine/core';
 import styles from './auth.module.scss';
 import WindowAnimation from './components/window-animation';
 import { usePathname } from 'next/navigation';
@@ -24,7 +24,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
   };
   return (
     <Center p="sm" w="100vw" h="100vh" bg={'var(--secondary)'}>
-      <Group pos="relative" maw="1200px" w="100%" h="100%">
+      <Group pos="relative" maw="1200px" w="100%" h="100%" mah="800px">
         <Center
           flex={1}
           className={`${styles['sign-in-container']} ${
@@ -60,8 +60,18 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
           </Box>
         </Center>
 
-        <Box pl="xxl" flex={1} h={'100%'}>
-          <Group w="80%" mt="lg" mih={40} mx="auto" justify="space-between">
+        <Stack pl="xxl" flex={1} h={'100%'}>
+          <Group
+            w="80%"
+            mt="lg"
+            mb={{
+              base: 0,
+              xl: 'xl',
+            }}
+            mih={40}
+            mx="auto"
+            justify="space-between"
+          >
             {pathname === '/sign-up' && !isAnimating && (
               <Button
                 size="compact-md"
@@ -96,7 +106,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
               {children}
             </motion.div>
           </AnimatePresence>
-        </Box>
+        </Stack>
       </Group>
     </Center>
   );

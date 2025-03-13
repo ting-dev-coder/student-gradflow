@@ -25,6 +25,7 @@ export default function ModalHowItWorks({ opened, close }) {
         body: styles['work-it-works_modal-content'],
         content: styles['work-it-works_modal-content'],
       }}
+      centered
       style={{ '--mantine-color-body': '#E0615A' }}
       opened={opened}
       onClose={close}
