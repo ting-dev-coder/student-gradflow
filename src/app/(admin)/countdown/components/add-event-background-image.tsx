@@ -4,13 +4,17 @@ import {
   Indicator,
   Paper,
   LoadingOverlay,
-  FileInput,
   Image,
   Text,
+  FileButton,
+  UnstyledButton,
+  Button,
+  Stack,
 } from '@mantine/core';
 import { useState } from 'react';
 import { MdCheck } from 'react-icons/md';
 import { DEFAULT_BACKGROUND_IMAGES } from '../hooks/use-create-countdown';
+import { RiImageAddLine } from 'react-icons/ri';
 
 export interface DefaultImageI {
   id: number;
@@ -145,12 +149,31 @@ export default function AddEventBackgroundImage({
                   onImageClick={onUploadImageClick}
                 />
               ) : (
-                <FileInput
+                <FileButton
                   accept="image/jpg,image/jpeg,image/png"
                   onChange={onUploadImageAdd}
-                  placeholder="Click to upload"
                   disabled={loading}
-                />
+                >
+                  {(props) => (
+                    <Button
+                      color="var(--gray4)"
+                      h="95px"
+                      style={{
+                        borderStyle: 'dashed',
+                        borderWidth: '2px',
+                      }}
+                      {...props}
+                      variant="outline"
+                    >
+                      <Stack gap={'xs'} align="center" justify="center">
+                        <RiImageAddLine size={32} />
+                        <Text fw="600" fz="sm">
+                          Upload image
+                        </Text>
+                      </Stack>
+                    </Button>
+                  )}
+                </FileButton>
               )}
             </SimpleGrid>
           }

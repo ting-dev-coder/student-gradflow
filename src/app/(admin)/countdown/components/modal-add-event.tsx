@@ -12,6 +12,7 @@ import { useCountdown } from '../hooks/use-create-countdown';
 import AddEventBackgroundImage, {
   DefaultImageI,
 } from './add-event-background-image';
+import styles from '../countdown.module.scss';
 
 const ModalAddEvent = ({ children }: { children: ReactNode }) => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -70,6 +71,10 @@ const ModalAddEvent = ({ children }: { children: ReactNode }) => {
     <>
       <Modal
         size="min(70%, xl)"
+        classNames={{
+          content: styles['modal-content'],
+          header: styles['modal-header'],
+        }}
         closeOnClickOutside={!loading}
         opened={opened}
         onClose={close}
