@@ -21,7 +21,7 @@ export function isTodayBefore(date: string) {
  */
 export function convertCustomTimeToISO(dateStr, timeArray) {
   if (!timeArray.length) return '';
-  const [hour, minute, meridiem] = timeArray;
+  let [hour, minute, meridiem] = timeArray;
   hour = parseInt(hour, 10);
   minute = parseInt(minute, 10);
   // Convert 12-hour format to 24-hour format
