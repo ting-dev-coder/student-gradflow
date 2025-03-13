@@ -1,9 +1,18 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import { Badge, Box, Group, Stack, Tabs, Text, Tooltip } from '@mantine/core';
+import {
+  Badge,
+  Box,
+  Divider,
+  Group,
+  Stack,
+  Tabs,
+  Text,
+  Tooltip,
+} from '@mantine/core';
 import { convertCustomTimeToISO, dateFormat } from '@/lib/utils';
-import { parseISO } from 'date-fns';
+import { parseISO, format } from 'date-fns';
 import './timeline.scss';
 
 let eventGuid = 0;
@@ -12,8 +21,13 @@ export function createEventId() {
 }
 
 const TimeLine = ({ tasks, currentDate, upcomingTasks }) => {
-  const [activeTab, setActiveTab] = useState<string | null>('today');
+  const [activeTab, setActiveTab] = useState('today');
   const calendarRef = useRef(null);
+
+  // Custom tab change handler
+  const handleTabChange = (newTab: string) => {
+    setActiveTab(newTab);
+  };
 
   const taskList = useMemo(
     () => (activeTab === 'today' ? tasks : upcomingTasks),
@@ -21,65 +35,104 @@ const TimeLine = ({ tasks, currentDate, upcomingTasks }) => {
   );
 
   const events = useMemo(() => {
-    if (!taskList) return [];
+    if (!taskList || activeTab !== 'today') return [];
 
     return taskList.map((task) => {
       const todayTitle = task.allDay
         ? task.startDate
         : convertCustomTimeToISO(task.startDate, task.startTime);
-      console.log(
-        'date',
-        activeTab === 'today' ? todayTitle : currentDate.toISOString()
-      );
+
       return {
         id: createEventId(),
         title: task.title,
-        start:
-          activeTab === 'today'
-            ? todayTitle
-            : convertCustomTimeToISO(currentDate.toISOString(), task.startTime),
+        start: todayTitle,
         extendedProps: {
-          isComingDay: activeTab !== 'today',
+          isComingDay: false,
           category: task.category,
           date: task.startDate,
         },
       };
     });
-  }, [taskList, currentDate, activeTab]);
+  }, [taskList, activeTab]);
 
+  // Initialize calendar and set date
   useEffect(() => {
-    if (!calendarRef?.current) return;
-    const calendarApi = calendarRef.current?.getApi();
-    calendarApi.gotoDate(parseISO(dateFormat(currentDate)));
-  }, [currentDate]);
+    if (!calendarRef?.current || activeTab !== 'today') return;
 
-  // Trigger FullCalendar re-render when events change
-  useEffect(() => {
-    if (calendarRef?.current) {
-      const calendarApi = calendarRef.current?.getApi();
-      calendarApi.refetchEvents();
-      console.log('taskList', events);
+    // Use setTimeout to ensure the calendar API is available
+    setTimeout(() => {
+      if (calendarRef.current) {
+        const calendarApi = calendarRef.current.getApi();
+        calendarApi.gotoDate(parseISO(dateFormat(currentDate)));
+        // Force events to refresh
+        calendarApi.refetchEvents();
+      }
+    }, 10);
+  }, [currentDate, activeTab]);
+
+  // Render upcoming tasks as a list
+  const renderUpcomingTasksList = () => {
+    if (!upcomingTasks || upcomingTasks.length === 0) {
+      return (
+        <Text ta="center" c="dimmed" py="xl">
+          No upcoming tasks
+        </Text>
+      );
     }
-  }, [events]);
+
+    return (
+      <Stack gap="xs" p="xs" className="upcoming-tasks-list">
+        {upcomingTasks.map((task, index) => (
+          <Box key={`${task.title}-${index}`} className="task-list-item" p="xs">
+            {!!index && <Divider mb="sm" />}
+            <Group justify="space-between" mb="xs">
+              <Text size="sm" c="dimmed">
+                {format(new Date(task.startDate), 'MMM dd, yyyy')}
+              </Text>
+              <Text size="sm">
+                {task.allDay
+                  ? 'All day'
+                  : `${task.startTime[0]}:${
+                      task.startTime[1] == 0 ? '00' : task.startTime[1]
+                    } ${task.startTime[2]}`}
+              </Text>
+            </Group>
+
+            <Group gap={'xs'} justify="space-between">
+              <Text fw={500}>{task.title}</Text>
+              <Badge bg="var(--primary)">{task.category}</Badge>
+            </Group>
+          </Box>
+        ))}
+      </Stack>
+    );
+  };
+
+  // Only render FullCalendar when in Today tab
+  const renderCalendar = () => {
+    if (activeTab !== 'today') return null;
+
+    return (
+      <FullCalendar
+        ref={calendarRef}
+        plugins={[timeGridPlugin]}
+        initialView="timeGridDay"
+        headerToolbar={false}
+        events={events}
+        dayMaxEventRows={false}
+        eventContent={renderEventContent}
+        dayHeaders={false}
+      />
+    );
+  };
 
   return (
     <Stack gap="0" className="to-do-timeline" miw="230" h="100%">
-      {/* <Group pt="xs" px="md">
-        <Group gap="xs">
-          <Box w="1rem" h="1rem" bg="var(--primary)" />
-          <Text>Weekly</Text>
-        </Group>
-        <Group gap="xs">
-          <Box w="1rem" h="1rem" bg="var(--primary)" />
-          <Text>Today</Text>
-        </Group>
-      </Group> */}
-
       <Tabs
         mb="md"
         color="var(--primary)"
         value={activeTab}
-        onChange={setActiveTab}
+        onChange={handleTabChange}
       >
         <Tabs.List justify="center">
           <Tabs.Tab value="today">Today</Tabs.Tab>
@@ -98,23 +151,19 @@ const TimeLine = ({ tasks, currentDate, upcomingTasks }) => {
         </Tabs.List>
       </Tabs>
 
-      <FullCalendar
-        ref={calendarRef}
-        plugins={[timeGridPlugin]}
-        initialView="timeGridDay"
-        headerToolbar={false}
-        events={events}
-        dayMaxEventRows={false}
-        eventContent={renderEventContent}
-        dayHeaders={false}
-      />
+      {activeTab === 'today' ? (
+        renderCalendar()
+      ) : (
+        <Box>{renderUpcomingTasksList()}</Box>
+      )}
     </Stack>
   );
 };
 
 function renderEventContent({ event }) {
-  console.log(event);
-  const renderContent = () => (
+  console.log('來喔', event);
+
+  return (
     <Box
       className="event-card"
       style={{
@@ -124,12 +173,6 @@ function renderEventContent({ event }) {
       <Text truncate>{event.title}</Text>
       <div className="event-card_category">{event.extendedProps.category}</div>
     </Box>
-  );
-
-  return event?.extendedProps?.isComingDay ? (
-    <Tooltip label={event.extendedProps.date}>{renderContent()}</Tooltip>
-  ) : (
-    renderContent()
   );
 }
 
