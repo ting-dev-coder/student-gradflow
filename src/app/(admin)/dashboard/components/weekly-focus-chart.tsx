@@ -1,6 +1,6 @@
 import { groupByDateAndSumMins } from '@/lib/utils';
 import { Stack, Group, Text, Skeleton, Button } from '@mantine/core';
-import { compareAsc, format, parseISO } from 'date-fns';
+import { format } from 'date-fns';
 import { BarChart, Bar, ResponsiveContainer, YAxis, XAxis } from 'recharts';
 import { MdKeyboardArrowRight } from 'react-icons/md';
 import { useRouter } from 'next/navigation';

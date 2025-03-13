@@ -9,14 +9,7 @@ import {
   startOfWeek,
 } from 'date-fns';
 import 'react-day-picker/style.css';
-import {
-  ActionIcon,
-  Box,
-  Button,
-  Group,
-  Stack,
-  UnstyledButton,
-} from '@mantine/core';
+import { Box, Button, Stack, UnstyledButton } from '@mantine/core';
 import styles from './weeky-calendar.module.scss';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 

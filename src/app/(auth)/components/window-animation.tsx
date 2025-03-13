@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { MotionPathPlugin } from 'gsap/MotionPathPlugin';
-import { delay } from 'framer-motion';
 
 gsap.registerPlugin(MotionPathPlugin);
 

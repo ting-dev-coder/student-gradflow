@@ -4,7 +4,6 @@ import { zValidator } from '@hono/zod-validator';
 import { Hono } from 'hono';
 import { ID, Query } from 'node-appwrite';
 import { createCountdownSchema, updateCountdownSchema } from '../schemas';
-import { z } from 'zod';
 
 const app = new Hono()
   .get('/', sessionMiddleware, async (c) => {

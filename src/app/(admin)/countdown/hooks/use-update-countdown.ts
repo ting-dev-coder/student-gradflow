@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { createCountdownSchema, updateCountdownSchema } from '../schemas';
+import { updateCountdownSchema } from '../schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 

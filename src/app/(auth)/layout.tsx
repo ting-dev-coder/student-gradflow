@@ -1,7 +1,6 @@
 'use client';
 
 import { ReactNode, useState } from 'react';
-//import Image from 'next/image';
 import { Box, Image, Center, Group, Title, Button } from '@mantine/core';
 import styles from './auth.module.scss';
 import WindowAnimation from './components/window-animation';

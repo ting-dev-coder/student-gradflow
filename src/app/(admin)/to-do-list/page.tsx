@@ -1,18 +1,16 @@
 'use client';
 
-import { Button, Card, Group, Paper, Stack, Title } from '@mantine/core';
+import { Button, Card, Group, Stack } from '@mantine/core';
 import { useGetTodoList } from './api/use-get-todo-list';
 import TimeLine from './components/timeline';
 import DateCalendar from './components/weekly-calendar/page';
 import ListTable from './components/list-table';
 import { useDisclosure } from '@mantine/hooks';
-import TaskDetail from './components/task-detail';
 import TaskStatus from './components/tasks-status';
 import DrawerHandleTask from './components/drawer-handle-task';
 import { useRef, useState } from 'react';
 import { isTodayBefore } from '@/lib/utils';
 import { useUpdateTodoList } from './api/use-update-todo-list';
-import { notifications } from '@mantine/notifications';
 import { useDeleteTodoList } from './api/use-delete-todo-list';
 import { addDays, startOfDay } from 'date-fns';
 

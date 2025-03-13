@@ -1,28 +1,21 @@
 import {
   ActionIcon,
   Button,
-  Center,
-  Flex,
   Group,
   Image,
   Stack,
-  TextInput,
   Title,
   Text,
   Box,
   Paper,
   Select,
 } from '@mantine/core';
-import { IoMdAdd } from 'react-icons/io';
-import { UseCountdownTimer } from '../hooks/use-countdown-timer';
 import { MdOutlineRestartAlt } from 'react-icons/md';
 import { IoPause, IoStop } from 'react-icons/io5';
 import { IoMdPlay } from 'react-icons/io';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { PomodoroContext } from '../page';
 import React from 'react';
-import type { Focus } from '../hooks/use-focus-list';
-import FocusMask from './focus-mask';
 import styles from '../pomodoro-timer.module.scss';
 
 function parseFocusData(data) {

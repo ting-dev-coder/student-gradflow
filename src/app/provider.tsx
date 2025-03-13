@@ -1,10 +1,9 @@
 'use client';
 
 import React, { ReactNode } from 'react';
-import { createTheme, MantineProvider } from '@mantine/core';
+import { MantineProvider } from '@mantine/core';
 import './globals.css';
 import {
-  HydrationBoundary,
   MutationCache,
   QueryCache,
   QueryClient,

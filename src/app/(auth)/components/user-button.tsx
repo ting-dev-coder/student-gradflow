@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useCurrent } from '../api/user-current';
 import { useLogout } from '../api/user-logout';
 import { memo } from 'react';
-import { Button, ButtonProps, Loader } from '@mantine/core';
+import { Button, ButtonProps } from '@mantine/core';
 
 export const UserButton = memo(({ ...props }: ButtonProps) => {
   const { mutate: logout } = useLogout();

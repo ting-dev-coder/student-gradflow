@@ -1,4 +1,4 @@
-import { Box, Group, GroupProps, Input } from '@mantine/core';
+import { Group, GroupProps, Input } from '@mantine/core';
 import { ReactNode } from 'react';
 
 interface FormLabelProps extends GroupProps {

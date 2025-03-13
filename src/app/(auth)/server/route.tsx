@@ -1,4 +1,3 @@
-import { z } from 'zod';
 import { ID } from 'node-appwrite';
 import { Hono } from 'hono';
 import { zValidator } from '@hono/zod-validator';

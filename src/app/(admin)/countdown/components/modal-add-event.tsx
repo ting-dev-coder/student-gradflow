@@ -1,26 +1,6 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  Button,
-  Card,
-  FileInput,
-  Image,
-  Indicator,
-  LoadingOverlay,
-  Modal,
-  Paper,
-  SimpleGrid,
-} from '@mantine/core';
+import { Button, Card, LoadingOverlay, Modal } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import {
-  cloneElement,
-  createElement,
-  isValidElement,
-  ReactElement,
-  ReactNode,
-  useRef,
-  useState,
-} from 'react';
-import { useForm } from 'react-hook-form';
+import { cloneElement, ReactElement, ReactNode } from 'react';
 import { z } from 'zod';
 import { useCreateCountdownEvent } from '../api/use-create-countdown-event';
 import { createCountdownSchema } from '../schemas';
@@ -28,12 +8,7 @@ import { BsCalendarEventFill } from 'react-icons/bs';
 import TitleIcon from '@/components/title-icon';
 import ControllerInput from '@/components/form/input';
 import DateInput from '@/components/form/date-input';
-import FormLabel from '@/components/form/form-label';
-import { MdCheck } from 'react-icons/md';
-import {
-  useCountdown,
-  DEFAULT_BACKGROUND_IMAGES,
-} from '../hooks/use-create-countdown';
+import { useCountdown } from '../hooks/use-create-countdown';
 import AddEventBackgroundImage, {
   DefaultImageI,
 } from './add-event-background-image';
@@ -51,7 +26,7 @@ const ModalAddEvent = ({ children }: { children: ReactNode }) => {
       clearErrors,
       reset,
       watch,
-      formState: { errors, isSubmitted, isDirty },
+      formState: { errors },
     },
   } = useCountdown();
   const uploadImage = watch('image');

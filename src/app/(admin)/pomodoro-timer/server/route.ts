@@ -1,15 +1,9 @@
-import {
-  COUNTDOWN_ID,
-  DATABASE_ID,
-  FOCUS_MINS_ID,
-  IMAGES_BUCKET_ID,
-} from '@/config';
+import { DATABASE_ID, FOCUS_MINS_ID } from '@/config';
 import { sessionMiddleware } from '@/lib/session-middleware';
 import { zValidator } from '@hono/zod-validator';
 import { Hono } from 'hono';
-import { ID, Query } from 'node-appwrite';
+import { Query } from 'node-appwrite';
 import { createFocusRecordSchema } from '../schemas';
-import { z } from 'zod';
 import { startOfWeek, addDays, formatISO } from 'date-fns';
 
 const app = new Hono()

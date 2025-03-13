@@ -4,7 +4,6 @@ import {
   SimpleGrid,
   Stack,
   Skeleton,
-  Center,
   Box,
   Group,
 } from '@mantine/core';

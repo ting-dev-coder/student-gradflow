@@ -1,7 +1,7 @@
 'use client';
 import { useGetCountdownEvents } from './api/use-get-countdown-events';
-import { Group, Image, ScrollArea, Title } from '@mantine/core';
-import { useRef, useState } from 'react';
+import { Group, ScrollArea, Title } from '@mantine/core';
+import { useState } from 'react';
 import CountdownList from './components/countdown-list';
 import MainCountdown from './components/main-countdown';
 

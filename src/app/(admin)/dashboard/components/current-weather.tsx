@@ -1,7 +1,16 @@
 import { memo } from 'react';
 import { GeocodingResponse, WeatherData } from '../hooks/types';
-import { Box, Card, Center, Grid, Group, Image, Text, Title } from '@mantine/core';
-import { LuAArrowDown, LuAArrowUp, LuDroplets, LuWind } from 'react-icons/lu';
+import {
+  Box,
+  Card,
+  Center,
+  Grid,
+  Group,
+  Image,
+  Text,
+  Title,
+} from '@mantine/core';
+import { LuDroplets, LuWind } from 'react-icons/lu';
 import { HiOutlineArrowDown, HiOutlineArrowUp } from 'react-icons/hi';
 
 interface CurrentWeatherProps {
@@ -9,13 +18,15 @@ interface CurrentWeatherProps {
   locationName?: GeocodingResponse;
 }
 
-export function CurrentWeather({ data, locationName, error }: CurrentWeatherProps) {
+export function CurrentWeather({
+  data,
+  locationName,
+  error,
+}: CurrentWeatherProps) {
   if (!data) return;
 
-  if(error) {
-    return <Center>
-      {error}
-    </Center>
+  if (error) {
+    return <Center>{error}</Center>;
   }
 
   const {

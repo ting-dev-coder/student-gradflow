@@ -1,23 +1,9 @@
 'use client';
 
 import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  Card,
-  Divider,
-  Input,
-  Button,
-  Text,
-  Title,
-  Stack,
-  Center,
-} from '@mantine/core';
-import { FcGoogle } from 'react-icons/fc';
-import { FaGithub } from 'react-icons/fa';
-import { Form, useForm } from 'react-hook-form';
+import { Card, Button, Text, Title, Stack } from '@mantine/core';
 import { loginSchema } from '../schemas';
 import { useLogin } from '../api/user-login';
-import { getCurrent } from '../actions';
 import ControllerInput from '@/components/form/input';
 import { useSignIn } from './use-sign-in';
 import ControllerPasswordInput from '@/components/form/password-input';

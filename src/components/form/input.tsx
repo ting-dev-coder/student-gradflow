@@ -2,12 +2,9 @@ import {
   Group,
   Stack,
   TextInput,
-  Input as MantineInput,
-  Text,
   TextInputProps,
   BoxProps,
 } from '@mantine/core';
-import { ChangeEvent } from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import FormLabel from './form-label';
 

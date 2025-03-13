@@ -12,7 +12,6 @@ import { differenceInDays, parseISO } from 'date-fns';
 import { MdFullscreen, MdFullscreenExit } from 'react-icons/md';
 import { useEditCountdown } from '../api/use-edit-countdown';
 import EditableDateInput from './editable-date-input';
-import { useState } from 'react';
 
 export interface EventI {
   imageUrl?: File | undefined;

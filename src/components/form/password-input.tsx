@@ -1,7 +1,5 @@
 import {
-  TextInput,
   PasswordInput as MantinePasswordInput,
-  Text,
   TextInputProps,
   BoxProps,
 } from '@mantine/core';

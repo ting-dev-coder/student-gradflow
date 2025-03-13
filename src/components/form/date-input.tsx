@@ -1,11 +1,6 @@
-import {
-  DateInputProps,
-  DateValue,
-  DateInput as MantineDateInput,
-} from '@mantine/dates';
+import { DateValue, DateInput as MantineDateInput } from '@mantine/dates';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import FormLabel from './form-label';
-import { parseISO } from 'date-fns';
 import { BoxProps } from '@mantine/core';
 
 interface DateInputWrapper<T extends FieldValues> extends BoxProps {

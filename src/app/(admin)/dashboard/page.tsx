@@ -1,7 +1,7 @@
 'use client';
 import { useReverseGeocodeQuery, useWeatherQuery } from './hooks/use-weather';
 import CurrentWeather from './components/current-weather';
-import { Box, Grid, Group, Skeleton, Stack, Text } from '@mantine/core';
+import { Box, Grid, Skeleton, Stack } from '@mantine/core';
 import classes from './dashboard.module.scss';
 import { useGetCountdownEvents } from '../countdown/api/use-get-countdown-events';
 import MainCountdown from './components/main-countdown';

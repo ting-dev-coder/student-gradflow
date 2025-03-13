@@ -1,12 +1,5 @@
 import { dateFormat } from '@/lib/utils';
-import {
-  BackgroundImage,
-  Box,
-  Center,
-  Paper,
-  Stack,
-  Text,
-} from '@mantine/core';
+import { BackgroundImage, Paper, Stack, Text } from '@mantine/core';
 import { differenceInDays } from 'date-fns';
 
 const MainCountdown = ({ event }) => {

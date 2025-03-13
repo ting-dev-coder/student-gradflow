@@ -1,13 +1,17 @@
 import { CheckboxIndicatorProps, Group } from '@mantine/core';
 import FormLabel from './form-label';
-import { Checkbox as MantineCheckbox } from '@mantine/core';
-import { Controller } from 'react-hook-form';
+import {
+  Checkbox as MantineCheckbox,
+  CheckboxProps as MantineCheckBoxProps,
+} from '@mantine/core';
+import { Control, Controller, FieldValues } from 'react-hook-form';
 
-interface CheckboxProps extends CheckboxIndicatorProps {
+interface CheckboxProps extends MantineCheckBoxProps {
   label: string;
+  name: string;
+  control?: Control<FieldValues> | undefined;
 }
-//MantineCheckbox.Indicato
-const Checkbox = ({ control, name, label, ...props }) => {
+const Checkbox = ({ control, name, label, ...props }: CheckboxProps) => {
   return (
     <Controller
       name={name}

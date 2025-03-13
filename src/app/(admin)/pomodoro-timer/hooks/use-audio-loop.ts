@@ -14,8 +14,10 @@ export function useAudioPlayer() {
     };
   }, []);
 
-  const playAudio = (src) => {
-    if (audioRef.current.src !== src) {
+  const playAudio = (src: string) => {
+    if (!audioRef?.current) return;
+
+    if (audioRef?.current.src !== src) {
       // Set the new audio source
       audioRef.current.src = src;
       audioRef.current.load(); // Reload the audio to apply the new source
@@ -27,6 +29,8 @@ export function useAudioPlayer() {
   };
 
   const stopAudio = () => {
+    if (!audioRef?.current) return;
+
     audioRef.current.pause();
     audioRef.current.loop = false; // Disable looping when stopping
     setIsPlaying(false);

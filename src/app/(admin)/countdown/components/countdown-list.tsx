@@ -1,14 +1,4 @@
-import {
-  Box,
-  Button,
-  CardSection,
-  FileInput,
-  Grid,
-  Group,
-  Image,
-  SimpleGrid,
-  Skeleton,
-} from '@mantine/core';
+import { Box, Button, SimpleGrid } from '@mantine/core';
 import { useDeleteCountdownEvent } from '../api/use-delete-countdown-event';
 import ModalAddEvent from './modal-add-event';
 import EventCard from './event-card';

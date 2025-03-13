@@ -4,35 +4,30 @@ import {
   Button,
   Divider,
   Drawer,
-  Group,
-  Input,
   Text,
   LoadingOverlay,
   Stack,
   Title,
 } from '@mantine/core';
-import { useForm, useWatch } from 'react-hook-form';
+import { useWatch } from 'react-hook-form';
 import { z } from 'zod';
 import { createTodoSchema, editTodoSchema } from '../schemas';
 import { useCreateTodoList } from '../api/user-create-todo-list';
 import ControllerInput from '@/components/form/input';
-import { DEFAULT_FORM_VALUES, useCreateTask } from '../hooks/use-create-task';
+import { useCreateTask } from '../hooks/use-create-task';
 import Select from '@/components/form/select';
 import DateInput from '@/components/form/date-input';
 import Checkbox from '@/components/form/checkbox';
 import TimePicker from '@/components/form/time-picker';
 import FormLabel from '@/components/form/form-label';
 import Textarea from '@/components/form/textarea';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useGetTodo } from '../api/use-get-todo';
 import { notifications } from '@mantine/notifications';
-import { useDeleteTodoList } from '../api/use-delete-todo-list';
 import { useUpdateTodoList } from '../api/use-update-todo-list';
 import { useEditTask } from '../hooks/use-edit-task';
 import { useMounted } from '@mantine/hooks';
 import { parseISO } from 'date-fns';
-import dayjs from 'dayjs';
-import { dateFormat } from '@/lib/utils';
 
 interface DrawerHandleTaskProps {
   opened: boolean;

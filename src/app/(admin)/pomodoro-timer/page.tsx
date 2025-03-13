@@ -10,8 +10,6 @@ import DrawerFocusQueue from './components/drawer-focus-queue';
 import { useFocusList, FocusContextType } from './hooks/use-focus-list';
 import ModalTimeUp from './components/modal-time-up';
 import { useDisclosure } from '@mantine/hooks';
-import { useAudioPlayer } from './hooks/use-audio-loop';
-import FocusMask from './components/focus-mask';
 
 const timerOpts = [
   ,
