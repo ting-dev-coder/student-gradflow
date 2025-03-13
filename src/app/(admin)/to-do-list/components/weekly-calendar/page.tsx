@@ -13,10 +13,6 @@ import { Box, Button, Stack, UnstyledButton } from '@mantine/core';
 import styles from './weeky-calendar.module.scss';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 
-type ValuePiece = Date | null;
-
-type Value = ValuePiece | [ValuePiece, ValuePiece];
-
 interface CurrentWeekRowProps extends WeekProps {
   date: Date;
 }
@@ -87,7 +83,6 @@ const DateCalendar = ({ onChange, defaultDate }) => {
         day: styles['day'],
       }}
       components={{
-        //WeekNumber: () => <>WeekNumber</>,
         Weekdays: () => <></>,
         DayButton,
         Week: (weekProps) => <CurrentWeekRow {...weekProps} date={value} />,

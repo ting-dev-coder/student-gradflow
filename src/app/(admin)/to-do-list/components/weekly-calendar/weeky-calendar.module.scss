@@ -22,6 +22,7 @@
   margin: auto;
 }
 .month {
+  z-index: 9;
   margin-right: calc(var(--mantine-spacing-sm) * -1);
 }
 
@@ -33,7 +34,7 @@
 }
 
 .nav {
-  z-index: -1;
+  z-index: 0;
   display: flex;
   margin-right: 0;
   position: absolute;
