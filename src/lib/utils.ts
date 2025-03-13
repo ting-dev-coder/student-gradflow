@@ -19,20 +19,21 @@ export function isTodayBefore(date: string) {
  * @param {[string, string, string]} timeArray - The time array in the format [hour, minute, 'AM'/'PM']
  * @returns {string} - The ISO formatted date string
  */
-export function convertCustomTimeToISO(dateStr, timeArray) {
+export function convertCustomTimeToISO(dateStr: string, timeArray: string[]) {
   if (!timeArray.length) return '';
-  let [hour, minute, meridiem] = timeArray;
-  hour = parseInt(hour, 10);
-  minute = parseInt(minute, 10);
+  const [hour, minute, meridiem] = timeArray; // 用const替代let
+  let newHour = parseInt(hour, 10); // 使用新的變數來賦值
+  const newMinute = parseInt(minute, 10);
+
   // Convert 12-hour format to 24-hour format
-  if (meridiem.toUpperCase() === 'PM' && hour < 12) {
-    hour += 12;
-  } else if (meridiem.toUpperCase() === 'AM' && hour === 12) {
-    hour = 0;
+  if (meridiem.toUpperCase() === 'PM' && newHour < 12) {
+    newHour += 12;
+  } else if (meridiem.toUpperCase() === 'AM' && newHour === 12) {
+    newHour = 0;
   }
 
   const baseDate = parseISO(dateStr);
-  baseDate.setHours(hour, minute, 0, 0);
+  baseDate.setHours(newHour, newMinute, 0, 0);
 
   return baseDate.toISOString();
 }
