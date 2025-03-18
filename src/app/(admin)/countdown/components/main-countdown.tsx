@@ -1,6 +1,7 @@
 import { dateFormat } from '@/lib/utils';
 import {
   Box,
+  Center,
   Image,
   Paper,
   Skeleton,
@@ -41,8 +42,17 @@ const MainCountdown = ({
         <Skeleton h="100%"></Skeleton>;
       </Box>
     );
+  if (!event) {
+    return (
+      <Center flex={1} pos="relative" h="100%">
+        <Stack c="var(--gray3)">
+          <Image mx="auto" w="200px" src="/no-data.svg" />
+          <Text>No data found. Start by adding a new event!</Text>
+        </Stack>
+      </Center>
+    );
+  }
 
-  console.log('event', event);
   function handleUpdateDate(value, callback) {
     mutate(
       {
