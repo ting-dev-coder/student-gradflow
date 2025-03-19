@@ -21,12 +21,6 @@ export const useGetFocusRecords = (date?: Date) => {
       }
       return await response.json();
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['countdown'] });
-    },
-    onError: () => {
-      console.log('failed to create countdown event');
-    },
   });
 
   return mutation;

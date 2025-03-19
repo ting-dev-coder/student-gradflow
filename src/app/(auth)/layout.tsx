@@ -38,7 +38,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
             left={20}
             top={20}
           >
-            Student Gradeflow
+            <Image w={108} src="/logo.svg" />
           </Title>
           <Box className={styles['sign-in-square_skew']} />
           <Box className={styles['sign-in-square']} />

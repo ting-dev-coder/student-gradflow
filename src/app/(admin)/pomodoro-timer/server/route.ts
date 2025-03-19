@@ -4,7 +4,7 @@ import { zValidator } from '@hono/zod-validator';
 import { Hono } from 'hono';
 import { Query } from 'node-appwrite';
 import { createFocusRecordSchema } from '../schemas';
-import { startOfWeek, addDays, formatISO } from 'date-fns';
+import { startOfWeek, addDays, formatISO, endOfWeek } from 'date-fns';
 
 const app = new Hono()
   .get('/', sessionMiddleware, async (c) => {
@@ -16,19 +16,19 @@ const app = new Hono()
     if (date) {
       const startOfWeekDate = startOfWeek(new Date());
 
-      // 加上 7 天
-      const endOfWeekDate = addDays(startOfWeekDate, 7);
+      const endOfWeekDate = endOfWeek(new Date());
 
       // 轉換為 ISO 格式
-      const startOfWeekISO = formatISO(startOfWeekDate);
-      const endOfWeekISO = formatISO(endOfWeekDate);
+      const startOfWeekISO = formatISO(startOfWeekDate, {
+        representation: 'date',
+      });
+      const endOfWeekISO = formatISO(endOfWeekDate, { representation: 'date' });
       queries.push(
-        ...[
-          Query.greaterThanEqual('$createdAt', startOfWeekISO),
-          Query.lessThanEqual('$createdAt', endOfWeekISO),
-        ]
+        Query.greaterThanEqual('date', startOfWeekISO),
+        Query.lessThanEqual('date', endOfWeekISO)
       );
     }
+    console.log('queries', queries);
     const countdownList = await databases.listDocuments(
       DATABASE_ID,
       FOCUS_MINS_ID,
