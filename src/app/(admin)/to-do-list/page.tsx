@@ -90,7 +90,7 @@ const ToDoList = () => {
         <Card padding="sm">
           {!isTodayBefore(selectedDate.toISOString()) && (
             <Button
-              style={{ zIndex: 1 }}
+              style={{ zIndex: 10 }}
               w="fit-content"
               px="md"
               size="compact-md"
