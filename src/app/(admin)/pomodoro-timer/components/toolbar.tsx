@@ -13,7 +13,7 @@ import {
   Paper,
   Tooltip,
 } from '@mantine/core';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { BiSolidBellRing } from 'react-icons/bi';
 import { MdOutlinePlayCircleFilled } from 'react-icons/md';
 import { FaListCheck } from 'react-icons/fa6';
@@ -38,6 +38,7 @@ const audioFiles = [
 
 export function ToolBar() {
   const { playAudio, stopAudio } = useAudioPlayer();
+
   const context = useContext(PomodoroContext);
   if (!context) return;
   const {
@@ -50,6 +51,15 @@ export function ToolBar() {
     onAlertSoundChange,
   } = context;
   const selectAudio = audioFiles.find((a) => a.value === alertSound);
+
+  useEffect(() => {
+    const hasLandBefore = localStorage.getItem('is-land-before');
+
+    if (!hasLandBefore) {
+      localStorage.setItem('is-land-before', 'true');
+      toggleIntroModal();
+    }
+  }, []);
 
   function onSoundPlayClick(src: string) {
     onAlertSoundChange(src);

@@ -2,10 +2,6 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { InferRequestType, InferResponseType } from 'hono';
 import { client } from '@/lib/rpc';
 
-type ResponseType = InferResponseType<(typeof client.api)['focus-min']['$get']>;
-
-type RequestType = InferRequestType<(typeof client.api)['focus-min']['$post']>;
-
 export const useGetFocusRecords = (date?: Date) => {
   const queryClient = useQueryClient();
   const mutation = useQuery({

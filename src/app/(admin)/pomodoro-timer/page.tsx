@@ -57,7 +57,7 @@ export default function PomodoroTimer() {
   const [focusTaskId, setFocusTaskId] = useState('');
   // how it work
   const [introModalOpened, { toggle: toggleIntroModal }] = useDisclosure(false);
-  console.log('主頁', timerSecs);
+
   // alert sound
   const [alertSound, setAlertSound] = useState('');
   const {
