@@ -37,10 +37,12 @@ const audioFiles = [
 ];
 
 export function ToolBar() {
+  const context = useContext(PomodoroContext);
+  if (!context) {
+    return <div>Error: PomodoroContext is not available.</div>;
+  }
   const { playAudio, stopAudio } = useAudioPlayer();
 
-  const context = useContext(PomodoroContext);
-  if (!context) return;
   const {
     onFocusListOpenChange,
     onTimerChange,
@@ -59,7 +61,7 @@ export function ToolBar() {
       localStorage.setItem('is-land-before', 'true');
       toggleIntroModal();
     }
-  }, []);
+  }, [toggleIntroModal]);
 
   function onSoundPlayClick(src: string) {
     onAlertSoundChange(src);

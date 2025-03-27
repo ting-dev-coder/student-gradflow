@@ -3,21 +3,11 @@ import { z } from 'zod';
 export const createCountdownSchema = z.object({
   name: z.string().trim().min(1, 'required field'),
   endAt: z.coerce.date(),
-  image: z
-    .instanceof(File, {
-      message: 'Invalid file type',
-    })
-    .optional(),
+  image: z.any().optional(),
   localImagePath: z.preprocess(
     (val) => (val == null ? '' : val.toString()),
     z.string().optional()
   ),
-  // image: z
-  //   .union([
-  //     z.instanceof(File),
-  //     z.string().transform((val) => (val === '' ? undefined : val)),
-  //   ])
-  //   .optional(),
 });
 
 export const updateCountdownSchema = z.object({
