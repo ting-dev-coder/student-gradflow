@@ -1,9 +1,6 @@
 'use client';
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { UseCountdownTimer } from './hooks/use-countdown-timer';
-import { notifications } from '@mantine/notifications';
-import { useCreateFocusRecord } from './api/use-create-focus-record';
-import { Box } from '@mantine/core';
 import MainView from './components/main-view';
 import { ToolBar } from './components/toolbar';
 import DrawerFocusQueue from './components/drawer-focus-queue';
@@ -38,11 +35,37 @@ interface PomodoroContextType extends FocusContextType {
   onFocusListOpenChange: (opened: boolean) => void;
   focusTaskId: string;
   setFocusTaskId: (id: string) => void;
+  introModalOpened: boolean;
+  toggleIntroModal: () => void;
 }
 
-export const PomodoroContext = createContext<PomodoroContextType | undefined>(
-  undefined
-);
+export const PomodoroContext = createContext<PomodoroContextType>({
+  formatTime: () => ({ mins: '00', secs: '00' }),
+  time: 0,
+  onReset: () => {},
+  isRunning: false,
+  onPause: () => {},
+  onStop: () => {},
+  onSetTime: () => {},
+  isOngoing: false,
+  onStart: () => {},
+  focusListOpened: false,
+  timerOpts: timerOpts,
+  timerSecs: timerOpts[1]?.value || 0, // 預設為 'demo' 選項
+  onTimerChange: () => {},
+  onFocusListOpenChange: () => {},
+  focusTaskId: '',
+  setFocusTaskId: () => {},
+
+  // focus queue 預設
+  focusList: [],
+  addFocus: () => {},
+  deleteFocus: () => {},
+  toggleFocus: () => {},
+  // intro modal
+  introModalOpened: false,
+  toggleIntroModal: () => {},
+});
 
 export default function PomodoroTimer() {
   // time up modal

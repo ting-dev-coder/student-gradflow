@@ -39,9 +39,6 @@ const audioFiles = [
 export function ToolBar() {
   const { playAudio, stopAudio } = useAudioPlayer();
   const context = useContext(PomodoroContext);
-  if (!context) {
-    return <div>Error: PomodoroContext is not available.</div>;
-  }
 
   const {
     onFocusListOpenChange,
