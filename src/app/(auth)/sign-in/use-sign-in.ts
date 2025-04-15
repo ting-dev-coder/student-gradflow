@@ -9,8 +9,8 @@ export const useSignIn = () => {
     reValidateMode: 'onSubmit',
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: '',
-      password: '',
+      email: 'demo@northislandcollege.ca',
+      password: 'demo12345',
     },
   });
   return {
