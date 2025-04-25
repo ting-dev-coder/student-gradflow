@@ -19,8 +19,6 @@ const aggregateMinsByDay = (data, weekDays) => {
     const dayName = format(item?.date, 'EEE');
     const weekDay = weekDays.find((entry) => entry.name === dayName);
 
-    console.log('item', weekDay);
-
     if (weekDay) {
       weekDay.mins += item.mins;
     }

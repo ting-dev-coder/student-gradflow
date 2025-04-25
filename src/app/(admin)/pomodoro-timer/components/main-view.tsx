@@ -149,7 +149,6 @@ export default function MainView() {
             data={parseFocusData(focusList)}
             value={selectedFocusTask?.id}
             onChange={(taskId) => {
-              console.log('set', taskId);
               setFocusTaskId(taskId);
             }}
           />

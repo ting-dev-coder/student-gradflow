@@ -201,7 +201,6 @@ const ControlTimePicker = <T extends FieldValues>({
             initialMin={initialMin}
             initialSession={initialSession as SessionT}
             onChange={(value) => {
-              console.log('value change', value);
               field.onChange(value);
               handleChange?.(value);
             }}

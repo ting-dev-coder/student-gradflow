@@ -161,8 +161,6 @@ const TimeLine = ({ tasks, currentDate, upcomingTasks }) => {
 };
 
 function renderEventContent({ event }) {
-  console.log('來喔', event);
-
   return (
     <Box
       className="event-card"

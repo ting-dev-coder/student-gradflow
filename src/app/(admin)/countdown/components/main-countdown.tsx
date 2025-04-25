@@ -26,6 +26,7 @@ interface EventProps {
   onFullViewChange: () => void;
   fullView: boolean;
   updating: boolean;
+  loading: boolean;
 }
 
 const MainCountdown = ({

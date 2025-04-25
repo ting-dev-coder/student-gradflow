@@ -50,7 +50,6 @@ export function useFocusList() {
 
   // mark task as done
   const toggleFocus = (id: string) => {
-    console.log('id done', id);
     setFocusList(
       focusList.map((focus) =>
         focus.id === id ? { ...focus, completed: !focus.completed } : focus

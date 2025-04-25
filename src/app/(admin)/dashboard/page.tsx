@@ -40,7 +40,7 @@ const Dashboard = () => {
     getLocation,
     isLoading: locationLoading,
   } = useGeolocation();
-  console.log('focusRecords', focusRecords);
+
   const weatherQuery = useWeatherQuery(coordinates);
   const locationQuery = useReverseGeocodeQuery(coordinates);
 

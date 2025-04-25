@@ -103,7 +103,6 @@ export default function WindowAnimation({ isDay, onAnimationStateChange }) {
       });
   }, [animateMoonIn]);
   useEffect(() => {
-    console.log('isDay changed:', isDay);
     if (isFirstLoad.current) {
       isFirstLoad.current = false;
       return;

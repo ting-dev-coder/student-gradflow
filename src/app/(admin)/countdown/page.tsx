@@ -15,9 +15,11 @@ const Countdown = () => {
     isPending: isLoading,
     isError,
   } = useGetCountdownEvents(false);
+
   const mainEvent =
     (countdownEvents?.documents || []).find((event) => event.isMain) ||
     countdownEvents?.documents[0];
+
   const noMainList = (countdownEvents?.documents || []).filter(
     (event) => !event.isMain
   );

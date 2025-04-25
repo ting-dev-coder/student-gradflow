@@ -45,12 +45,10 @@ const ModalAddEvent = ({ children }: { children: ReactNode }) => {
   };
 
   const handleImageChange = (payload: File | null) => {
-    console.log('set', payload);
     if (!payload) {
       setValue('image', undefined);
       return;
     }
-    console.log('set', payload);
     setValue('image', payload);
   };
 
