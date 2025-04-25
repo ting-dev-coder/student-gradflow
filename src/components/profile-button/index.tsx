@@ -25,15 +25,15 @@ export function ProfileButton() {
         radius="xl"
       />
 
-      <div style={{ flex: 1 }}>
+      <Group flex="1" w="0" gap={'xxs'} pr="xs">
         <Text size="sm" fw={600} c="#fff">
           {user.name}
         </Text>
 
-        <Text c="dimmed" size="xs">
+        <Text c="dimmed" size="xs" truncate="end">
           {user.email}
         </Text>
-      </div>
+      </Group>
     </Group>
   );
 }
